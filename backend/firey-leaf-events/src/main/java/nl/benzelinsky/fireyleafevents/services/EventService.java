@@ -23,4 +23,11 @@ public class EventService {
         return EventMapper.toOutputDto(event);
     }
 
+    // Get event by id
+    public EventOutputDto getEventById(Long id) {
+        Event event = this.repository.getEventById(id);
+        return EventMapper.toOutputDto(event);
+        // Still need to add exception handling!!
+    }
+
 }

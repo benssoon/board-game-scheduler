@@ -1,9 +1,9 @@
 import './EventCard.css';
 
-function EventCard() {
+function EventCard({title}) {
     return (
         <>
-
+            <h2>{title}</h2>
         </>
     )
 }
