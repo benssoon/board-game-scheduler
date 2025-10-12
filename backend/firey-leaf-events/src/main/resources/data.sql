@@ -1,4 +1,6 @@
 INSERT INTO events (title,
-                    is_full)
+                    is_full,
+                    location)
 VALUES ('Root',
-        false);
+        true,
+        'Ben''s house');

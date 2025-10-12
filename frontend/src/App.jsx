@@ -12,6 +12,7 @@ function App() {
         try {
             const response = await axios.get(devApiUrl+'/events/'+id)
             console.log(response);
+            console.log(event)
             setEvent(response.data)
         } catch (e) {
             console.error(devApiUrl+'/events/'+id)
@@ -19,10 +20,24 @@ function App() {
         }
     }
 
+    /*async function createEvent() {
+        try {
+
+        }
+    }*/
+
     return (
         <>
             <h1>Hello</h1>
-            <EventCard title={event.title}/>
+            <EventCard
+                title={event.title}
+                game={event.game}
+                host={event.host}
+                isFull={event.isFull}
+                location={event.location}
+                players={event.players}
+                possibleTimes={event.possibleTimes}
+            />
             <button type="submit" onClick={fetchEvent}>Get event</button>
         </>
     )
