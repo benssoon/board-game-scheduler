@@ -12,7 +12,6 @@ function App() {
         try {
             const response = await axios.get(devApiUrl+'/events/'+id)
             console.log(response);
-            console.log(event)
             setEvent(response.data)
         } catch (e) {
             console.error(devApiUrl+'/events/'+id)
@@ -20,11 +19,19 @@ function App() {
         }
     }
 
-    /*async function createEvent() {
+    async function createEvent() {
+        console.log('hi');
         try {
-
+            const response = await axios.post(devApiUrl+'/events', {
+                title: 'Arcs',
+                isFull: false,
+            })
+            console.log(response);
+            console.log("hi");
+        } catch (e) {
+            console.error(e);
         }
-    }*/
+    }
 
     return (
         <>
@@ -38,6 +45,15 @@ function App() {
                 players={event.players}
                 possibleTimes={event.possibleTimes}
             />
+
+            <form>
+                <label htmlFor="eventTitle">Event title:</label>
+                <input type="text" id="eventTitle"/>
+                <label htmlFor="numberPlayers">Number of players:</label>
+                <input type="number" id="numberPlayers" />
+                <button type="submit" onSubmit={createEvent}>Submit</button>
+            </form>
+
             <button type="submit" onClick={fetchEvent}>Get event</button>
         </>
     )
