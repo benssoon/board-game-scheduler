@@ -19,15 +19,27 @@ function App() {
         }
     }
 
-    async function createEvent() {
-        console.log('hi');
+    async function createEvent(e) {
+        e.preventDefault();
         try {
             const response = await axios.post(devApiUrl+'/events', {
                 title: 'Arcs',
                 isFull: false,
             })
             console.log(response);
-            console.log("hi");
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function createUser(e) {
+        e.preventDefault();
+        try {
+            const response = await axios.post(devApiUrl+'/users', {
+                name: 'Ben',
+                emailAddress: 'ben@ben.com',
+            })
+            console.log(response);
         } catch (e) {
             console.error(e);
         }
@@ -51,7 +63,15 @@ function App() {
                 <input type="text" id="eventTitle"/>
                 <label htmlFor="numberPlayers">Number of players:</label>
                 <input type="number" id="numberPlayers" />
-                <button type="submit" onSubmit={createEvent}>Submit</button>
+                <button type="button" onClick={createEvent}>Submit</button>
+            </form>
+
+            <form>
+                <label htmlFor="name">Name:</label>
+                <input type="text" id="name"/>
+                <label htmlFor="email">Email:</label>
+                <input type="text" id="email" />
+                <button type="button" onClick={createUser}>Submit</button>
             </form>
 
             <button type="submit" onClick={fetchEvent}>Get event</button>
