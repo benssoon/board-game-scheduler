@@ -4,18 +4,44 @@ import EventCard from './components/eventCard/EventCard.jsx';
 import axios from 'axios';
 
 function App() {
-    const [id, setId] = useState(1)
-    const [event, setEvent] = useState({})
+    //<editor-fold desc="State">
+    const [formState, setFormState] = useState({
+        userId: 0,
+        eventId: 0,
+    });
+    const [userId, setUserId] = useState(0);
+    const [eventId, setEventId] = useState(0);
+    const [event, setEvent] = useState({});
     const devApiUrl = 'http://localhost:8080';
+    //</editor-fold>
 
-    async function fetchEvent() {
+    //<editor-fold desc="Handlers">
+    function handleSubmit(e) {
+        e.preventDefault();
+        console.log(formState['eventId']);
+        fetchEvent(formState['eventId']);
+    }
+
+    function handleChange(e) {
+        const changedFieldName = e.target.name;
+        const newValue = e.target.value;
+
+        setFormState({
+            ...formState,
+            [changedFieldName]: newValue,
+        });
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="HTTP requests">
+    async function fetchEvent(id) {
         try {
-            const response = await axios.get(devApiUrl+'/events/'+id)
+            const response = await axios.get(devApiUrl+'/events/'+id);
             console.log(response);
-            setEvent(response.data)
+            setEvent(response.data);
         } catch (e) {
-            console.error(devApiUrl+'/events/'+id)
-            console.error(e)
+            console.error(devApiUrl+'/events/'+id);
+            console.error(e);
         }
     }
 
@@ -44,6 +70,8 @@ function App() {
             console.error(e);
         }
     }
+//</editor-fold>
+
 
     return (
         <>
@@ -74,7 +102,17 @@ function App() {
                 <button type="button" onClick={createUser}>Submit</button>
             </form>
 
-            <button type="submit" onClick={fetchEvent}>Get event</button>
+            <form>
+                <label htmlFor="id">ID:</label>
+                <input
+                    type="number"
+                    name="eventId"
+                    id="eventId"
+                    value={formState['eventId']}
+                    onChange={handleChange}
+                />
+                <button type="button" onClick={handleSubmit}>Get event</button>
+            </form>
         </>
     )
 }
