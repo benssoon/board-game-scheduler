@@ -2,6 +2,7 @@ package nl.benzelinsky.fireyleafevents.services;
 
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
+import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
 import nl.benzelinsky.fireyleafevents.mappers.EventMapper;
 import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.repositories.EventRepository;
@@ -25,9 +26,11 @@ public class EventService {
 
     // Get event by id
     public EventOutputDto getEventById(Long id) {
-        Event event = this.repository.getEventById(id);
-        return EventMapper.toOutputDto(event);
-        // Still need to add exception handling!!
+        return EventMapper.toOutputDto(
+                this.repository.findById(id)
+                        .orElseThrow(() ->
+                                new RecordNotFoundException("Event not found")));
+
     }
 
 }

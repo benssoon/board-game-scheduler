@@ -2,6 +2,7 @@ package nl.benzelinsky.fireyleafevents.services;
 
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
+import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
 import nl.benzelinsky.fireyleafevents.mappers.UserMapper;
 import nl.benzelinsky.fireyleafevents.models.User;
 import nl.benzelinsky.fireyleafevents.repositories.UserRepository;
@@ -25,9 +26,12 @@ public class UserService {
 
     // Get user by id
     public UserOutputDto getUserById(Long id) {
-        User user = this.repository.getUserById(id);
-        return UserMapper.toOutputDto(user);
-        // EXCEPTION HANDLING!
+        return UserMapper.toOutputDto(
+                this.repository.findById(id)
+                        .orElseThrow(() ->
+                                new RecordNotFoundException("User not found")));
+
+
     }
 
 }

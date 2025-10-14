@@ -16,10 +16,8 @@ function App() {
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
-    function handleSubmit(e) {
-        e.preventDefault();
-        console.log(formState['eventId']);
-        fetchEvent(formState['eventId']);
+    function handleClick(type, id) {
+        fetchObject(type, formState[id]);
     }
 
     function handleChange(e) {
@@ -34,14 +32,26 @@ function App() {
     //</editor-fold>
 
     //<editor-fold desc="HTTP requests">
-    async function fetchEvent(id) {
+    async function fetchObject(type, id) {
         try {
-            const response = await axios.get(devApiUrl+'/events/'+id);
+            const response = await axios.get(`${devApiUrl}/${type}s/${id}`);
+            console.log(response);
+            if (type === 'event') {
+                setEvent(response.data);
+            }
+        } catch (e) {
+            console.error(e.message + ': ' + e.response.data);
+        }
+    }
+
+    async function fetchUser(id) {
+        try {
+            const response = await axios.get(devApiUrl+'/user/'+id);
             console.log(response);
             setEvent(response.data);
         } catch (e) {
             console.error(devApiUrl+'/events/'+id);
-            console.error(e);
+            console.error(e.message + ': ' + e.response.data);
         }
     }
 
@@ -103,7 +113,7 @@ function App() {
             </form>
 
             <form>
-                <label htmlFor="id">ID:</label>
+                <label htmlFor="eventId">Event ID:</label>
                 <input
                     type="number"
                     name="eventId"
@@ -111,7 +121,18 @@ function App() {
                     value={formState['eventId']}
                     onChange={handleChange}
                 />
-                <button type="button" onClick={handleSubmit}>Get event</button>
+                <button type="button" onClick={() => handleClick('event', 'eventId')}>Get event</button>
+            </form>
+            <form>
+                <label htmlFor="UserId">User ID:</label>
+                <input
+                    type="number"
+                    name="userId"
+                    id="userId"
+                    value={formState['userId']}
+                    onChange={handleChange}
+                />
+                <button type="button" onClick={() => handleClick('user', 'userId')}>Get user</button>
             </form>
         </>
     )
