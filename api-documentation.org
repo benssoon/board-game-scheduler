@@ -1,0 +1,15 @@
+#-*- mode: org -*-
+#+STARTUP: showall
+
+** Events
+* /events
+  - Use this for POST requests:
+    - When creating an event
+
+
+* /events/{id}
+  - Use this for GET and DELETE requests:
+    - get event by id
+    - delete event by id
+    - something else? 
+

@@ -1,0 +1,76 @@
+#-*- mode: org -*-
+#+STARTUP: showall
+
+* STARTED Event backend [1/4]
+** DONE Repository
+** STARTED Service [4/8]
+*** DONE Mapper
+*** DONE Input DTO
+*** DONE Output DTO
+*** DONE POST request
+*** STARTED GET request
+**** TODO Exception handling!
+*** TODO PUT request
+*** TODO DELETE request
+** STARTED Controller [2/4]
+*** DONE POST request
+*** DONE GET request
+*** TODO PUT request
+*** TODO DELETE request
+** TODO Tests
+
+
+* TODO Game backend [0/4]
+** TODO Repository
+** TODO Service [0/3]
+*** TODO Mapper
+*** TODO Input DTO
+*** TODO Output DTO
+** TODO Controller [0/4]
+*** TODO POST request
+*** TODO GET request
+*** TODO PUT request
+*** TODO DELETE request
+** TODO Tests
+
+
+* STARTED User backend [1/4]
+** DONE Repository
+** STARTED Service [4/8]
+*** DONE Mapper
+*** DONE Input DTO
+*** DONE Output DTO
+*** DONE POST request
+*** STARTED GET request
+**** TODO Exception handling
+*** TODO PUT request
+*** TODO DELETE request
+** STARTED Controller [2/4]
+*** DONE POST request
+*** DONE GET request
+*** TODO PUT request
+*** TODO DELETE request
+** TODO Tests
+
+
+* TODO Host backend [0/4]
+** TODO POST request
+** TODO GET request
+** TODO PUT request
+** TODO DELETE request
+
+
+* TODO Participant backend [0/4]
+** TODO POST request
+** TODO GET request
+** TODO PUT request
+** TODO DELETE request
+
+
+
+
+* TODO Organization backend [0/4]
+** TODO POST request
+** TODO GET request
+** TODO PUT request
+** TODO DELETE request

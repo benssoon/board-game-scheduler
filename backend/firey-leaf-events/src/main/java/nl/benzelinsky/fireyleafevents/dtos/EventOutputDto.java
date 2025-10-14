@@ -17,4 +17,6 @@ public class EventOutputDto {
     public List<Participant> players;
     public String location;
     public Host host;
+
+    public GameOutputDto gameOutputDto;
 }

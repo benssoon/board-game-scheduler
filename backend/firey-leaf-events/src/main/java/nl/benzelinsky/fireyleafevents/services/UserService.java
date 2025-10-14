@@ -30,8 +30,29 @@ public class UserService {
                 this.repository.findById(id)
                         .orElseThrow(() ->
                                 new RecordNotFoundException("User not found")));
+    }
+    
+    // Update user by ID
+    public UserOutputDto updateUserById(Long id, UserInputDto dtoIn) {
+        User toUpdate = this.repository.findById(id)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("User not found."));
 
+        toUpdate.setName(dtoIn.name);
+        toUpdate.setEmailAddress(dtoIn.emailAddress);
+        toUpdate.setTelephoneNumber(dtoIn.telephoneNumber);
 
+        this.repository.save(toUpdate);
+        return UserMapper.toOutputDto(toUpdate);
+    }
+
+    // Delete user by ID
+    public String deleteUserById(Long id) {
+        User toDelete = this.repository.findById(id)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("User not found."));
+        this.repository.delete(toDelete);
+        return "User " + toDelete.getName() + " has been deleted.";
     }
 
 }

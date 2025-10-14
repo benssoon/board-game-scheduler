@@ -20,6 +20,7 @@ public class EventController {
         this.service = service;
     }
 
+    // Create Event
     @PostMapping
     public ResponseEntity<EventOutputDto> createEvent(@Valid @RequestBody EventInputDto eventInputDto) {
         EventOutputDto eventOutputDto = this.service.createEvent(eventInputDto);
@@ -29,9 +30,31 @@ public class EventController {
         return ResponseEntity.created(location).body(eventOutputDto);
     }
 
+    // Get Event by ID
     @GetMapping("/{id}")
-    public ResponseEntity<EventOutputDto> getEvent(@PathVariable Long id) {
+    public ResponseEntity<EventOutputDto> getEventById(@PathVariable Long id) {
         return ResponseEntity.ok(this.service.getEventById(id));
     }
 
+    // Update Event by ID
+    @PutMapping("/{id}")
+    public ResponseEntity<EventOutputDto> updateEventById(@PathVariable Long id,
+                                                          @RequestBody EventInputDto dtoIn) {
+        EventOutputDto dtoOut = this.service.updateEventById(id, dtoIn);
+        return ResponseEntity.ok(dtoOut);
+    }
+
+    // Delete Event by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEvent(@PathVariable Long id) {
+        return ResponseEntity.ok(this.service.deleteEventById(id));
+    }
+
+    /**********/
+
+    // Couple Event with Game
+    @PutMapping("/{eventId}/game/{gameId}")
+    public void assignGameToEvent(@PathVariable("gameId") Long gameId, @PathVariable("eventId") Long eventId) {
+        this.service.assignGameToEvent(gameId, eventId);
+    }
 }

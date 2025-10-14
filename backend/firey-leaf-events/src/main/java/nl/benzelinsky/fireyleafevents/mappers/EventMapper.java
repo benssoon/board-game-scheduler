@@ -6,34 +6,34 @@ import nl.benzelinsky.fireyleafevents.models.Event;
 
 public class EventMapper {
 
-    public static Event toEntity(EventInputDto eventInputDto) {
+    public static Event toEntity(EventInputDto dtoIn) {
         Event event = new Event();
 
-        event.setTitle(eventInputDto.title);
-        event.setGame(eventInputDto.game);
-        event.setFull(eventInputDto.isFull);
-        event.setDefinitiveTime(eventInputDto.definitiveTime);
-        event.setPossibleTimes(eventInputDto.possibleTimes);
-        event.setPlayers(eventInputDto.players);
-        event.setLocation(eventInputDto.location);
-        event.setHost(eventInputDto.host);
+        event.setTitle(dtoIn.title);
+        event.setGame(dtoIn.game);
+        event.setFull(dtoIn.isFull);
+        event.setDefinitiveTime(dtoIn.definitiveTime);
+        event.setPossibleTimes(dtoIn.possibleTimes);
+        event.setPlayers(dtoIn.players);
+        event.setLocation(dtoIn.location);
+        event.setHost(dtoIn.host);
 
         return event;
     }
 
     public static EventOutputDto toOutputDto(Event event) {
-        EventOutputDto eventOutputDto = new EventOutputDto();
+        EventOutputDto dtoOut = new EventOutputDto();
 
-        eventOutputDto.id = event.getId();
-        eventOutputDto.title = event.getTitle();
-        eventOutputDto.game = event.getGame();
-        eventOutputDto.isFull = event.isFull();
-        eventOutputDto.definitiveTime = event.getDefinitiveTime();
-        eventOutputDto.possibleTimes = event.getPossibleTimes();
-        eventOutputDto.players = event.getPlayers();
-        eventOutputDto.location = event.getLocation();
-        eventOutputDto.host = event.getHost();
+        dtoOut.id = event.getId();
+        dtoOut.title = event.getTitle();
+        dtoOut.game = event.getGame();
+        dtoOut.isFull = event.isFull();
+        dtoOut.definitiveTime = event.getDefinitiveTime();
+        dtoOut.possibleTimes = event.getPossibleTimes();
+        dtoOut.players = event.getPlayers();
+        dtoOut.location = event.getLocation();
+        dtoOut.host = event.getHost();
 
-        return eventOutputDto;
+        return dtoOut;
     }
 }

@@ -33,4 +33,18 @@ public class UserController {
     public ResponseEntity<UserOutputDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(this.service.getUserById(id));
     }
+
+    // Update User by ID
+    @PutMapping("/{id}")
+    public ResponseEntity<UserOutputDto> updateUserById(@PathVariable Long id,
+                                                          @RequestBody UserInputDto dtoIn) {
+        UserOutputDto dtoOut = this.service.updateUserById(id, dtoIn);
+        return ResponseEntity.ok(dtoOut);
+    }
+
+    // Delete User by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        return ResponseEntity.ok(this.service.deleteUserById(id));
+    }
 }
