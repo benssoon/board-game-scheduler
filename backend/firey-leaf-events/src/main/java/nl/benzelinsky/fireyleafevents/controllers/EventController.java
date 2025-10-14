@@ -5,13 +5,11 @@ import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.services.EventService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/events")
 public class EventController {
@@ -29,6 +27,11 @@ public class EventController {
         URI location = URI.create("/events/" + eventOutputDto.id);
 
         return ResponseEntity.created(location).body(eventOutputDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EventOutputDto> getEvent(@PathVariable Long id) {
+        return ResponseEntity.ok(this.service.getEventById(id));
     }
 
 }

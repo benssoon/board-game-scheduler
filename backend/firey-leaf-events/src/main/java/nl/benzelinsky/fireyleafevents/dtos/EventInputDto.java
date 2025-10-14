@@ -11,6 +11,7 @@ import java.util.List;
 
 public class EventInputDto {
 
+    @NotBlank
     public String title;
     public Game game;
 

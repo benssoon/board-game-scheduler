@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 @DiscriminatorColumn(name = "user_type") // Column to indicate which type of user (Participant, Host, Organization)
 public class User {
 
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
