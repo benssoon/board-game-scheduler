@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-@Service
+@CrossOrigin(origins = "http://localhost:5173")
+@RestController
+@RequestMapping("/games")
 public class GameController {
 
     private final GameService service;
@@ -38,7 +40,7 @@ public class GameController {
     // Update Game by ID
     @PutMapping("/{id}")
     public ResponseEntity<GameOutputDto> updateGameById(@PathVariable Long id,
-                                                          @RequestBody GameInputDto dtoIn) {
+                                                          @Valid @RequestBody GameInputDto dtoIn) {
         GameOutputDto dtoOut = this.service.updateGameById(id, dtoIn);
         return ResponseEntity.ok(dtoOut);
     }

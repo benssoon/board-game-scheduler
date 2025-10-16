@@ -13,15 +13,19 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private boolean isFull;
+    private LocalDateTime definitiveTime;
+    /* This needs to be changed to a relation. */private List<LocalDateTime> possibleTimes;
+    private String location;
+    // Relations:
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id")
     private Game game;
-    private boolean isFull;
-    private LocalDateTime definitiveTime;
-    private List<LocalDateTime> possibleTimes;
+
     @ManyToMany(mappedBy = "joinedEvents")
     private List<Participant> players;
-    private String location;
+
     @ManyToOne
     @JoinColumn(name = "host_id")
     private Host host;

@@ -6,6 +6,7 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("Participant")
 public class Participant extends User {
 
     private int age;
@@ -20,8 +21,8 @@ public class Participant extends User {
     @ManyToMany
     @JoinTable(
             name = "player_events",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "participant_id")
+            joinColumns = @JoinColumn(name = "participant_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     private List<Event> joinedEvents;
 

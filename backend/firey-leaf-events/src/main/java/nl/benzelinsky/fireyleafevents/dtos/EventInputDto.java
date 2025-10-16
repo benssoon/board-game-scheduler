@@ -13,14 +13,16 @@ public class EventInputDto {
 
     @NotBlank
     public String title;
-    public Game game;
-
-    @NotNull
     public boolean isFull;
 
+    @NotBlank
+    public String location;
+
     public LocalDateTime definitiveTime;
+
+    // Relations
+    public Game game;
+    public Host host;
     public List<LocalDateTime> possibleTimes;
     public List<Participant> players;
-    public String location;
-    public Host host;
 }

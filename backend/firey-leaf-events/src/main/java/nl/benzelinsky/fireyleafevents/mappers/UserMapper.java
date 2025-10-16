@@ -6,24 +6,24 @@ import nl.benzelinsky.fireyleafevents.models.User;
 
 public class UserMapper {
 
-    public static User toEntity(UserInputDto userInputDto) {
+    public static User toEntity(UserInputDto inputDto) {
         User user = new User();
 
-        user.setName(userInputDto.name);
-        user.setEmailAddress(userInputDto.emailAddress);
-        user.setTelephoneNumber(userInputDto.telephoneNumber);
+        user.setName(inputDto.name);
+        user.setEmailAddress(inputDto.emailAddress);
+        user.setTelephoneNumber(inputDto.telephoneNumber);
 
         return user;
     }
     public static UserOutputDto toOutputDto(User user) {
-        UserOutputDto userOutputDto = new UserOutputDto();
+        UserOutputDto outputDto = new UserOutputDto();
 
-        userOutputDto.id = user.getId();
-        userOutputDto.name = user.getName();
-        userOutputDto.emailAddress = user.getEmailAddress();
-        userOutputDto.telephoneNumber = user.getTelephoneNumber();
+        outputDto.id = user.getId();
+        outputDto.name = user.getName();
+        outputDto.emailAddress = user.getEmailAddress();
+        outputDto.telephoneNumber = user.getTelephoneNumber();
 
-        return userOutputDto;
+        return outputDto;
     }
 
 }

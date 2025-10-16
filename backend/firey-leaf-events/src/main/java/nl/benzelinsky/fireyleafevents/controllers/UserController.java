@@ -37,7 +37,7 @@ public class UserController {
     // Update User by ID
     @PutMapping("/{id}")
     public ResponseEntity<UserOutputDto> updateUserById(@PathVariable Long id,
-                                                          @RequestBody UserInputDto dtoIn) {
+                                                          @Valid @RequestBody UserInputDto dtoIn) {
         UserOutputDto dtoOut = this.service.updateUserById(id, dtoIn);
         return ResponseEntity.ok(dtoOut);
     }

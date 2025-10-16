@@ -8,13 +8,12 @@ import jakarta.persistence.*;
 @DiscriminatorColumn(name = "user_type") // Column to indicate which type of user (Participant, Host, Organization)
 public class User {
 
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String emailAddress;
-    private int telephoneNumber;
+    private String telephoneNumber;
 
     // Getters and setters
     public Long getId() {
@@ -37,11 +36,11 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public int getTelephoneNumber() {
+    public String getTelephoneNumber() {
         return this.telephoneNumber;
     }
 
-    public void setTelephoneNumber(int telephoneNumber) {
+    public void setTelephoneNumber(String telephoneNumber) {
         this.telephoneNumber = telephoneNumber;
     }
 }

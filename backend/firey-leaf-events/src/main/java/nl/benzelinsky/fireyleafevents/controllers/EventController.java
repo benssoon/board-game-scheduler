@@ -39,7 +39,7 @@ public class EventController {
     // Update Event by ID
     @PutMapping("/{id}")
     public ResponseEntity<EventOutputDto> updateEventById(@PathVariable Long id,
-                                                          @RequestBody EventInputDto dtoIn) {
+                                                          @Valid @RequestBody EventInputDto dtoIn) {
         EventOutputDto dtoOut = this.service.updateEventById(id, dtoIn);
         return ResponseEntity.ok(dtoOut);
     }
