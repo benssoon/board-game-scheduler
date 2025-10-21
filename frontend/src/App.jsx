@@ -44,17 +44,6 @@ function App() {
         }
     }
 
-    async function fetchUser(id) {
-        try {
-            const response = await axios.get(devApiUrl+'/user/'+id);
-            console.log(response);
-            setEvent(response.data);
-        } catch (e) {
-            console.error(devApiUrl+'/events/'+id);
-            console.error(e.message + ': ' + e.response.data);
-        }
-    }
-
     async function createEvent(e) {
         e.preventDefault();
         try {
