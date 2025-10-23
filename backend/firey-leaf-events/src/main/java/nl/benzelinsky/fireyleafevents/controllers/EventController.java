@@ -33,7 +33,7 @@ public class EventController {
 
     // Get all Events
     @GetMapping
-    public ResponseEntity<List<EventOutputDto>> getAllEvents(@PathVariable Long id) {
+    public ResponseEntity<List<EventOutputDto>> getAllEvents() {
         return ResponseEntity.ok(this.service.getAllEvents());
     }
 
