@@ -2,9 +2,10 @@ import './Home.css';
 import axios from 'axios';
 import {useState} from 'react';
 import EventCard from '../../components/EventCard/EventCard.jsx';
+import {createEvent, fetchObject} from '../../helpers/httpRequests.js';
 
 function Home() {
-    const devApiUrl = 'http://localhost:8080';
+
 
     //<editor-fold desc="State">
     const [formState, setFormState] = useState({
@@ -23,8 +24,18 @@ function Home() {
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
-    function handleClick(type, id) {
-        fetchObject(type, formState[id]);
+    function handleClick(httpRequest, type, id) {
+        if (httpRequest === 'post') {
+            switch (type) {
+                case 'event':
+                    createEvent(eventFormState);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            fetchObject(type, formState[id], setEvent, setUser);
+        }
     }
 
     function handleChange(e) {
@@ -40,8 +51,6 @@ function Home() {
     function handleCreateChange(e) {
         const changedFieldName = e.target.name;
         const newValue = e.target.value;
-        console.log(changedFieldName);
-        console.log(newValue);
 
         setEventFormState({
             ...eventFormState,
@@ -49,72 +58,6 @@ function Home() {
         });
     }
     //</editor-fold>
-
-    //<editor-fold desc="HTTP requests">
-    async function fetchObject(type, id) {
-        try {
-            const response = await axios.get(`${devApiUrl}/${type}s/${id}`);
-            console.log(response);
-            switch (type) {
-                case 'event':
-                    setEvent(response.data);
-                    break;
-                case 'user':
-                    setUser(response.data);
-                    break;
-                default:
-                    break;
-            }
-        } catch (e) {
-            console.error(e.message + ': ' + e.response.data);
-        }
-    }
-
-    async function createEvent(e) {
-        e.preventDefault();
-        try {
-            const response = await axios.post(devApiUrl+'/events', eventFormState)
-            console.log(response);
-        } catch (e) {
-            const response = e.response.data;
-            const missingKeys = Object.keys(response);
-            console.error(e);
-            let errors = [];
-            for (const key in missingKeys) {
-                const missingKey = missingKeys[key]
-                const keyProblem = response[missingKey]
-                const err = `"${missingKey}" ${keyProblem}`;
-                console.error(err);
-                errors.push(err);
-                return errors;
-            }
-        }
-    }
-
-    async function createUser(e) {
-        e.preventDefault();
-        try {
-            const response = await axios.post(devApiUrl+'/users', {
-                name: 'Ben',
-                emailAddress: 'ben@ben.com',
-            })
-            console.log(response);
-        } catch (e) {
-            const response = e.response.data;
-            const missingKeys = Object.keys(response);
-            console.error(e);
-            let errors = [];
-            for (const key in missingKeys) {
-                const missingKey = missingKeys[key]
-                const keyProblem = response[missingKey]
-                const err = `"${missingKey}" ${keyProblem}`;
-                console.error(err);
-                errors.push(err);
-                return errors;
-            }
-        }
-    }
-//</editor-fold>
 
     return (
         <>
@@ -147,7 +90,7 @@ function Home() {
                     value={eventFormState.location}
                     onChange={handleCreateChange}
                 />
-                <button type="button" onClick={createEvent}>Submit</button>
+                <button type="button" onClick={() => handleClick('post', 'event')}>Submit</button>
             </form>
 
             {/*Get Event*/}
@@ -160,7 +103,7 @@ function Home() {
                     value={formState['eventId']}
                     onChange={handleChange}
                 />
-                <button type="button" onClick={() => handleClick('event', 'eventId')}>Get event</button>
+                <button type="button" onClick={() => handleClick('get', 'event', 'eventId')}>Get event</button>
             </form>
 
             {/*Get User*/}
@@ -173,7 +116,7 @@ function Home() {
                     value={formState['userId']}
                     onChange={handleChange}
                 />
-                <button type="button" onClick={() => handleClick('user', 'userId')}>Get user</button>
+                <button type="button" onClick={() => handleClick('get', 'user', 'userId')}>Get user</button>
             </form>
         </>
     );
