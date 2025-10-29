@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import EventCard from './components/EventCard/EventCard.jsx';
+import Card from './components/Card/Card.jsx';
 import axios from 'axios';
 import Home from './pages/Home/Home.jsx';
 import EventsPage from './pages/EventsPage/EventsPage.jsx';

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -28,6 +29,12 @@ public class EventController {
         URI location = URI.create("/events/" + eventOutputDto.id);
 
         return ResponseEntity.created(location).body(eventOutputDto);
+    }
+
+    // Get all Events
+    @GetMapping
+    public ResponseEntity<List<EventOutputDto>> getAllEvents() {
+        return ResponseEntity.ok(this.service.getAllEvents());
     }
 
     // Get Event by ID

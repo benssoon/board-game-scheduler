@@ -10,6 +10,9 @@ import nl.benzelinsky.fireyleafevents.repositories.EventRepository;
 import nl.benzelinsky.fireyleafevents.repositories.GameRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class EventService {
 
@@ -26,6 +29,15 @@ public class EventService {
         Event event = EventMapper.toEntity(dtoIn);
         this.eventRepository.save(event);
         return EventMapper.toOutputDto(event);
+    }
+
+    // Get all events
+    public List<EventOutputDto> getAllEvents() {
+        List<EventOutputDto> allEvents = new ArrayList<>();
+        this.eventRepository.findAll()
+                .forEach(event ->
+                        allEvents.add(EventMapper.toOutputDto(event)));
+        return allEvents;
     }
 
     // Get event by ID

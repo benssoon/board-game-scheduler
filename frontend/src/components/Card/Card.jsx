@@ -1,10 +1,13 @@
-import './EventCard.css';
+import './Card.css';
 
-function EventCard({title, game, host, isFull, location, players, possibleTimes}) {
+function Card({title, game, host, isFull, location, players, possibleTimes, className}) {
     return (
-        <>
-            <h2>{title}</h2>
+        <article className={className}>
+            <div className="placeholder">
+
+            </div>
             <ul>
+                <li>Title: {title}</li>
                 <li>Game: {game}</li>
                 <li>Host: {host}</li>
                 {isFull && <li>Game full</li>}
@@ -12,8 +15,8 @@ function EventCard({title, game, host, isFull, location, players, possibleTimes}
                 <li>Players: {players}</li>
                 <li>Possible times: {possibleTimes}</li>
             </ul>
-        </>
+        </article>
     )
 }
 
-export default EventCard;
+export default Card;

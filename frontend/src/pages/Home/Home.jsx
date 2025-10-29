@@ -1,7 +1,7 @@
 import './Home.css';
 import axios from 'axios';
 import {useState} from 'react';
-import EventCard from '../../components/EventCard/EventCard.jsx';
+import Card from '../../components/Card/Card.jsx';
 
 function Home() {
     const devApiUrl = 'http://localhost:8080';
@@ -12,11 +12,7 @@ function Home() {
         eventId: 0,
     });
 
-    const [eventFormState, setEventFormState] = useState({
-        title: '',
-        location: '',
-        isFull: false,
-    });
+
 
     const [user, setUser] = useState({});
     const [event, setEvent] = useState({});
@@ -37,17 +33,7 @@ function Home() {
         });
     }
 
-    function handleCreateChange(e) {
-        const changedFieldName = e.target.name;
-        const newValue = e.target.value;
-        console.log(changedFieldName);
-        console.log(newValue);
 
-        setEventFormState({
-            ...eventFormState,
-            [changedFieldName]: newValue,
-        });
-    }
     //</editor-fold>
 
     //<editor-fold desc="HTTP requests">
@@ -70,26 +56,6 @@ function Home() {
         }
     }
 
-    async function createEvent(e) {
-        e.preventDefault();
-        try {
-            const response = await axios.post(devApiUrl+'/events', eventFormState)
-            console.log(response);
-        } catch (e) {
-            const response = e.response.data;
-            const missingKeys = Object.keys(response);
-            console.error(e);
-            let errors = [];
-            for (const key in missingKeys) {
-                const missingKey = missingKeys[key]
-                const keyProblem = response[missingKey]
-                const err = `"${missingKey}" ${keyProblem}`;
-                console.error(err);
-                errors.push(err);
-                return errors;
-            }
-        }
-    }
 
     async function createUser(e) {
         e.preventDefault();
@@ -119,38 +85,8 @@ function Home() {
     return (
         <>
             <h1>Home</h1>
-            <EventCard
-                title={event.title}
-                game={event.game}
-                host={event.host}
-                isFull={event.isFull}
-                location={event.location}
-                players={event.players}
-                possibleTimes={event.possibleTimes}
-            />
 
-            {/*Create Event*/}
-            <form>
-                <label htmlFor="eventTitle">Event title:</label>
-                <input
-                    type="text"
-                    name="title"
-                    id="eventTitle"
-                    value={eventFormState.title}
-                    onChange={handleCreateChange}
-                />
-                <label htmlFor="eventLocation">Location:</label>
-                <input
-                    type="text"
-                    name="location"
-                    id="eventLocation"
-                    value={eventFormState.location}
-                    onChange={handleCreateChange}
-                />
-                <button type="button" onClick={createEvent}>Submit</button>
-            </form>
-
-            {/*Get Event*/}
+            {/*<editor-fold desc="Get Event Form">*/}
             <form>
                 <label htmlFor="eventId">Event ID:</label>
                 <input
@@ -162,8 +98,9 @@ function Home() {
                 />
                 <button type="button" onClick={() => handleClick('event', 'eventId')}>Get event</button>
             </form>
+            {/*</editor-fold>*/}
 
-            {/*Get User*/}
+            {/*<editor-fold desc="Get User Form">*/}
             <form>
                 <label htmlFor="UserId">User ID:</label>
                 <input
@@ -175,6 +112,7 @@ function Home() {
                 />
                 <button type="button" onClick={() => handleClick('user', 'userId')}>Get user</button>
             </form>
+            {/*</editor-fold>*/}
         </>
     );
 }
