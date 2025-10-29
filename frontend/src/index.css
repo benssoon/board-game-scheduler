@@ -2,3 +2,14 @@
     display: flex;
     flex-direction: column;
 }
+
+:root {
+    --color-primary: orange;
+    --color-secondary: #c3c1c1;
+    --color-tertiary: black;
+    --color-accent: #bc6262;
+    --color-white: white;
+
+    --rounding-gentle: 12px;
+    --card-spacing: 48px;
+}

@@ -1,0 +1,18 @@
+.card {
+    background-color: var(--color-secondary);
+    display: flex;
+    max-width: 312px;
+    height: 218px;
+    padding: 20px 10px;
+    border-radius: var(--rounding-gentle);
+}
+
+.game, .user {
+    flex-direction: column;
+}
+
+.card .placeholder {
+    background-color: var(--color-primary);
+    border-radius: var(--rounding-gentle);
+    width: 160px;
+}
