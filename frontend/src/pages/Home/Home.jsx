@@ -16,8 +16,10 @@ function Home() {
     const [formState, setFormState] = useState({
         userId: 0,
         eventId: 0,
+        gameId: 0,
     });
     const [user, setUser] = useState({});
+    const [game, setGame] = useState({});
     const [event, setEvent] = useState({});
     //</editor-fold>
 
@@ -58,7 +60,7 @@ function Home() {
             {/*</editor-fold>*/}
 
             {/*<editor-fold desc="Get User Form">*/}
-            <form>
+            <form onSubmit={(e) => handleSubmit(e,'user', 'userId', setUser)}>
                 <label htmlFor="UserId">User ID:</label>
                 <input
                     type="number"
@@ -67,7 +69,21 @@ function Home() {
                     value={formState['userId']}
                     onChange={handleChange}
                 />
-                <button type="button" onClick={() => handleSubmit('user', 'userId')}>Get user</button>
+                <button type="submit">Get user</button>
+            </form>
+            {/*</editor-fold>*/}
+
+            {/*<editor-fold desc="Get Game Form">*/}
+            <form onSubmit={(e) => handleSubmit(e, 'game', 'gameId', setGame)}>
+                <label htmlFor="gameId">Game ID:</label>
+                <input
+                    type="number"
+                    name="gameId"
+                    id="gameId"
+                    value={formState['gameId']}
+                    onChange={handleChange}
+                />
+                <button type="submit">Get game</button>
             </form>
             {/*</editor-fold>*/}
         </>
