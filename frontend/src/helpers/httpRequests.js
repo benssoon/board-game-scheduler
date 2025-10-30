@@ -1,22 +1,24 @@
 import axios from 'axios';
 const devApiUrl = 'http://localhost:8080';
 
-export async function fetchObject(type, id, setEvent, setUser) {
+//<editor-fold desc="Get Requests">
+export async function fetchObject(e, type, id, setObject) {
+    e.preventDefault();
     try {
         const response = await axios.get(`${devApiUrl}/${type}s/${id}`);
         console.log(response);
         switch (type) {
             case 'event':
-                setEvent(response.data);
+                setObject(response.data);
                 break;
             case 'user':
-                setUser(response.data);
+                setObject(response.data);
                 break;
             default:
                 break;
         }
-    } catch (e) {
-        console.error(e.message + ': ' + e.response.data);
+    } catch (er) {
+        console.error(er.message + ': ' + er.response.data);
     }
 }
 
@@ -26,14 +28,15 @@ export async function fetchEvents(e, setAllEvents) {
             const response = await axios.get(`${devApiUrl}/events`);
             console.log(response.data);
             setAllEvents(response.data);
-        } catch (e) {
-            console.error(e.message + ': ' + e.response.data);
+        } catch (er) {
+            console.error(er.message + ': ' + er.response.data);
             setAllEvents([])
         }
     }
+//</editor-fold>
 
+//<editor-fold desc="Post Requests">
 export async function createEvent(e, eventFormState) {
-    console.log(e);
     e.preventDefault();
     try {
         const response = await axios.post(devApiUrl+'/events', eventFormState)
@@ -75,5 +78,27 @@ export async function createUser(e) {
             errors.push(err);
             return errors;
         }
+    }
+}
+//</editor-fold>
+
+export async function deleteEvent(e, id) {
+    e.preventDefault();
+    try {
+        const response = await axios.delete(`${devApiUrl}/events/${id}`)
+        console.log(response.data);
+    } catch (er) {
+        console.error(er.message + ': ' + er.response.data);
+        console.error(`${devApiUrl}/events/${id}`);
+    }
+}
+
+export async function deleteEvents(e) {
+    e.preventDefault();
+    try {
+        const response = await axios.delete(`${devApiUrl}/events/deleteAll`)
+        console.log(response.data);
+    } catch (er) {
+        console.error(er);
     }
 }

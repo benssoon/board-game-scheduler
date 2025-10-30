@@ -77,6 +77,18 @@ public class EventService {
         return toDelete.getTitle() + " event has been deleted.";
     }
 
+    // Delete all events (besides default event)
+    public String deleteAll() {
+        List<Long> allIds = new ArrayList<>();
+        this.eventRepository
+                .findAll()
+                .forEach(event ->
+                        allIds.add(event.getId()));
+        allIds.remove(Long.valueOf(1));
+        this.eventRepository.deleteAllById(allIds);
+        return "All events except " + this.eventRepository.getEventById(Long.valueOf(1)).getTitle() + " have been deleted.";
+    }
+
     // Couple Event with Game
     public void assignGameToEvent(Long gameId, Long eventId) {
         Game game = this.gameRepository.findById(gameId)

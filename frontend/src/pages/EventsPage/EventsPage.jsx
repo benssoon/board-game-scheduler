@@ -6,11 +6,10 @@ import Card from '../../components/Card/Card.jsx';
 import Pill from '../../components/Pill/Pill.jsx';
 
 // Libraries
-import axios from 'axios';
 
 // Functions
 import {useState} from 'react';
-import {fetchEvents, createEvent} from '../../helpers/httpRequests.js';
+import {fetchEvents, createEvent, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
 
 function EventsPage() {
 
@@ -20,6 +19,7 @@ function EventsPage() {
         location: '',
         isFull: false,
     });
+    const [eventId, setEventId] = useState(2);
     const [allEvents, setAllEvents] = useState([]);
     //</editor-fold>
 
@@ -35,6 +35,16 @@ function EventsPage() {
             [changedFieldName]: newValue,
         });
     }
+
+    function handleDeleteChange(e) {
+        const newValue = e.target.value;
+
+        if (newValue <= 1) {
+            setEventId(2);
+        } else {
+            setEventId(newValue);
+        }
+    }
     //</editor-fold>
 
     return (
@@ -42,6 +52,7 @@ function EventsPage() {
             <h2>Events</h2>
 
             {/*<editor-fold desc="Create Event Form">*/}
+            <h2>Create Event</h2>
             <form>
                 <label htmlFor="eventTitle">Event title:</label>
                 <input
@@ -63,7 +74,22 @@ function EventsPage() {
             </form>
             {/*</editor-fold>*/}
 
+            {/*<editor-fold desc="Delete Event Form">*/}
+            <form onSubmit={(e) => deleteEvent(e, eventId)}>
+                <label htmlFor="deleteEventId">Event ID:</label>
+                <input
+                    type="number"
+                    name="deleteEventId"
+                    id="deleteEventId"
+                    value={eventId}
+                    onChange={handleDeleteChange}
+                />
+                <button type="submit">Delete event</button>
+            </form>
+            {/*</editor-fold>*/}
+
             <button type="button" onClick={(e) => fetchEvents(e, setAllEvents)}>Get all</button>
+            <button type="button" onClick={deleteEvents}>Delete all</button>
 
             {/*<editor-fold desc="Events Grid">*/}
             <section className="categoryPage">

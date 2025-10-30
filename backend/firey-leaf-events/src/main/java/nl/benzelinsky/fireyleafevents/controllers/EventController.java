@@ -57,6 +57,12 @@ public class EventController {
         return ResponseEntity.ok(this.service.deleteEventById(id));
     }
 
+    // Delete all Events (besides default event)
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<String> deleteAll() {
+        return ResponseEntity.ok(this.service.deleteAll());
+    }
+
     /**********/
 
     // Couple Event with Game
