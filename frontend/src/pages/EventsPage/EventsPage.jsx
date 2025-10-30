@@ -1,10 +1,16 @@
+// CSS
 import './EventsPage.css';
+
+// Components
 import Card from '../../components/Card/Card.jsx';
-import axios from 'axios';
-import {useState} from 'react';
 import Pill from '../../components/Pill/Pill.jsx';
 
-const devApiUrl = 'http://localhost:8080';
+// Libraries
+import axios from 'axios';
+
+// Functions
+import {useState} from 'react';
+import {fetchEvents, createEvent} from '../../helpers/httpRequests.js';
 
 function EventsPage() {
 
@@ -31,42 +37,6 @@ function EventsPage() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="HTTP">
-    async function createEvent(e) {
-        e.preventDefault();
-        try {
-            const response = await axios.post(devApiUrl+'/events', eventFormState)
-            console.log(response);
-        } catch (e) {
-            const response = e.response.data;
-            const missingKeys = Object.keys(response);
-            console.error(e);
-            let errors = [];
-            for (const key in missingKeys) {
-                const missingKey = missingKeys[key]
-                const keyProblem = response[missingKey]
-                const err = `"${missingKey}" ${keyProblem}`;
-                console.error(err);
-                errors.push(err);
-                return errors;
-            }
-        }
-    }
-
-    async function fetchEvents(e) {
-        e.preventDefault();
-        try {
-            const response = await axios.get(`${devApiUrl}/events`);
-            console.log(response.data);
-            setAllEvents(response.data);
-        } catch (e) {
-            console.error(e.message + ': ' + e.response.data);
-            setAllEvents([])
-        }
-    }
-    //</editor-fold>
-
-
     return (
         <>
             <h2>Events</h2>
@@ -89,11 +59,11 @@ function EventsPage() {
                     value={eventFormState.location}
                     onChange={handleCreateChange}
                 />
-                <button type="button" onClick={createEvent}>Submit</button>
+                <button type="button" onClick={(e) => createEvent(e, eventFormState)}>Submit</button>
             </form>
             {/*</editor-fold>*/}
 
-            <button type="button" onClick={fetchEvents}>Get all</button>
+            <button type="button" onClick={(e) => fetchEvents(e, setAllEvents)}>Get all</button>
 
             {/*<editor-fold desc="Events Grid">*/}
             <section className="categoryPage">

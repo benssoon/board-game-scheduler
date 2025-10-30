@@ -20,7 +20,21 @@ export async function fetchObject(type, id, setEvent, setUser) {
     }
 }
 
-export async function createEvent(eventFormState) {
+export async function fetchEvents(e, setAllEvents) {
+        e.preventDefault();
+        try {
+            const response = await axios.get(`${devApiUrl}/events`);
+            console.log(response.data);
+            setAllEvents(response.data);
+        } catch (e) {
+            console.error(e.message + ': ' + e.response.data);
+            setAllEvents([])
+        }
+    }
+
+export async function createEvent(e, eventFormState) {
+    console.log(e);
+    e.preventDefault();
     try {
         const response = await axios.post(devApiUrl+'/events', eventFormState)
         console.log(response);
