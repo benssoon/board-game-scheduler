@@ -1,9 +1,18 @@
 import './Pill.css';
 
-function Pill() {
+function Pill( {toggleVisible} ) {
+
+    function deletePill() {
+        toggleVisible(false);
+    }
+
     return (
-        <div className="searchBar">
-            Hello
+        <div className="pill">
+            <span>Hello</span>
+            <button
+                className="deletePill"
+                onClick={deletePill}
+            >X</button>
         </div>
     );
 }

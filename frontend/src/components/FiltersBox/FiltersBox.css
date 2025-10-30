@@ -1,0 +1,9 @@
+.filtersBox {
+    display: flex;
+    align-items: center;
+    gap: var(--filter-items-spacing);
+    border: solid 2px var(--color-tertiary);
+    padding: 2px;
+    overflow-x: scroll;
+}
+

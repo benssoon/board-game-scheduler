@@ -4,8 +4,3 @@
     gap: var(--card-spacing);
 }
 
-.categoryPage {
-    display: flex;
-    flex-direction: column;
-    gap: var(--card-spacing);
-}

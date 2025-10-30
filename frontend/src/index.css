@@ -10,6 +10,8 @@
     --color-accent: #bc6262;
     --color-white: white;
 
-    --rounding-gentle: 12px;
+    --rounding-gentle: 6px;
+    --rounding-pill: 50px;
     --card-spacing: 48px;
+    --filter-items-spacing: 10px;
 }
