@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -35,6 +36,12 @@ public class GameController {
     @GetMapping("/{id}")
     public ResponseEntity<GameOutputDto> getGameById(@PathVariable Long id) {
         return ResponseEntity.ok(this.service.getGameById(id));
+    }
+
+    // Get all Games
+    @GetMapping
+    public ResponseEntity<List<GameOutputDto>> getAllGames() {
+        return ResponseEntity.ok(this.service.getAllGames());
     }
 
     // Update Game by ID

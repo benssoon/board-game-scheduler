@@ -44,3 +44,9 @@ button {
     flex-direction: column;
     gap: 10px;
 }
+
+.categoryGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--card-spacing);
+}

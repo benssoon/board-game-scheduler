@@ -23,16 +23,29 @@ export async function fetchObject(e, type, id, setObject) {
 }
 
 export async function fetchEvents(e, setAllEvents) {
-        e.preventDefault();
-        try {
-            const response = await axios.get(`${devApiUrl}/events`);
-            console.log(response.data);
-            setAllEvents(response.data);
-        } catch (er) {
-            console.error(er.message + ': ' + er.response.data);
-            setAllEvents([])
-        }
+    e.preventDefault();
+    try {
+        const response = await axios.get(`${devApiUrl}/events`);
+        console.log(response.data);
+        setAllEvents(response.data);
+    } catch (er) {
+        console.error(er.message + ': ' + er.response.data);
+        setAllEvents([])
     }
+}
+
+export async function fetchGames(e, setAllGames) {
+    e.preventDefault();
+    console.log("This should be a custom hook!");
+    try {
+        const response = await axios.get(`${devApiUrl}/games`);
+        console.log(response.data);
+        setAllGames(response.data);
+    } catch (er) {
+        console.error(er.message + ': ' + er.response.data);
+        setAllGames([])
+    }
+}
 //</editor-fold>
 
 //<editor-fold desc="Post Requests">
@@ -80,8 +93,14 @@ export async function createUser(e) {
         }
     }
 }
+
+export async function createGame(e) {
+    e.preventDefault();
+    console.log("This should be replaced with a custom hook!")
+}
 //</editor-fold>
 
+//<editor-fold desc="Delete requests">
 export async function deleteEvent(e, id) {
     e.preventDefault();
     try {
@@ -93,6 +112,11 @@ export async function deleteEvent(e, id) {
     }
 }
 
+export async function deleteGame(e) {
+    e.preventDefault();
+    console.log("This should be replaced with a custom hook!")
+}
+
 export async function deleteEvents(e) {
     e.preventDefault();
     try {
@@ -102,3 +126,9 @@ export async function deleteEvents(e) {
         console.error(er);
     }
 }
+
+export async function deleteGames(e) {
+    e.preventDefault();
+    console.log("This should be replaced with a custom hook!")
+}
+//</editor-fold>

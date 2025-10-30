@@ -1,6 +1,0 @@
-.eventsGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--card-spacing);
-}
-

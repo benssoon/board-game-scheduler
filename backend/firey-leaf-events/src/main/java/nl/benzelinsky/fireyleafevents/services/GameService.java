@@ -4,26 +4,25 @@ import nl.benzelinsky.fireyleafevents.dtos.GameInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.GameOutputDto;
 import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
 import nl.benzelinsky.fireyleafevents.mappers.GameMapper;
-import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
-import nl.benzelinsky.fireyleafevents.repositories.EventRepository;
 import nl.benzelinsky.fireyleafevents.repositories.GameRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class GameService {
 
     private final GameRepository gameRepository;
-    private final EventRepository eventRepository;
 
-    public GameService(GameRepository gameRepository, EventRepository eventRepository) {
+    public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
-        this.eventRepository = eventRepository;
     }
 
     /****** CRUD operations ******/
 
-    // Create an game
+    // Create a game
     public GameOutputDto createGame(GameInputDto dtoIn) {
         Game game = GameMapper.toEntity(dtoIn);
         this.gameRepository.save(game);
@@ -37,6 +36,15 @@ public class GameService {
                         .orElseThrow(() ->
                                 new RecordNotFoundException("Game not found")));
 
+    }
+
+    // Get all gamess
+    public List<GameOutputDto> getAllGames() {
+        List<GameOutputDto> allGames = new ArrayList<>();
+        this.gameRepository.findAll()
+                .forEach(game ->
+                        allGames.add(GameMapper.toOutputDto(game)));
+        return allGames;
     }
 
     // Update game by ID

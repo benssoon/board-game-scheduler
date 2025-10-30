@@ -3,7 +3,6 @@ import './EventsPage.css';
 
 // Components
 import Card from '../../components/Card/Card.jsx';
-import Pill from '../../components/Pill/Pill.jsx';
 
 // Libraries
 
