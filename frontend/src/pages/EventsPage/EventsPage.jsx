@@ -10,6 +10,8 @@ import Pill from '../../components/Pill/Pill.jsx';
 // Functions
 import {useState} from 'react';
 import {fetchEvents, createEvent, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
+import SearchBar from '../../components/SearchBar/SearchBar.jsx';
+import FiltersBar from '../../components/FiltersBar/FiltersBar.jsx';
 
 function EventsPage() {
 
@@ -93,7 +95,7 @@ function EventsPage() {
 
             {/*<editor-fold desc="Events Grid">*/}
             <section className="categoryPage">
-                <Pill/>
+                <FiltersBar/>
                 <div className="eventsGrid">
                     {allEvents.map((event) => {
                         return (<Card
