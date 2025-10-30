@@ -1,0 +1,9 @@
+.searchBar {
+    display: flex;
+}
+
+.searchButton {
+    border-radius: 0 var(--rounding-gentle) var(--rounding-gentle) 0;
+    border: solid var(--color-secondary);
+    background-color: var(--color-secondary);
+}

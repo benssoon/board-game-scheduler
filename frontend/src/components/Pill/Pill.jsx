@@ -1,5 +1,4 @@
 import './Pill.css';
-import {useState} from 'react';
 
 function Pill( {toggleVisible} ) {
 

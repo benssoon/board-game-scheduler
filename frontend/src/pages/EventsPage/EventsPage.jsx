@@ -10,34 +10,23 @@ import Pill from '../../components/Pill/Pill.jsx';
 // Functions
 import {useState} from 'react';
 import {fetchEvents, createEvent, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
-import SearchBar from '../../components/SearchBar/SearchBar.jsx';
-import FiltersBar from '../../components/FiltersBar/FiltersBar.jsx';
+import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
+import {handleFormChange} from '../../helpers/handlers.js';
 
 function EventsPage() {
 
     //<editor-fold desc="State">
-    const [eventFormState, setEventFormState] = useState({
+    const initialEventFormState = {
         title: '',
         location: '',
         isFull: false,
-    });
+    }
+    const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
     const [allEvents, setAllEvents] = useState([]);
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
-    function handleCreateChange(e) {
-        const changedFieldName = e.target.name;
-        const newValue = e.target.value;
-        console.log(changedFieldName);
-        console.log(newValue);
-
-        setEventFormState({
-            ...eventFormState,
-            [changedFieldName]: newValue,
-        });
-    }
-
     function handleDeleteChange(e) {
         const newValue = e.target.value;
 
@@ -47,22 +36,27 @@ function EventsPage() {
             setEventId(newValue);
         }
     }
+
+    function handleEventSubmit(e) {
+        setEventFormState(initialEventFormState);
+        createEvent(e, eventFormState);
+    }
     //</editor-fold>
 
     return (
-        <>
+        <div className="categoryPage">
             <h2>Events</h2>
 
             {/*<editor-fold desc="Create Event Form">*/}
             <h2>Create Event</h2>
-            <form>
+            <form onSubmit={handleEventSubmit}>
                 <label htmlFor="eventTitle">Event title:</label>
                 <input
                     type="text"
                     name="title"
                     id="eventTitle"
                     value={eventFormState.title}
-                    onChange={handleCreateChange}
+                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
                 <label htmlFor="eventLocation">Location:</label>
                 <input
@@ -70,9 +64,9 @@ function EventsPage() {
                     name="location"
                     id="eventLocation"
                     value={eventFormState.location}
-                    onChange={handleCreateChange}
+                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
-                <button type="button" onClick={(e) => createEvent(e, eventFormState)}>Submit</button>
+                <button type="submit">Submit</button>
             </form>
             {/*</editor-fold>*/}
 
@@ -94,8 +88,8 @@ function EventsPage() {
             <button type="button" onClick={deleteEvents}>Delete all</button>
 
             {/*<editor-fold desc="Events Grid">*/}
-            <section className="categoryPage">
-                <FiltersBar/>
+            <section className="categoryBox">
+                <FiltersBox/>
                 <div className="eventsGrid">
                     {allEvents.map((event) => {
                         return (<Card
@@ -114,7 +108,7 @@ function EventsPage() {
                 </div>
             </section>
             {/*</editor-fold>*/}
-        </>
+        </div>
     );
 }
 
