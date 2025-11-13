@@ -93,8 +93,9 @@ function GamesPage() {
                     {allGames.map((game) => {
                         return (<Card
                                 key={game.id}
-                                title={game.title}
-                                className="card"
+                                type="game"
+                                data={game}
+                                className="game card"
                             />
                         )
                     })}

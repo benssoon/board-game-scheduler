@@ -24,20 +24,21 @@ public class UserService {
         return UserMapper.toOutputDto(user);
     }
 
-    // Get user by id
-    public UserOutputDto getUserById(Long id) {
+    // Get user by username
+    public UserOutputDto getUser(String username) {
         return UserMapper.toOutputDto(
-                this.repository.findById(id)
+                this.repository.findById(username)
                         .orElseThrow(() ->
                                 new RecordNotFoundException("User not found")));
     }
     
-    // Update user by ID
-    public UserOutputDto updateUserById(Long id, UserInputDto dtoIn) {
-        User toUpdate = this.repository.findById(id)
+    // Update user by username
+    public UserOutputDto updateUser(String username, UserInputDto dtoIn) {
+        User toUpdate = this.repository.findById(username)
                 .orElseThrow(() ->
                         new RecordNotFoundException("User not found."));
 
+        // Doing this with a mapper wouldn't work, because then the record would get a different id.
         toUpdate.setName(dtoIn.name);
         toUpdate.setEmailAddress(dtoIn.emailAddress);
         toUpdate.setTelephoneNumber(dtoIn.telephoneNumber);
@@ -46,9 +47,9 @@ public class UserService {
         return UserMapper.toOutputDto(toUpdate);
     }
 
-    // Delete user by ID
-    public String deleteUserById(Long id) {
-        User toDelete = this.repository.findById(id)
+    // Delete user by username
+    public String deleteUser(String username) {
+        User toDelete = this.repository.findById(username)
                 .orElseThrow(() ->
                         new RecordNotFoundException("User not found."));
         this.repository.delete(toDelete);

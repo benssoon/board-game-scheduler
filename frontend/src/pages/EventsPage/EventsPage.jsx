@@ -93,14 +93,9 @@ function EventsPage() {
                     {allEvents.map((event) => {
                         return (<Card
                                 key={event.id}
-                                title={event.title}
-                                game={event.game}
-                                host={event.host}
-                                isFull={event.isFull}
-                                location={event.location}
-                                players={event.players}
-                                possibleTimes={event.possibleTimes}
-                                className="card"
+                                type="event"
+                                data={event}
+                                className="event card"
                             />
                         )
                     })}

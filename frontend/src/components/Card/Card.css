@@ -1,18 +1,36 @@
 .card {
     background-color: var(--color-secondary);
     display: flex;
-    max-width: 312px;
+    max-width: 320px;
     height: 218px;
     padding: 20px 10px;
     border-radius: var(--rounding-gentle);
 }
 
-.game, .user {
-    flex-direction: column;
+.card ul {
+    list-style-type: none;
+    text-align: left;
+}
+
+.game ul {
+    text-align: center;
 }
 
 .card .placeholder {
     background-color: var(--color-primary);
     border-radius: var(--rounding-gentle);
+}
+
+.event .placeholder {
     width: 160px;
+}
+
+.game .placeholder {
+    height: 160px;
+    width: 320px;
+}
+
+.game, .user {
+    flex-direction: column;
+    justify-content: center;
 }

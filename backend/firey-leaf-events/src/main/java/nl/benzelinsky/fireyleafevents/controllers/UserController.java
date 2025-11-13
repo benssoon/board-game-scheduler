@@ -24,27 +24,27 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserOutputDto> createUser(@Valid @RequestBody UserInputDto userInputDto) {
         UserOutputDto userOutputDto = this.service.createUser(userInputDto);
-        URI location = URI.create("/users/" + userOutputDto.id);
+        URI location = URI.create("/users/" + userOutputDto.username);
         return ResponseEntity.created(location).body(userOutputDto);
     }
 
-    // Get User by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<UserOutputDto> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(this.service.getUserById(id));
+    // Get User by username
+    @GetMapping("/{username}")
+    public ResponseEntity<UserOutputDto> getUser(@PathVariable String username) {
+        return ResponseEntity.ok(this.service.getUser(username));
     }
 
-    // Update User by ID
-    @PutMapping("/{id}")
-    public ResponseEntity<UserOutputDto> updateUserById(@PathVariable Long id,
-                                                          @Valid @RequestBody UserInputDto dtoIn) {
-        UserOutputDto dtoOut = this.service.updateUserById(id, dtoIn);
+    // Update User by username
+    @PutMapping("/{username}")
+    public ResponseEntity<UserOutputDto> updateUser(@PathVariable String username,
+                                                    @Valid @RequestBody UserInputDto dtoIn) {
+        UserOutputDto dtoOut = this.service.updateUser(username, dtoIn);
         return ResponseEntity.ok(dtoOut);
     }
 
-    // Delete User by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        return ResponseEntity.ok(this.service.deleteUserById(id));
+    // Delete User by username
+    @DeleteMapping("/{username}")
+    public ResponseEntity<String> deleteUser(@PathVariable String username) {
+        return ResponseEntity.ok(this.service.deleteUser(username));
     }
 }

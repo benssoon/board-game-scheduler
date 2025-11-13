@@ -18,7 +18,7 @@ public class UserMapper {
     public static UserOutputDto toOutputDto(User user) {
         UserOutputDto outputDto = new UserOutputDto();
 
-        outputDto.id = user.getId();
+        outputDto.username = user.getUsername();
         outputDto.name = user.getName();
         outputDto.emailAddress = user.getEmailAddress();
         outputDto.telephoneNumber = user.getTelephoneNumber();

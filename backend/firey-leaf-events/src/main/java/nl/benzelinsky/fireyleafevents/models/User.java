@@ -9,15 +9,18 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false, unique = true)
+    private String username;
+    @Column
     private String name;
+    @Column
     private String emailAddress;
+    @Column
     private String telephoneNumber;
 
     // Getters and setters
-    public Long getId() {
-        return this.id;
+    public String getUsername() {
+        return this.username;
     }
 
     public String getName() {

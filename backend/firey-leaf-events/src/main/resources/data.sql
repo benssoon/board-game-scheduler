@@ -7,11 +7,13 @@ VALUES ('Game night',
         TIMESTAMP '2025-10-31 23:11:11',
         'Ben''s house');
 
-INSERT INTO users (name,
+INSERT INTO users (username,
+                   name,
                    email_address,
                    telephone_number,
                    user_type)
-VALUES ('Ben',
+VALUES ('ben',
+        'Ben',
         'ben.z@test.none',
         '0123456789',
         'User'); /*This can't be Participant yet because the Participant entity isn't fully set up yet.*/
