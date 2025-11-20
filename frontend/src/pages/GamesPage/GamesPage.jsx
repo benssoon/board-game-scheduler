@@ -7,10 +7,11 @@ import Card from '../../components/Card/Card.jsx';
 
 // Functions
 import {useEffect, useState} from 'react';
-import {fetchGames, createGame, deleteGame, deleteGames, fetchEvents} from '../../helpers/httpRequests.js';
+import {createGame, deleteGame, deleteGames} from '../../helpers/httpRequests.js';
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
 import {handleFormChange} from '../../helpers/handlers.js';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
+import useFetch from '../../useFetch.js';
 
 function GamesPage() {
     //<editor-fold desc="State">
@@ -20,7 +21,7 @@ function GamesPage() {
     }
     const [gameFormState, setGameFormState] = useState(initialGameFormState);
     const [gameId, setGameId] = useState(2);
-    const [allGames, setAllGames] = useState([]);
+    const [endpoint, setEndpoint] = useState('/games');
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
@@ -40,15 +41,14 @@ function GamesPage() {
     }
     //</editor-fold>
 
-    useEffect(() => {
-        fetchGames(setAllGames);
-    }, []);
+    const { data: games, loading, error } = useFetch(endpoint);
 
     return (
         <div className="categoryPage">
             <h2>Games</h2>
 
             {/*<editor-fold desc="Create Game Form">*/}
+            {/*Make this a component!*/}
             <h2>Create Game</h2>
             <form onSubmit={handleGameSubmit}>
                 <label htmlFor="gameTitle">Game title:</label>
@@ -90,10 +90,14 @@ function GamesPage() {
             {/*<editor-fold desc="Games Grid">*/}
             <section className="categoryBox">
                 <FiltersBox/>
-                <DisplayGrid
-                    type="game"
-                    collection={allGames}
-                />
+                {loading || !games ?
+                    <p>Loading...</p>
+                    :
+                    <DisplayGrid
+                        type="game"
+                        collection={games}
+                    />
+                }
             </section>
             {/*</editor-fold>*/}
         </div>

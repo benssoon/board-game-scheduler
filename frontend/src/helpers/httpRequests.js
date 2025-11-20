@@ -1,11 +1,11 @@
 import axios from 'axios';
-const devApiUrl = 'http://localhost:8080';
+import {API} from '../globalConstants.js';
 
 //<editor-fold desc="Get Requests">
 export async function fetchObject(e, type, id, setObject) {
     e.preventDefault();
     try {
-        const response = await axios.get(`${devApiUrl}/${type}s/${id}`);
+        const response = await axios.get(`${API}/${type}s/${id}`);
         console.log(response);
         switch (type) {
             case 'event':
@@ -21,37 +21,13 @@ export async function fetchObject(e, type, id, setObject) {
         console.error(er.message + ': ' + er.response.data);
     }
 }
-
-export async function fetchEvents(setAllEvents) {
-    console.log("This should be a custom hook!");
-    try {
-        const response = await axios.get(`${devApiUrl}/events`);
-        console.log(response.data);
-        setAllEvents(response.data);
-    } catch (er) {
-        console.error(er.message + ': ' + er.response.data);
-        setAllEvents([])
-    }
-}
-
-export async function fetchGames(setAllGames) {
-    console.log("This should be a custom hook!");
-    try {
-        const response = await axios.get(`${devApiUrl}/games`);
-        console.log(response.data);
-        setAllGames(response.data);
-    } catch (er) {
-        console.error(er.message + ': ' + er.response.data);
-        setAllGames([])
-    }
-}
 //</editor-fold>
 
 //<editor-fold desc="Post Requests">
 export async function createEvent(e, eventFormState) {
     e.preventDefault();
     try {
-        const response = await axios.post(devApiUrl+'/events', eventFormState)
+        const response = await axios.post(API+'/events', eventFormState)
         console.log(response);
     } catch (e) {
         const response = e.response.data;
@@ -72,7 +48,7 @@ export async function createEvent(e, eventFormState) {
 export async function createUser(e) {
     e.preventDefault();
     try {
-        const response = await axios.post(devApiUrl+'/users', {
+        const response = await axios.post(API+'/users', {
             name: 'Ben',
             emailAddress: 'ben@ben.com',
         })
@@ -103,11 +79,11 @@ export async function createGame(e) {
 export async function deleteEvent(e, id) {
     e.preventDefault();
     try {
-        const response = await axios.delete(`${devApiUrl}/events/${id}`)
+        const response = await axios.delete(`${API}/events/${id}`)
         console.log(response.data);
     } catch (er) {
         console.error(er.message + ': ' + er.response.data);
-        console.error(`${devApiUrl}/events/${id}`);
+        console.error(`${API}/events/${id}`);
     }
 }
 
@@ -119,7 +95,7 @@ export async function deleteGame(e) {
 export async function deleteEvents(e) {
     e.preventDefault();
     try {
-        const response = await axios.delete(`${devApiUrl}/events/deleteAll`)
+        const response = await axios.delete(`${API}/events/deleteAll`)
         console.log(response.data);
     } catch (er) {
         console.error(er);
