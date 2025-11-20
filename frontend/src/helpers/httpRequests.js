@@ -22,8 +22,8 @@ export async function fetchObject(e, type, id, setObject) {
     }
 }
 
-export async function fetchEvents(e, setAllEvents) {
-    e.preventDefault();
+export async function fetchEvents(setAllEvents) {
+    console.log("This should be a custom hook!");
     try {
         const response = await axios.get(`${devApiUrl}/events`);
         console.log(response.data);
@@ -34,8 +34,7 @@ export async function fetchEvents(e, setAllEvents) {
     }
 }
 
-export async function fetchGames(e, setAllGames) {
-    e.preventDefault();
+export async function fetchGames(setAllGames) {
     console.log("This should be a custom hook!");
     try {
         const response = await axios.get(`${devApiUrl}/games`);

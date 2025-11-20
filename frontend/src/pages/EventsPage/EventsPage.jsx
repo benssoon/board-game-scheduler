@@ -7,10 +7,11 @@ import Card from '../../components/Card/Card.jsx';
 // Libraries
 
 // Functions
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {fetchEvents, createEvent, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
 import {handleFormChange} from '../../helpers/handlers.js';
+import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 
 function EventsPage() {
 
@@ -41,6 +42,10 @@ function EventsPage() {
         createEvent(e, eventFormState);
     }
     //</editor-fold>
+
+    useEffect(() => {
+        fetchEvents(setAllEvents);
+    }, []);
 
     return (
         <div className="categoryPage">
@@ -83,23 +88,15 @@ function EventsPage() {
             </form>
             {/*</editor-fold>*/}
 
-            <button type="button" onClick={(e) => fetchEvents(e, setAllEvents)}>Get all</button>
             <button type="button" onClick={deleteEvents}>Delete all</button>
 
             {/*<editor-fold desc="Events Grid">*/}
             <section className="categoryBox">
                 <FiltersBox/>
-                <div className="eventsGrid">
-                    {allEvents.map((event) => {
-                        return (<Card
-                                key={event.id}
-                                type="event"
-                                data={event}
-                                className="event card"
-                            />
-                        )
-                    })}
-                </div>
+                <DisplayGrid
+                    type="event"
+                    collection={allEvents}
+                />
             </section>
             {/*</editor-fold>*/}
         </div>

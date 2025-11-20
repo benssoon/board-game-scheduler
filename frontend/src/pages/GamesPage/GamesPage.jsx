@@ -6,10 +6,11 @@ import Card from '../../components/Card/Card.jsx';
 // Libraries
 
 // Functions
-import {useState} from 'react';
-import {fetchGames, createGame, deleteGame, deleteGames} from '../../helpers/httpRequests.js';
+import {useEffect, useState} from 'react';
+import {fetchGames, createGame, deleteGame, deleteGames, fetchEvents} from '../../helpers/httpRequests.js';
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
 import {handleFormChange} from '../../helpers/handlers.js';
+import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 
 function GamesPage() {
     //<editor-fold desc="State">
@@ -38,6 +39,10 @@ function GamesPage() {
         createGame(e, gameFormState);
     }
     //</editor-fold>
+
+    useEffect(() => {
+        fetchGames(setAllGames);
+    }, []);
 
     return (
         <div className="categoryPage">
@@ -80,26 +85,15 @@ function GamesPage() {
             </form>
             {/*</editor-fold>*/}
 
-            <button type="button" onClick={(e) => fetchGames(e, setAllGames)}>Get all</button>
-
-            {/*<editor-fold desc="Replace with useEffect()!">*/}
             <button type="button" onClick={deleteGames}>Delete all</button>
-            {/*</editor-fold>*/}
 
-            {/*<editor-fold desc="Events Grid">*/}
+            {/*<editor-fold desc="Games Grid">*/}
             <section className="categoryBox">
                 <FiltersBox/>
-                <div className="categoryGrid">
-                    {allGames.map((game) => {
-                        return (<Card
-                                key={game.id}
-                                type="game"
-                                data={game}
-                                className="game card"
-                            />
-                        )
-                    })}
-                </div>
+                <DisplayGrid
+                    type="game"
+                    collection={allGames}
+                />
             </section>
             {/*</editor-fold>*/}
         </div>
