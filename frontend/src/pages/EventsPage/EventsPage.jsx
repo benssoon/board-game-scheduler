@@ -24,7 +24,6 @@ function EventsPage() {
     }
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
-    const [endpoint, setEndpoint] = useState('/events');
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
@@ -44,10 +43,6 @@ function EventsPage() {
     }
     //</editor-fold>
 
-    const { data: events, loading, error } = useFetch(endpoint);
-
-    /*console.log("Here comes the error:")
-    console.log(error)*/
     return (
         <div className="categoryPage">
             <h2>Events</h2>
@@ -94,14 +89,9 @@ function EventsPage() {
             {/*<editor-fold desc="Events Grid">*/}
             <section className="categoryBox">
                 <FiltersBox/>
-                {loading || !events ?
-                    error.message || <p>Loading...</p>
-                    :
-                    <DisplayGrid
-                        type="event"
-                        collection={events}
-                    />
-                }
+                <DisplayGrid
+                    type="event"
+                />
             </section>
             {/*</editor-fold>*/}
         </div>

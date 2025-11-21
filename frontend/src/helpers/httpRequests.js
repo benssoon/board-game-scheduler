@@ -24,10 +24,10 @@ export async function fetchObject(e, type, id, setObject) {
 //</editor-fold>
 
 //<editor-fold desc="Post Requests">
-export async function createEvent(e, eventFormState) {
+export async function createEvent(e, data) {
     e.preventDefault();
     try {
-        const response = await axios.post(API+'/events', eventFormState)
+        const response = await axios.post(API+'/events', data)
         console.log(response);
     } catch (e) {
         const response = e.response.data;
@@ -64,14 +64,30 @@ export async function createUser(e) {
             const err = `"${missingKey}" ${keyProblem}`;
             console.error(err);
             errors.push(err);
-            return errors;
         }
+        return errors;
     }
 }
 
-export async function createGame(e) {
+export async function createGame(e, data) {
     e.preventDefault();
-    console.log("This should be replaced with a custom hook!")
+    try {
+        const response = await axios.post(API+'/games', data)
+        console.log(response);
+    } catch (er) {
+        const response = er.response.data;
+        const missingKeys = Object.keys(response);
+        console.error(er);
+        let errors = [];
+        for (const key in missingKeys) {
+            const missingKey = missingKeys[key]
+            const keyProblem = response[missingKey]
+            const err = `"${missingKey}" ${keyProblem}`;
+            errors.push(err);
+        }
+        console.log(errors);
+        return errors;
+    }
 }
 //</editor-fold>
 
