@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 
 import java.util.List;
 
+/* ToDo verwijderen? Te complex */
 @Entity
 public class Organization extends Host {
 

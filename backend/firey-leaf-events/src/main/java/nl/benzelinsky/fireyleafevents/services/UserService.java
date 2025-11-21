@@ -28,6 +28,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /* TODO Unnecessary? */
     public boolean userExists(String username) {
         return this.userRepository.existsById(username);
     }
