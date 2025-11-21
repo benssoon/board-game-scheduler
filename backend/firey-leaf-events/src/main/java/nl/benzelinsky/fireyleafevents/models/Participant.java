@@ -1,7 +1,6 @@
 package nl.benzelinsky.fireyleafevents.models;
 
 import jakarta.persistence.*;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
@@ -25,6 +24,10 @@ public class Participant extends User {
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     private List<Event> joinedEvents;
+
+    public Participant() {
+        super();
+    }
 
     // Getters and setters
 
