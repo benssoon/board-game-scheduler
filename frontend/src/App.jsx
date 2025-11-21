@@ -1,7 +1,4 @@
-import { useState } from 'react'
 import './App.css'
-import Card from './components/Card/Card.jsx';
-import axios from 'axios';
 import Home from './pages/Home/Home.jsx';
 import EventsPage from './pages/EventsPage/EventsPage.jsx';
 import {NavLink, Route, Routes} from 'react-router-dom';

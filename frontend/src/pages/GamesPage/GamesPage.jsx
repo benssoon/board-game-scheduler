@@ -1,16 +1,12 @@
 import './GamesPage.css';
-
-// Components
-import Card from '../../components/Card/Card.jsx';
-
-// Libraries
-
-// Functions
-import {useEffect, useState} from 'react';
-import {fetchGames, createGame, deleteGame, deleteGames, fetchEvents} from '../../helpers/httpRequests.js';
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
+import {useEffect, useState} from 'react';
+import {deleteGame, deleteGames} from '../../helpers/httpRequests.js';
 import {handleFormChange} from '../../helpers/handlers.js';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
+import axios from 'axios';
+import {API} from '../../globalConstants.js';
+import {concatKeysValues} from '../../helpers/helpers.js';
 
 function GamesPage() {
     //<editor-fold desc="State">
@@ -20,7 +16,7 @@ function GamesPage() {
     }
     const [gameFormState, setGameFormState] = useState(initialGameFormState);
     const [gameId, setGameId] = useState(2);
-    const [allGames, setAllGames] = useState([]);
+    const [formError, setFormError] = useState(null);
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
@@ -40,15 +36,26 @@ function GamesPage() {
     }
     //</editor-fold>
 
-    useEffect(() => {
-        fetchGames(setAllGames);
-    }, []);
+    //<editor-fold desc="Functions">
+    async function createGame(e) {
+        e.preventDefault();
+        try {
+            const response = await axios.post(API+'/games', gameFormState)
+            console.log(response);
+        } catch (er) {
+            const response = er.response.data;
+            const errors = concatKeysValues(response);
+            setFormError(errors);
+        }
+    }
+    //</editor-fold>
 
     return (
         <div className="categoryPage">
             <h2>Games</h2>
 
             {/*<editor-fold desc="Create Game Form">*/}
+            {/*Make this a component!*/}
             <h2>Create Game</h2>
             <form onSubmit={handleGameSubmit}>
                 <label htmlFor="gameTitle">Game title:</label>
@@ -69,6 +76,15 @@ function GamesPage() {
                 />
                 <button type="submit">Submit</button>
             </form>
+            {formError &&
+                <ul>
+                    {
+                        formError.map((err) => {
+                            return <li key={err}>{err}</li>
+                        })
+                    }
+                </ul>
+            }
             {/*</editor-fold>*/}
 
             {/*<editor-fold desc="Delete Game Form">*/}
@@ -92,7 +108,6 @@ function GamesPage() {
                 <FiltersBox/>
                 <DisplayGrid
                     type="game"
-                    collection={allGames}
                 />
             </section>
             {/*</editor-fold>*/}

@@ -8,10 +8,11 @@ import Card from '../../components/Card/Card.jsx';
 
 // Functions
 import {useEffect, useState} from 'react';
-import {fetchEvents, createEvent, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
+import {createEvent, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
 import {handleFormChange} from '../../helpers/handlers.js';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
+import useFetch from '../../useFetch.js';
 
 function EventsPage() {
 
@@ -23,7 +24,6 @@ function EventsPage() {
     }
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
-    const [allEvents, setAllEvents] = useState([]);
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
@@ -42,10 +42,6 @@ function EventsPage() {
         createEvent(e, eventFormState);
     }
     //</editor-fold>
-
-    useEffect(() => {
-        fetchEvents(setAllEvents);
-    }, []);
 
     return (
         <div className="categoryPage">
@@ -95,7 +91,6 @@ function EventsPage() {
                 <FiltersBox/>
                 <DisplayGrid
                     type="event"
-                    collection={allEvents}
                 />
             </section>
             {/*</editor-fold>*/}
