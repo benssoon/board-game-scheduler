@@ -40,7 +40,7 @@ public class AuthenticationController {
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
         try {
-            authenticationManager.authenticate(
+            this.authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
         }
@@ -48,7 +48,7 @@ public class AuthenticationController {
             throw new Exception("Incorrect username or password.", ex);
         }
         final UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
-        final String jwt = jwtUtil.generateToken(userDetails);
+        final String jwt = this.jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 }

@@ -5,6 +5,8 @@ import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.services.EventService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,8 +25,10 @@ public class EventController {
 
     // Create Event
     @PostMapping
-    public ResponseEntity<EventOutputDto> createEvent(@Valid @RequestBody EventInputDto eventInputDto) {
-        EventOutputDto eventOutputDto = this.service.createEvent(eventInputDto);
+    public ResponseEntity<EventOutputDto> createEvent(@Valid @RequestBody EventInputDto eventInputDto,
+                                                      @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        EventOutputDto eventOutputDto = this.service.createEvent(eventInputDto, username);
 
         URI location = URI.create("/events/" + eventOutputDto.id);
 
@@ -70,4 +74,7 @@ public class EventController {
     public void assignGameToEvent(@PathVariable("gameId") Long gameId, @PathVariable("eventId") Long eventId) {
         this.service.assignGameToEvent(gameId, eventId);
     }
+
+    // Add player to Event
+    //@PatchMapping
 }

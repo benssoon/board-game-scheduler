@@ -1,21 +1,32 @@
 package nl.benzelinsky.fireyleafevents.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "events")
 public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = true)
     private boolean isFull;
+    private boolean isHostPlaying;
     private LocalDateTime definitiveTime;
-    /* This needs to be changed to a relation. */private List<LocalDateTime> possibleTimes;
+    /* This needs to be changed to a relation. */private List<LocalDateTime> possibleTimes = new ArrayList<>();
     private String location;
     // Relations:
 
@@ -24,81 +35,17 @@ public class Event {
     private Game game;
 
     @ManyToMany(mappedBy = "joinedEvents")
-    private List<Participant> players;
+    private List<User> players = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "host_id")
-    private Host host;
+    @JoinColumn(name = "host_username")
+    private User host;
 
-    // Getters and setters
-
-
-    public String getTitle() {
-        return this.title;
+    // Methods
+    public void addPlayer(User player) {
+        this.players.add(player);
     }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Host getHost() {
-        return host;
-    }
-
-    public void setHost(Host host) {
-        this.host = host;
-    }
-
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public boolean isFull() {
-        return this.isFull;
-    }
-
-    public void setFull(boolean full) {
-        isFull = full;
-    }
-
-    public LocalDateTime getDefinitiveTime() {
-        return this.definitiveTime;
-    }
-
-    public void setDefinitiveTime(LocalDateTime definitiveScheduledTime) {
-        this.definitiveTime = definitiveScheduledTime;
-    }
-
-    public List<LocalDateTime> getPossibleTimes() {
-        return this.possibleTimes;
-    }
-
-    public void setPossibleTimes(List<LocalDateTime> possibleTimes) {
-        this.possibleTimes = possibleTimes;
-    }
-
-    public List<Participant> getPlayers() {
-        return this.players;
-    }
-
-    public void setPlayers(List<Participant> players) {
-        this.players = players;
-    }
-
-    public String getLocation() {
-        return this.location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+    public void removePlayer(User player) {
+        this.players.remove(player);
     }
 }

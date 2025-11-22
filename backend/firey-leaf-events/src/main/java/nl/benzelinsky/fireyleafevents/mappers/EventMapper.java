@@ -4,19 +4,20 @@ import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.models.Event;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EventMapper {
 
     public static Event toEntity(EventInputDto inputDto) {
         Event event = new Event();
 
         event.setTitle(inputDto.title);
-        event.setGame(inputDto.game);
         event.setFull(inputDto.isFull);
+        event.setHostPlaying(inputDto.isHostPlaying);
         event.setDefinitiveTime(inputDto.definitiveTime);
         event.setPossibleTimes(inputDto.possibleTimes);
-        event.setPlayers(inputDto.players);
         event.setLocation(inputDto.location);
-        event.setHost(inputDto.host);
 
         return event;
     }
@@ -26,13 +27,22 @@ public class EventMapper {
 
         outputDto.id = event.getId();
         outputDto.title = event.getTitle();
-        outputDto.game = event.getGame();
+        if (event.getGame() != null) {
+            outputDto.game = event.getGame().getTitle();
+        }
         outputDto.isFull = event.isFull();
+        outputDto.isHostPlaying = event.isHostPlaying();
         outputDto.definitiveTime = event.getDefinitiveTime();
         outputDto.possibleTimes = event.getPossibleTimes();
-        outputDto.players = event.getPlayers();
+        if (event.getPlayers() != null){
+            List<String> players = new ArrayList<>();
+            event.getPlayers().forEach((player) -> players.add(player.getName()));
+            outputDto.players = players;
+        }
         outputDto.location = event.getLocation();
-        outputDto.host = event.getHost();
+        if (event.getHost() != null) {
+            outputDto.host = event.getHost().getName();
+        }
 
         return outputDto;
     }
