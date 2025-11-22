@@ -55,7 +55,7 @@ public class UserService {
         return UserMapper.toShortDto(
                 this.userRepository.findById(username)
                         .orElseThrow(() ->
-                                new UsernameNotFoundException("User not found")));
+                                new UsernameNotFoundException("User not found with username: " + username)));
     }
 
     public UserOutputDto getUserWithPassword(String username) {

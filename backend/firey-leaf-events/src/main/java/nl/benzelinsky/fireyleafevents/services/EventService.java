@@ -6,8 +6,12 @@ import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
 import nl.benzelinsky.fireyleafevents.mappers.EventMapper;
 import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
+import nl.benzelinsky.fireyleafevents.models.User;
 import nl.benzelinsky.fireyleafevents.repositories.EventRepository;
 import nl.benzelinsky.fireyleafevents.repositories.GameRepository;
+import nl.benzelinsky.fireyleafevents.repositories.UserRepository;
+import nl.benzelinsky.fireyleafevents.utils.JwtUtil;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,15 +22,22 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final GameRepository gameRepository;
+    private final UserRepository userRepository;
 
-    public EventService(EventRepository eventRepository, GameRepository gameRepository) {
+    public EventService(EventRepository eventRepository, GameRepository gameRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
         this.gameRepository = gameRepository;
+        this.userRepository = userRepository;
     }
 
     // Create an event
-    public EventOutputDto createEvent(EventInputDto dtoIn) {
+    public EventOutputDto createEvent(EventInputDto dtoIn, String username) {
         Event event = EventMapper.toEntity(dtoIn);
+        User host = this.userRepository.findById(username)
+                        .orElseThrow(() ->
+                                new RecordNotFoundException("User not found with username: " + username));
+        event.setHost(host);
+        event.addPlayer(host);
         this.eventRepository.save(event);
         return EventMapper.toOutputDto(event);
     }
@@ -45,7 +56,7 @@ public class EventService {
         return EventMapper.toOutputDto(
                 this.eventRepository.findById(id)
                         .orElseThrow(() ->
-                                new RecordNotFoundException("Event not found")));
+                                new RecordNotFoundException("Event not found with id: " + id)));
 
     }
 
@@ -53,16 +64,13 @@ public class EventService {
     public EventOutputDto updateEventById(Long id, EventInputDto dtoIn) {
         Event toUpdate = this.eventRepository.findById(id)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found."));
+                        new RecordNotFoundException("Event not found with id: " + id));
 
         toUpdate.setTitle(dtoIn.title);
-        toUpdate.setGame(dtoIn.game);
         toUpdate.setFull(dtoIn.isFull);
         toUpdate.setDefinitiveTime(dtoIn.definitiveTime);
         toUpdate.setPossibleTimes(dtoIn.possibleTimes);
-        toUpdate.setPlayers(dtoIn.players);
         toUpdate.setLocation(dtoIn.location);
-        toUpdate.setHost(dtoIn.host);
 
         this.eventRepository.save(toUpdate);
         return EventMapper.toOutputDto(toUpdate);
@@ -72,7 +80,7 @@ public class EventService {
     public String deleteEventById(Long id) {
         Event toDelete = this.eventRepository.findById(id)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found."));
+                        new RecordNotFoundException("Event not found with id: " + id));
         this.eventRepository.delete(toDelete);
         return toDelete.getTitle() + " event has been deleted.";
     }
@@ -93,11 +101,35 @@ public class EventService {
     public void assignGameToEvent(Long gameId, Long eventId) {
         Game game = this.gameRepository.findById(gameId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Game not found."));
+                        new RecordNotFoundException("Game not found with id: " + gameId));
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found."));
+                        new RecordNotFoundException("Event not found with id: " + eventId));
         event.setGame(game);
+        this.eventRepository.save(event);
+    }
+
+    // Add host to Event
+    public void assignHostToEvent(String username, Long eventId) {
+        User host = this.userRepository.findById(username)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("User not found with username: " + username));
+        Event event = this.eventRepository.findById(eventId)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("Event not found with id: " + eventId));
+        event.setHost(host);
+        this.eventRepository.save(event);
+    }
+
+    // Add player to Event
+    public void addPlayer(Long eventId, String username) {
+        Event event = this.eventRepository.findById(eventId)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("Event not found with id: " + eventId));
+        User player = this.userRepository.findById(username)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("User not found with id: " + username));
+        event.addPlayer(player);
         this.eventRepository.save(event);
     }
 }
