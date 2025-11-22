@@ -28,11 +28,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /* TODO Unnecessary? */
-    public boolean userExists(String username) {
-        return this.userRepository.existsById(username);
-    }
-
     // Create user
     public String createUser(UserInputDto userInputDto) {
         userInputDto.apiKey = RandomStringGenerator.generateAlphaNumeric(20);
@@ -62,7 +57,7 @@ public class UserService {
         return UserMapper.toFullDto(
                 this.userRepository.findById(username)
                         .orElseThrow(() ->
-                                new UsernameNotFoundException("User not found")));
+                                new UsernameNotFoundException("User not found with username: " + username)));
     }
     
     // Update user by username
