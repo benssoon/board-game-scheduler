@@ -29,6 +29,4 @@ public class GameInputDto {
 
     @Positive
     public int maxAge;
-
-    public List<Event> activeEvents;
 }

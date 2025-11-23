@@ -34,7 +34,7 @@ public class GameService {
         return GameMapper.toOutputDto(
                 this.gameRepository.findById(id)
                         .orElseThrow(() ->
-                                new RecordNotFoundException("Game not found")));
+                                new RecordNotFoundException("Game not found with id: " + id)));
 
     }
 
@@ -51,7 +51,7 @@ public class GameService {
     public GameOutputDto updateGameById(Long id, GameInputDto dtoIn) {
         Game toUpdate = this.gameRepository.findById(id)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Game not found."));
+                        new RecordNotFoundException("Game not found with id: " + id));
 
         toUpdate.setTitle(dtoIn.title);
         toUpdate.setDescription(dtoIn.description);
@@ -60,7 +60,6 @@ public class GameService {
         toUpdate.setComplexity(dtoIn.complexity);
         toUpdate.setMinAge(dtoIn.minAge);
         toUpdate.setMaxAge(dtoIn.maxAge);
-        toUpdate.setActiveEvents(dtoIn.activeEvents);
 
         this.gameRepository.save(toUpdate);
         return GameMapper.toOutputDto(toUpdate);
@@ -70,7 +69,7 @@ public class GameService {
     public String deleteGameById(Long id) {
         Game toDelete = this.gameRepository.findById(id)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Game not found."));
+                        new RecordNotFoundException("Game not found with id: " + id));
         this.gameRepository.delete(toDelete);
         return "Game " + toDelete.getTitle() + " has been deleted.";
     }

@@ -3,6 +3,7 @@ package nl.benzelinsky.fireyleafevents.controllers;
 import jakarta.validation.Valid;
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
+import nl.benzelinsky.fireyleafevents.dtos.PatchEventInputDto;
 import nl.benzelinsky.fireyleafevents.services.EventService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,9 +49,9 @@ public class EventController {
     }
 
     // Update Event by ID
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<EventOutputDto> updateEventById(@PathVariable Long id,
-                                                          @Valid @RequestBody EventInputDto dtoIn) {
+                                                          @Valid @RequestBody PatchEventInputDto dtoIn) {
         EventOutputDto dtoOut = this.service.updateEventById(id, dtoIn);
         return ResponseEntity.ok(dtoOut);
     }
@@ -76,5 +77,8 @@ public class EventController {
     }
 
     // Add player to Event
-    //@PatchMapping
+    @PatchMapping("{eventId}/players/{username}")
+    public ResponseEntity<EventOutputDto> addPlayer(@PathVariable("username") String username, @PathVariable("eventId") Long eventId) {
+        return ResponseEntity.ok(this.service.addPlayer(username, eventId));
+    }
 }

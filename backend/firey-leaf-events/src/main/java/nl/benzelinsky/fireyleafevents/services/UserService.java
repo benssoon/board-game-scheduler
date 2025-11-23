@@ -2,11 +2,14 @@ package nl.benzelinsky.fireyleafevents.services;
 
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
+import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
 import nl.benzelinsky.fireyleafevents.exceptions.RoleNotFoundException;
 import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
 import nl.benzelinsky.fireyleafevents.mappers.UserMapper;
+import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Role;
 import nl.benzelinsky.fireyleafevents.models.User;
+import nl.benzelinsky.fireyleafevents.repositories.EventRepository;
 import nl.benzelinsky.fireyleafevents.repositories.UserRepository;
 import nl.benzelinsky.fireyleafevents.utils.RandomStringGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,10 +25,12 @@ public class UserService {
 
     private  final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
 
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, EventRepository eventRepository) {
         this.userRepository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.eventRepository = eventRepository;
     }
 
     // Create user
@@ -86,9 +91,7 @@ public class UserService {
     }
 
     public void addRole(String username, String roleName) {
-        if (Pattern.matches("ROLE_*", roleName)) {
-            roleName = "ROLE_" + roleName.toUpperCase();
-        }
+        roleName = "ROLE_" + roleName.toUpperCase();
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
@@ -114,5 +117,19 @@ public class UserService {
                         new UsernameNotFoundException(username));
         this.userRepository.deleteById(username);
         return "User " + toDelete.getUsername() + " has been deleted.";
+    }
+
+    // TODO Add to UserController
+    // Join Event
+    public void joinEvent(String username, Long eventId) {
+        User user = this.userRepository.findById(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found with username: " + username));
+        Event event = this.eventRepository.findById(eventId)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("Event not found with id: " + eventId));
+        user.joinEvent(event);
+        event.addPlayer(user);
+        this.userRepository.save(user);
     }
 }

@@ -30,7 +30,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserOutputDto> createUser(@Valid @RequestBody UserInputDto dtoIn) {
         String newUsername = this.userService.createUser(dtoIn);
-        this.userService.addRole(newUsername, "ROLE_USER");
+        for (String role : dtoIn.roles) {
+            this.userService.addRole(newUsername, role);
+        }
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}").buildAndExpand(newUsername).toUri();
 

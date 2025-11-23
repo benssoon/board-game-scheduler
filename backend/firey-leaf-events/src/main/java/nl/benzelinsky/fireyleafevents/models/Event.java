@@ -20,7 +20,7 @@ public class Event {
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private String name;
 
     @Column(nullable = true)
     private boolean isFull;

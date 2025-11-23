@@ -13,5 +13,5 @@ public class GameOutputDto {
     public String complexity;
     public int minAge;
     public int maxAge;
-    public List<Event> activeEvents;
+    public List<String> activeEvents; // Should this not include the event id rather than the event title?
 }
