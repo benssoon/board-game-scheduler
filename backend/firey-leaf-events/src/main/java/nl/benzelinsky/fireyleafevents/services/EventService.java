@@ -3,6 +3,7 @@ package nl.benzelinsky.fireyleafevents.services;
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.PatchEventInputDto;
+import nl.benzelinsky.fireyleafevents.exceptions.EventFullException;
 import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
 import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyJoinedEventException;
 import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
@@ -167,8 +168,14 @@ public class EventService {
         if (event.getPlayers().contains(player)) {
             throw new UserAlreadyJoinedEventException(username, eventId);
         }
+        if (event.isFull()) {
+            throw new EventFullException(event.getName());
+        }
         event.addPlayer(player);
         player.joinEvent(event);
+        if (event.getPlayers().size() == event.getGame().getMaxPlayers()) {
+            event.setFull(true);
+        }
         this.eventRepository.save(event);
         return EventMapper.toOutputDto(event);
     }

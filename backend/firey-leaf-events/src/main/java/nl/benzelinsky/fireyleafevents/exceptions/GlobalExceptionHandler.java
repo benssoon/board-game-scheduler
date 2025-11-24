@@ -65,4 +65,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    //Event full
+    @ExceptionHandler(EventFullException.class)
+    public ResponseEntity<String> handleEventFullException(EventFullException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }
