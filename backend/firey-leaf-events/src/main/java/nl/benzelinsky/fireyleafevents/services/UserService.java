@@ -118,18 +118,4 @@ public class UserService {
         this.userRepository.deleteById(username);
         return "User " + toDelete.getUsername() + " has been deleted.";
     }
-
-    // TODO Add to UserController
-    // Join Event
-    public void joinEvent(String username, Long eventId) {
-        User user = this.userRepository.findById(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username: " + username));
-        Event event = this.eventRepository.findById(eventId)
-                .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + eventId));
-        user.joinEvent(event);
-        event.addPlayer(user);
-        this.userRepository.save(user);
-    }
 }

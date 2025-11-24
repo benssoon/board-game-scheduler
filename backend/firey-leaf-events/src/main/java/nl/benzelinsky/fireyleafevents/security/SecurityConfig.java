@@ -54,9 +54,11 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/events").hasRole("ADMIN")
+                                /*.requestMatchers(HttpMethod.POST, "/events").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/events/{eventId}/players").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH, "/events/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN")*/
+                                .requestMatchers("/events").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/**").permitAll() // TODO Change to has role User
                                 .requestMatchers(HttpMethod.PUT, "/games/**").permitAll() // TODO remove later
                                 .requestMatchers(HttpMethod.PATCH, "/games/**").permitAll() // TODO remove later
