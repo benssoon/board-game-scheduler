@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
 import nl.benzelinsky.fireyleafevents.exceptions.BadRequestException;
+import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +31,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserOutputDto> createUser(@Valid @RequestBody UserInputDto dtoIn) {
         String newUsername = this.userService.createUser(dtoIn);
-        this.userService.addRole(newUsername, "ROLE_USER");
+        for (String role : dtoIn.roles) {
+            this.userService.addRole(newUsername, role);
+        }
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}").buildAndExpand(newUsername).toUri();
 

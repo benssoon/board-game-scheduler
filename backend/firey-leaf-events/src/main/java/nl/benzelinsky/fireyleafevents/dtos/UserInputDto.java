@@ -20,5 +20,5 @@ public class UserInputDto {
     @Size(min = 10, max = 16)
     @Pattern(regexp = "^\\+?[0-9]{5,15}$")
     public String telephoneNumber;
-    public Set<Role> roles;
+    public String[] roles;
 }

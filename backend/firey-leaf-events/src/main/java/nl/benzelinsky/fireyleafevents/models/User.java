@@ -83,4 +83,16 @@ public class User {
     public void removeRole(Role role) {
         this.roles.remove(role);
     }
+    public void joinEvent(Event event) {
+        this.joinedEvents.add(event);
+    }
+    public void leaveEvent(Event event) {
+        this.joinedEvents.remove(event);
+    }
+    public void hostEvent(Event event) {
+        this.hostedEvents.add(event);
+    }
+    public void stopHostingEvent(Event event) {
+        this.hostedEvents.remove(event);
+    }
 }

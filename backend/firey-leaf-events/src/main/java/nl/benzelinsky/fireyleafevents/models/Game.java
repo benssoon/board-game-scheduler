@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -23,5 +24,12 @@ public class Game {
     private int minAge;
     private int maxAge;
     @OneToMany(mappedBy = "game")
-    private List<Event> activeEvents;
+    private List<Event> activeEvents = new ArrayList<>();
+
+    public void addEvent(Event event) {
+        this.activeEvents.add(event);
+    }
+    public void removeEvent(Event event) {
+        this.activeEvents.remove(event);
+    }
 }

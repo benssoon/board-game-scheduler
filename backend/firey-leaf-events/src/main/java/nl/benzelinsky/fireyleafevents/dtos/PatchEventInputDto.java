@@ -3,15 +3,11 @@ package nl.benzelinsky.fireyleafevents.dtos;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class EventOutputDto {
-    public Long id;
+public class PatchEventInputDto {
     public String name;
-    public String game;
     public Boolean isFull;
     public Boolean isHostPlaying;
+    public String location;
     public LocalDateTime definitiveTime;
     public List<LocalDateTime> possibleTimes;
-    public List<String> players; // TODO Is this the best way to prevent recursion?
-    public String location;
-    public String host;
 }

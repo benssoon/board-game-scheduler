@@ -24,7 +24,7 @@ VALUES ('ben', 'ROLE_ADMIN'),
        ('ben', 'ROLE_USER'),
        ('bob', 'ROLE_USER');
 
-INSERT INTO events (title,
+INSERT INTO events (name,
                     definitive_time,
                     is_full,
                     is_host_playing,

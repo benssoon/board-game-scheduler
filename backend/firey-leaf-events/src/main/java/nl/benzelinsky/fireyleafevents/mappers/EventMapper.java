@@ -12,7 +12,7 @@ public class EventMapper {
     public static Event toEntity(EventInputDto inputDto) {
         Event event = new Event();
 
-        event.setTitle(inputDto.title);
+        event.setName(inputDto.name);
         event.setFull(inputDto.isFull);
         event.setHostPlaying(inputDto.isHostPlaying);
         event.setDefinitiveTime(inputDto.definitiveTime);
@@ -26,21 +26,17 @@ public class EventMapper {
         EventOutputDto outputDto = new EventOutputDto();
 
         outputDto.id = event.getId();
-        outputDto.title = event.getTitle();
-        if (event.getGame() != null) {
-            outputDto.game = event.getGame().getTitle();
-        }
+        outputDto.name = event.getName();
+        outputDto.game = event.getGame().getTitle();
         outputDto.isFull = event.isFull();
         outputDto.isHostPlaying = event.isHostPlaying();
         outputDto.definitiveTime = event.getDefinitiveTime();
         outputDto.possibleTimes = event.getPossibleTimes();
-        if (event.getPlayers() != null){
-            List<String> players = new ArrayList<>();
-            event.getPlayers().forEach((player) -> players.add(player.getName()));
-            outputDto.players = players;
-        }
+        List<String> players = new ArrayList<>();
+        event.getPlayers().forEach((player) -> players.add(player.getName()));
+        outputDto.players = players;
         outputDto.location = event.getLocation();
-        if (event.getHost() != null) {
+        if (event.getHost() != null) { // TODO Unnecessary?
             outputDto.host = event.getHost().getName();
         }
 

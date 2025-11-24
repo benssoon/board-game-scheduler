@@ -5,6 +5,9 @@ import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
 import nl.benzelinsky.fireyleafevents.models.Role;
 import nl.benzelinsky.fireyleafevents.models.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserMapper {
 
     public static User toEntity(UserInputDto inputDto) {
@@ -16,9 +19,6 @@ public class UserMapper {
         user.setName(inputDto.name);
         user.setEmailAddress(inputDto.emailAddress);
         user.setTelephoneNumber(inputDto.telephoneNumber);
-        for (Role role : inputDto.roles) {
-            user.addRole(role);
-        }
 
         return user;
     }
@@ -29,6 +29,16 @@ public class UserMapper {
         outputDto.name = user.getName();
         outputDto.emailAddress = user.getEmailAddress();
         outputDto.telephoneNumber = user.getTelephoneNumber();
+        outputDto.age = user.getAge();
+        outputDto.area = user.getArea();
+        outputDto.address = user.getAddress();
+        // Only send back the name of the event to prevent recursion.
+        List<String> hostedEvents = new ArrayList<>();
+        user.getHostedEvents().forEach((event) -> hostedEvents.add(event.getName()));
+        outputDto.hostedEvents = hostedEvents;
+        List<String> joinedEvents = new ArrayList<>();
+        user.getJoinedEvents().forEach((event) -> joinedEvents.add(event.getName()));
+        outputDto.joinedEvents = joinedEvents;
         outputDto.roles = user.getRoles();
 
         return outputDto;
@@ -42,9 +52,11 @@ public class UserMapper {
         outputDto.name = user.getName();
         outputDto.emailAddress = user.getEmailAddress();
         outputDto.telephoneNumber = user.getTelephoneNumber();
+        outputDto.age = user.getAge();
+        outputDto.area = user.getArea();
+        outputDto.address = user.getAddress();
         outputDto.roles = user.getRoles();
 
         return outputDto;
     }
-
 }
