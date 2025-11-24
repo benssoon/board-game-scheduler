@@ -1,5 +1,6 @@
 package nl.benzelinsky.fireyleafevents.mappers;
 
+import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
 import nl.benzelinsky.fireyleafevents.models.Role;
@@ -22,8 +23,8 @@ public class UserMapper {
 
         return user;
     }
-    public static UserOutputDto toShortDto(User user) {
-        UserOutputDto outputDto = new UserOutputDto();
+    public static ShortUserOutputDto toShortDto(User user) {
+        ShortUserOutputDto outputDto = new ShortUserOutputDto();
 
         outputDto.username = user.getUsername();
         outputDto.name = user.getName();
@@ -32,7 +33,7 @@ public class UserMapper {
         outputDto.age = user.getAge();
         outputDto.area = user.getArea();
         outputDto.address = user.getAddress();
-        // Only send back the name of the event to prevent recursion.
+        // Only send back the name of the event to prevent recursion. TODO add @JsonSerialize in the output DTO instead.
         List<String> hostedEvents = new ArrayList<>();
         user.getHostedEvents().forEach((event) -> hostedEvents.add(event.getName()));
         outputDto.hostedEvents = hostedEvents;
@@ -55,6 +56,7 @@ public class UserMapper {
         outputDto.age = user.getAge();
         outputDto.area = user.getArea();
         outputDto.address = user.getAddress();
+        // TODO Add relations, with @JsonSerialize in DTO.
         outputDto.roles = user.getRoles();
 
         return outputDto;

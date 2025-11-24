@@ -32,25 +32,37 @@ public class GlobalExceptionHandler {
 
     //Http request method not supported
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<String> handleNotAllowed(HttpRequestMethodNotSupportedException ex) {
+    public ResponseEntity<String> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("You can't do that!\nMethod: " + ex.getMethod());
     }
 
     //Username not found
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<String> handleUsernameNotFound(UsernameNotFoundException ex) {
+    public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     //Bad request
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<String> handleBadRequest(BadRequestException ex) {
+    public ResponseEntity<String> handleBadRequestException(BadRequestException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
-    //User Already joined Event
-    @ExceptionHandler(UserAlreadyJoinedEvent.class)
-    public ResponseEntity<String> handleUserAlreadyJoinedEvent(UserAlreadyJoinedEvent ex) {
+    //User already joined Event
+    @ExceptionHandler(UserAlreadyJoinedEventException.class)
+    public ResponseEntity<String> handleUserAlreadyJoinedEventException(UserAlreadyJoinedEventException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    //Username unavailable
+    @ExceptionHandler(UsernameUnavailableException.class)
+    public ResponseEntity<String> handleUsernameUnavailableException(UsernameUnavailableException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    //User already exists
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

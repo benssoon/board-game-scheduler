@@ -1,12 +1,10 @@
 package nl.benzelinsky.fireyleafevents.services;
 
-import ch.qos.logback.core.joran.conditional.IfAction;
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.PatchEventInputDto;
-import nl.benzelinsky.fireyleafevents.exceptions.BadRequestException;
 import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
-import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyJoinedEvent;
+import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyJoinedEventException;
 import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
 import nl.benzelinsky.fireyleafevents.mappers.EventMapper;
 import nl.benzelinsky.fireyleafevents.models.Event;
@@ -167,7 +165,7 @@ public class EventService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
         if (event.getPlayers().contains(player)) {
-            throw new UserAlreadyJoinedEvent(username, eventId);
+            throw new UserAlreadyJoinedEventException(username, eventId);
         }
         event.addPlayer(player);
         player.joinEvent(event);
