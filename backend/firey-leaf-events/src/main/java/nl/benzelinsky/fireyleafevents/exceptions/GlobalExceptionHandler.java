@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     //Http request method not supported
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<String> handleNotAllowed(HttpRequestMethodNotSupportedException ex) {
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("You can't do that!");
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("You can't do that!\nMethod: " + ex.getMethod());
     }
 
     //Username not found
@@ -45,6 +45,12 @@ public class GlobalExceptionHandler {
     //Bad request
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<String> handleBadRequest(BadRequestException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    //User Already joined Event
+    @ExceptionHandler(UserAlreadyJoinedEvent.class)
+    public ResponseEntity<String> handleUserAlreadyJoinedEvent(UserAlreadyJoinedEvent ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

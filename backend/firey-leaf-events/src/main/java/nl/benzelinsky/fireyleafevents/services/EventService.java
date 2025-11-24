@@ -4,7 +4,10 @@ import ch.qos.logback.core.joran.conditional.IfAction;
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.PatchEventInputDto;
+import nl.benzelinsky.fireyleafevents.exceptions.BadRequestException;
 import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
+import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyJoinedEvent;
+import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
 import nl.benzelinsky.fireyleafevents.mappers.EventMapper;
 import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
@@ -36,7 +39,7 @@ public class EventService {
         Event event = EventMapper.toEntity(dtoIn);
         User host = this.userRepository.findById(username)
                         .orElseThrow(() ->
-                                new RecordNotFoundException("User not found with username: " + username));
+                                new UsernameNotFoundException(username));
         Long gameId = dtoIn.gameId;
         Game game = this.gameRepository.findById(gameId)
                         .orElseThrow(() ->
@@ -113,6 +116,7 @@ public class EventService {
         return toDelete.getName() + " event has been deleted.";
     }
 
+    // TODO Make deletes be able to handle decoupling of relations of events.
     // Delete all events (besides default event)
     public String deleteAll() {
         List<Long> allIds = new ArrayList<>();
@@ -142,7 +146,7 @@ public class EventService {
     public void assignHostToEvent(String username, Long eventId) {
         User host = this.userRepository.findById(username)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("User not found with username: " + username));
+                        new UsernameNotFoundException(username));
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
                         new RecordNotFoundException("Event not found with id: " + eventId));
@@ -161,7 +165,10 @@ public class EventService {
                         new RecordNotFoundException("Event not found with id: " + eventId));
         User player = this.userRepository.findById(username)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("User not found with id: " + username));
+                        new UsernameNotFoundException(username));
+        if (event.getPlayers().contains(player)) {
+            throw new UserAlreadyJoinedEvent(username, eventId);
+        }
         event.addPlayer(player);
         player.joinEvent(event);
         this.eventRepository.save(event);
