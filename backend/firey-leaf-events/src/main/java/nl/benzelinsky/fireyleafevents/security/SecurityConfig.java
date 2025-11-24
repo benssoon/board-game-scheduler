@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/events").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PATCH, "/events/{eventId}/players").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/events/{eventId}/players").hasRole("USER")
                                 .requestMatchers(HttpMethod.PATCH, "/events/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/events").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN")
