@@ -60,10 +60,11 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/events").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/users/{username}").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/**").permitAll() // TODO Change to has role User
-                                .requestMatchers(HttpMethod.PUT, "/games/**").permitAll() // TODO remove later
-                                .requestMatchers(HttpMethod.PATCH, "/games/**").permitAll() // TODO remove later
-                                .requestMatchers(HttpMethod.POST, "/games/**").permitAll() // TODO remove later
+                                .requestMatchers(HttpMethod.POST, "/games").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/games/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/games/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/games/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/**").permitAll()
                                 .requestMatchers("/authenticated").authenticated()
                                 .requestMatchers("/authenticate").permitAll()
                                 .anyRequest().denyAll()
