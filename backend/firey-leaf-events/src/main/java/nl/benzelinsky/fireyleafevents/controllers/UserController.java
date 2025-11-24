@@ -1,6 +1,7 @@
 package nl.benzelinsky.fireyleafevents.controllers;
 
 import jakarta.validation.Valid;
+import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
 import nl.benzelinsky.fireyleafevents.exceptions.BadRequestException;
@@ -42,14 +43,14 @@ public class UserController {
 
     // Get all Users
     @GetMapping(value = "")
-    public ResponseEntity<List<UserOutputDto>> getUsers() {
-        List<UserOutputDto> userDtos = this.userService.getUsers();
+    public ResponseEntity<List<ShortUserOutputDto>> getUsers() {
+        List<ShortUserOutputDto> userDtos = this.userService.getUsers();
         return ResponseEntity.ok().body(userDtos);
     }
 
     // Get User by username
     @GetMapping("/{username}")
-    public ResponseEntity<UserOutputDto> getUser(@PathVariable("username") String username, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ShortUserOutputDto> getUser(@PathVariable("username") String username, @AuthenticationPrincipal UserDetails userDetails) {
         if (username.equals(userDetails.getUsername())) {
             return ResponseEntity.ok(this.userService.getUser(username));
         }

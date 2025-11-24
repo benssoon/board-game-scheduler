@@ -1,12 +1,13 @@
 package nl.benzelinsky.fireyleafevents.services;
 
+import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
-import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
 import nl.benzelinsky.fireyleafevents.exceptions.RoleNotFoundException;
+import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyExistsException;
 import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
+import nl.benzelinsky.fireyleafevents.exceptions.UsernameUnavailableException;
 import nl.benzelinsky.fireyleafevents.mappers.UserMapper;
-import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Role;
 import nl.benzelinsky.fireyleafevents.models.User;
 import nl.benzelinsky.fireyleafevents.repositories.EventRepository;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -35,15 +35,24 @@ public class UserService {
 
     // Create user
     public String createUser(UserInputDto userInputDto) {
-        userInputDto.apiKey = RandomStringGenerator.generateAlphaNumeric(20);
+        if (this.userRepository.existsUserByUsername(userInputDto.username)) {
+            throw new UsernameUnavailableException(userInputDto.username);
+        }
+        if (this.userRepository.existsUserByEmailAddress(userInputDto.emailAddress)) {
+            throw new UserAlreadyExistsException("email address", userInputDto.emailAddress);
+        }
+        if (this.userRepository.existsUserByTelephoneNumber(userInputDto.telephoneNumber)) {
+            throw new UserAlreadyExistsException("telephone number", userInputDto.telephoneNumber);
+        }
+        userInputDto.apiKey = RandomStringGenerator.generateAlphaNumeric(20); // TODO unnecessary?
         userInputDto.password = passwordEncoder.encode(userInputDto.password);
         User newUser = this.userRepository.save(UserMapper.toEntity(userInputDto));
         return newUser.getUsername();
     }
 
     // Get all users
-    public List<UserOutputDto> getUsers() {
-        List<UserOutputDto> allUsers = new ArrayList<>();
+    public List<ShortUserOutputDto> getUsers() {
+        List<ShortUserOutputDto> allUsers = new ArrayList<>();
         this.userRepository.findAll()
                 .forEach(user ->
                         allUsers.add(UserMapper.toShortDto(user)));
@@ -51,7 +60,7 @@ public class UserService {
     }
 
     // Get user by username
-    public UserOutputDto getUser(String username) {
+    public ShortUserOutputDto getUser(String username) {
         return UserMapper.toShortDto(
                 this.userRepository.findById(username)
                         .orElseThrow(() ->
@@ -66,7 +75,7 @@ public class UserService {
     }
     
     // Update user by username
-    public UserOutputDto updateUser(String username, UserInputDto dtoIn) {
+    public ShortUserOutputDto updateUser(String username, UserInputDto dtoIn) {
         User toUpdate = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
@@ -86,7 +95,7 @@ public class UserService {
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
-        UserOutputDto dtoOut = UserMapper.toShortDto(user);
+        ShortUserOutputDto dtoOut = UserMapper.toShortDto(user);
         return dtoOut.roles;
     }
 

@@ -59,6 +59,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PATCH, "/events/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/events").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/users/{username}").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/**").permitAll() // TODO Change to has role User
                                 .requestMatchers(HttpMethod.PUT, "/games/**").permitAll() // TODO remove later
                                 .requestMatchers(HttpMethod.PATCH, "/games/**").permitAll() // TODO remove later
