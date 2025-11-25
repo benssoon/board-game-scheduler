@@ -1,5 +1,6 @@
 package nl.benzelinsky.fireyleafevents.exceptions;
 
+import org.aspectj.weaver.ast.Not;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -69,6 +70,12 @@ public class GlobalExceptionHandler {
     //Event full
     @ExceptionHandler(EventFullException.class)
     public ResponseEntity<String> handleEventFullException(EventFullException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    //Not a player in selected event
+    @ExceptionHandler(NotAPlayerException.class)
+    public ResponseEntity<String> handleNotAPlayerException(NotAPlayerException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

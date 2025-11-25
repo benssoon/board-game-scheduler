@@ -105,6 +105,7 @@ public class EventService {
         Event toDelete = this.eventRepository.findById(id)
                 .orElseThrow(() ->
                         new RecordNotFoundException("Event not found with id: " + id));
+        removePlayer("ben", toDelete.getId());
         this.eventRepository.delete(toDelete);
         return toDelete.getName() + " event has been deleted.";
     }
@@ -171,6 +172,25 @@ public class EventService {
             event.setFull(true);
         }
         this.eventRepository.save(event);
+        return EventMapper.toOutputDto(event);
+    }
+
+    public EventOutputDto removePlayer(String username, Long eventId) {
+        Event event = this.eventRepository.findById(eventId)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("Event", eventId));
+        User player = this.userRepository.findById(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(username));
+        if (event.getPlayers().contains(player)) {
+            event.removePlayer(player);
+            player.leaveEvent(event);
+            event.setFull(false);
+            this.eventRepository.save(event);
+        }
+        else {
+            throw new
+        }
         return EventMapper.toOutputDto(event);
     }
 }
