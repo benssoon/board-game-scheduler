@@ -86,17 +86,11 @@ public class EventService {
         if (dtoIn.name != null) {
             toUpdate.setName(dtoIn.name);
         }
-        if (dtoIn.isFull != null) {
-            toUpdate.setFull(dtoIn.isFull);
-        }
         if (dtoIn.isHostPlaying != null) {
             toUpdate.setHostPlaying(dtoIn.isHostPlaying);
         }
         if (dtoIn.definitiveTime != null) {
             toUpdate.setDefinitiveTime(dtoIn.definitiveTime);
-        }
-        if (dtoIn.possibleTimes != null) {
-            toUpdate.setPossibleTimes(dtoIn.possibleTimes);
         }
         if (dtoIn.location != null) {
             toUpdate.setLocation(dtoIn.location);
