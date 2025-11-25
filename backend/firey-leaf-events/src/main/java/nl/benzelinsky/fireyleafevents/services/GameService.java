@@ -1,5 +1,7 @@
 package nl.benzelinsky.fireyleafevents.services;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import nl.benzelinsky.fireyleafevents.dtos.GameInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.GameOutputDto;
 import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
@@ -38,12 +40,24 @@ public class GameService {
 
     }
 
-    // Get all gamess
-    public List<GameOutputDto> getAllGames() {
+    // Get all games, optional title criterium
+    public List<GameOutputDto> getAllGames(String title) {
         List<GameOutputDto> allGames = new ArrayList<>();
-        this.gameRepository.findAll()
-                .forEach(game ->
-                        allGames.add(GameMapper.toOutputDto(game)));
+        if (title != null) {
+            // Find and sort all games based on how close the title is to the given search term.
+            FuzzySearch.extractSorted(title, this.gameRepository.findAll(), Game::getTitle)
+                    .stream()
+                    //.filter(result -> result.getScore() >= 60) // Optional, for returning only results with a score higher than 60
+                    .map(BoundExtractedResult::getReferent)
+                    .toList()
+                    .forEach(game ->
+                            allGames.add(GameMapper.toOutputDto(game)));
+        }
+        else {
+            this.gameRepository.findAll()
+                    .forEach(game ->
+                            allGames.add(GameMapper.toOutputDto(game)));
+        }
         return allGames;
     }
 

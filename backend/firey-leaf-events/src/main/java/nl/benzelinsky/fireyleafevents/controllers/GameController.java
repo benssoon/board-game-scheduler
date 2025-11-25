@@ -5,7 +5,6 @@ import nl.benzelinsky.fireyleafevents.dtos.GameInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.GameOutputDto;
 import nl.benzelinsky.fireyleafevents.services.GameService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -38,10 +37,10 @@ public class GameController {
         return ResponseEntity.ok(this.service.getGameById(id));
     }
 
-    // Get all Games
+    // Get all Games, optional title criterium
     @GetMapping
-    public ResponseEntity<List<GameOutputDto>> getAllGames() {
-        return ResponseEntity.ok(this.service.getAllGames());
+    public ResponseEntity<List<GameOutputDto>> getAllGames(@RequestParam(required = false) String title) {
+        return ResponseEntity.ok(this.service.getAllGames(title));
     }
 
     // Update Game by ID
