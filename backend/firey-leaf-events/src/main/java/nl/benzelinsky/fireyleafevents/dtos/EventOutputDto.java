@@ -8,6 +8,7 @@ public class EventOutputDto {
     public String name;
     public String game;
     public Boolean isFull;
+    public Boolean isReadyToStart;
     public Boolean isHostPlaying;
     public LocalDateTime definitiveTime;
     public List<LocalDateTime> possibleTimes;

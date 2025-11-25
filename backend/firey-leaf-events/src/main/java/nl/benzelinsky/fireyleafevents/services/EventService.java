@@ -3,10 +3,7 @@ package nl.benzelinsky.fireyleafevents.services;
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.PatchEventInputDto;
-import nl.benzelinsky.fireyleafevents.exceptions.EventFullException;
-import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
-import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyJoinedEventException;
-import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
+import nl.benzelinsky.fireyleafevents.exceptions.*;
 import nl.benzelinsky.fireyleafevents.mappers.EventMapper;
 import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
@@ -104,8 +101,11 @@ public class EventService {
     public String deleteEventById(Long id) {
         Event toDelete = this.eventRepository.findById(id)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + id));
-        removePlayer("ben", toDelete.getId());
+                        new RecordNotFoundException("Event", id));
+        // Iterate over a copy of toDelete.players to avoid a bug when deleting players from the same collection we're iterating over.
+        new ArrayList<>(toDelete.getPlayers())
+                .forEach(player ->
+                        removePlayer(player.getUsername(), toDelete.getId()));
         this.eventRepository.delete(toDelete);
         return toDelete.getName() + " event has been deleted.";
     }
@@ -168,9 +168,6 @@ public class EventService {
         }
         event.addPlayer(player);
         player.joinEvent(event);
-        if (event.getPlayers().size() == event.getGame().getMaxPlayers()) {
-            event.setFull(true);
-        }
         this.eventRepository.save(event);
         return EventMapper.toOutputDto(event);
     }
@@ -185,11 +182,11 @@ public class EventService {
         if (event.getPlayers().contains(player)) {
             event.removePlayer(player);
             player.leaveEvent(event);
-            event.setFull(false);
             this.eventRepository.save(event);
         }
         else {
-            throw new
+            // player is not in event
+            throw new NotAPlayerException(username, eventId);
         }
         return EventMapper.toOutputDto(event);
     }
