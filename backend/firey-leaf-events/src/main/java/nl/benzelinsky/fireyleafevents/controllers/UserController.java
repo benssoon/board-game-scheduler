@@ -1,15 +1,14 @@
 package nl.benzelinsky.fireyleafevents.controllers;
 
 import jakarta.validation.Valid;
+import nl.benzelinsky.fireyleafevents.dtos.PatchUserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
 import nl.benzelinsky.fireyleafevents.exceptions.BadRequestException;
-import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -61,10 +60,28 @@ public class UserController {
 
     // Update User by username
     @PutMapping("/{username}")
-    public ResponseEntity<UserOutputDto> updateUser(@PathVariable("username") String username,
-                                                    @Valid @RequestBody UserInputDto dtoIn) {
-        this.userService.updateUser(username, dtoIn);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ShortUserOutputDto> updateWholeUser(@PathVariable("username") String username,
+                                                              @Valid @RequestBody UserInputDto dtoIn,
+                                                              @AuthenticationPrincipal UserDetails userDetails) {
+        if (username.equals(userDetails.getUsername())) {
+            return ResponseEntity.ok(this.userService.updateWholeUser(username, dtoIn));
+        }
+        else {
+            throw new BadRequestException("You are only authorized to update your own user profile.");
+        }
+    }
+
+    // Partially update user
+    @PatchMapping("/{username}")
+    public ResponseEntity<ShortUserOutputDto> updateUser(@PathVariable("username") String username,
+                                                         @Valid @RequestBody PatchUserInputDto dtoIn,
+                                                         @AuthenticationPrincipal UserDetails userDetails) {
+        if (username.equals(userDetails.getUsername())) {
+            return ResponseEntity.ok(this.userService.updateUser(username, dtoIn));
+        }
+        else {
+            throw new BadRequestException("You are only authorized to update your own user profile.");
+        }
     }
 
     @GetMapping(value = "/{username}/roles")

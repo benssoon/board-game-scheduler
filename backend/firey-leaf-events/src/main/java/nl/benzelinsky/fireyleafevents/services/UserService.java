@@ -1,12 +1,10 @@
 package nl.benzelinsky.fireyleafevents.services;
 
+import nl.benzelinsky.fireyleafevents.dtos.PatchUserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
-import nl.benzelinsky.fireyleafevents.exceptions.RoleNotFoundException;
-import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyExistsException;
-import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
-import nl.benzelinsky.fireyleafevents.exceptions.UsernameUnavailableException;
+import nl.benzelinsky.fireyleafevents.exceptions.*;
 import nl.benzelinsky.fireyleafevents.mappers.UserMapper;
 import nl.benzelinsky.fireyleafevents.models.Role;
 import nl.benzelinsky.fireyleafevents.models.User;
@@ -16,9 +14,7 @@ import nl.benzelinsky.fireyleafevents.utils.RandomStringGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -75,7 +71,7 @@ public class UserService {
     }
     
     // Update user by username
-    public ShortUserOutputDto updateUser(String username, UserInputDto dtoIn) {
+    public ShortUserOutputDto updateWholeUser(String username, UserInputDto dtoIn) {
         User toUpdate = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
@@ -87,6 +83,28 @@ public class UserService {
         toUpdate.setTelephoneNumber(dtoIn.telephoneNumber);
 
         this.userRepository.save(toUpdate);
+        return UserMapper.toShortDto(toUpdate);
+    }
+
+    // Partially update user
+    public ShortUserOutputDto updateUser(String username, PatchUserInputDto dtoIn) {
+        User toUpdate = this.userRepository.findById(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(username));
+
+        if (dtoIn.password != null) {
+            toUpdate.setPassword(dtoIn.password);
+        }
+        if (dtoIn.name != null) {
+            toUpdate.setName(dtoIn.name);
+        }
+        if (dtoIn.emailAddress != null) {
+            toUpdate.setEmailAddress(dtoIn.emailAddress);
+        }
+        if (dtoIn.telephoneNumber != null) {
+            toUpdate.setTelephoneNumber(dtoIn.telephoneNumber);
+        }
+
         return UserMapper.toShortDto(toUpdate);
     }
 
@@ -124,7 +142,19 @@ public class UserService {
         User toDelete = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
-        this.userRepository.deleteById(username);
+        if (!toDelete.getHostedEvents().isEmpty()) {
+            List<String> events = new ArrayList<>();
+            Map<Long, String> eventIds = new HashMap<>();
+            toDelete.getHostedEvents()
+                    .forEach(event -> {
+                        events.add(event.getName());
+                        eventIds.put(event.getId(), event.getName());
+                    });
+            throw new HasActiveEventsException(username, eventIds);
+        }
+        else {
+            this.userRepository.deleteById(username);
+        }
         return "User " + toDelete.getUsername() + " has been deleted.";
     }
 }

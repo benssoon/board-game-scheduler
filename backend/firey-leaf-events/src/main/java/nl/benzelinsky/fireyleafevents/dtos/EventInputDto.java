@@ -11,7 +11,6 @@ public class EventInputDto {
 
     @NotBlank
     public String name;
-    public Boolean isFull;
     @NotNull
     public Boolean isHostPlaying;
     @NotBlank

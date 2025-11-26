@@ -13,7 +13,6 @@ public class EventMapper {
         Event event = new Event();
 
         event.setName(inputDto.name);
-        event.setFull(inputDto.isFull);
         event.setHostPlaying(inputDto.isHostPlaying);
         event.setDefinitiveTime(inputDto.definitiveTime);
         event.setPossibleTimes(inputDto.possibleTimes);
@@ -29,6 +28,7 @@ public class EventMapper {
         outputDto.name = event.getName();
         outputDto.game = event.getGame().getTitle();
         outputDto.isFull = event.isFull();
+        outputDto.isReadyToStart = event.isReadyToStart();
         outputDto.isHostPlaying = event.isHostPlaying();
         outputDto.definitiveTime = event.getDefinitiveTime();
         outputDto.possibleTimes = event.getPossibleTimes();

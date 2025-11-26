@@ -69,7 +69,7 @@ public class EventController {
     // Delete all Events (besides default event)
     @DeleteMapping("/deleteAll")
     public ResponseEntity<String> deleteAll() {
-        return ResponseEntity.ok(this.service.deleteAll());
+        return ResponseEntity.ok(this.service.deleteAllEvents());
     }
 
     /**********/

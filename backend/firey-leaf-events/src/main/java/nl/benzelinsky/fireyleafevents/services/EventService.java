@@ -3,10 +3,7 @@ package nl.benzelinsky.fireyleafevents.services;
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.PatchEventInputDto;
-import nl.benzelinsky.fireyleafevents.exceptions.EventFullException;
-import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
-import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyJoinedEventException;
-import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
+import nl.benzelinsky.fireyleafevents.exceptions.*;
 import nl.benzelinsky.fireyleafevents.mappers.EventMapper;
 import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
@@ -58,7 +55,7 @@ public class EventService {
         return EventMapper.toOutputDto(event);
     }
 
-    // Get all events
+    // Get all Events
     public List<EventOutputDto> getAllEvents() {
         List<EventOutputDto> allEvents = new ArrayList<>();
         this.eventRepository.findAll()
@@ -67,7 +64,7 @@ public class EventService {
         return allEvents;
     }
 
-    // Get event by ID
+    // Get Event by ID
     public EventOutputDto getEventById(Long id) {
         return EventMapper.toOutputDto(
                 this.eventRepository.findById(id)
@@ -86,17 +83,11 @@ public class EventService {
         if (dtoIn.name != null) {
             toUpdate.setName(dtoIn.name);
         }
-        if (dtoIn.isFull != null) {
-            toUpdate.setFull(dtoIn.isFull);
-        }
         if (dtoIn.isHostPlaying != null) {
             toUpdate.setHostPlaying(dtoIn.isHostPlaying);
         }
         if (dtoIn.definitiveTime != null) {
             toUpdate.setDefinitiveTime(dtoIn.definitiveTime);
-        }
-        if (dtoIn.possibleTimes != null) {
-            toUpdate.setPossibleTimes(dtoIn.possibleTimes);
         }
         if (dtoIn.location != null) {
             toUpdate.setLocation(dtoIn.location);
@@ -110,22 +101,30 @@ public class EventService {
     public String deleteEventById(Long id) {
         Event toDelete = this.eventRepository.findById(id)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + id));
+                        new RecordNotFoundException("Event", id));
+        // Iterate over a copy of toDelete.players to avoid a bug when deleting players from the same collection we're iterating over.
+        new ArrayList<>(toDelete.getPlayers())
+                .forEach(player ->
+                        this.removePlayer(player.getUsername(), toDelete.getId()));
         this.eventRepository.delete(toDelete);
-        return toDelete.getName() + " event has been deleted.";
+        return "Event with id " + id + " has been deleted.";
     }
 
-    // TODO Make deletes be able to handle decoupling of relations of events.
     // Delete all events (besides default event)
-    public String deleteAll() {
-        List<Long> allIds = new ArrayList<>();
+    public String deleteAllEvents() {
+        Long protectedId = 1L;
+        List<Long> toDeleteIds = new ArrayList<>();
+        // Create a list of all IDs except for the first one.
         this.eventRepository
                 .findAll()
                 .forEach(event ->
-                        allIds.add(event.getId()));
-        allIds.remove(Long.valueOf(1));
-        this.eventRepository.deleteAllById(allIds);
-        return "All events except " + this.eventRepository.getEventById(Long.valueOf(1)).getName() + " have been deleted.";
+                        toDeleteIds.add(event.getId()));
+        toDeleteIds.remove(protectedId); // Remove ID 1 from the list of all IDs.
+
+        toDeleteIds
+                .forEach(id ->
+                        System.out.println("\n"+this.deleteEventById(id)+"\n"));
+        return "All events except Event with id " + protectedId + " have been deleted.";
     }
 
     // Couple Event with Game
@@ -173,10 +172,27 @@ public class EventService {
         }
         event.addPlayer(player);
         player.joinEvent(event);
-        if (event.getPlayers().size() == event.getGame().getMaxPlayers()) {
-            event.setFull(true);
-        }
         this.eventRepository.save(event);
+        return EventMapper.toOutputDto(event);
+    }
+
+    // TODO add endpoint
+    public EventOutputDto removePlayer(String username, Long eventId) {
+        Event event = this.eventRepository.findById(eventId)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("Event", eventId));
+        User player = this.userRepository.findById(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(username));
+        if (event.getPlayers().contains(player)) {
+            event.removePlayer(player);
+            player.leaveEvent(event);
+            this.eventRepository.save(event);
+        }
+        else {
+            // player is not in event
+            throw new NotAPlayerException(username, eventId);
+        }
         return EventMapper.toOutputDto(event);
     }
 }
