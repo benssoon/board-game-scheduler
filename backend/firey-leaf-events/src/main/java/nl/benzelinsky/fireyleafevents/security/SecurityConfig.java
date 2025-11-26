@@ -50,21 +50,28 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth ->
                         auth
+                                // Users
                                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                                // Events
                                 .requestMatchers(HttpMethod.POST, "/events").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH, "/events/{eventId}/players").hasRole("USER")
                                 .requestMatchers(HttpMethod.PATCH, "/events/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/events").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/events").hasRole("ADMIN") // Delete all events
+                                .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN") // Delete event by id
+                                // User profile
                                 .requestMatchers(HttpMethod.GET, "/users/{username}").authenticated()
+                                // Games
                                 .requestMatchers(HttpMethod.POST, "/games").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.PATCH, "/games/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/games/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/games/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/games").hasRole("ADMIN") // Delete all games
+                                .requestMatchers(HttpMethod.DELETE, "/games/**").hasRole("ADMIN") // Delete game by id
+                                // All GET
                                 .requestMatchers(HttpMethod.GET, "/**").permitAll()
+                                // Log in
                                 .requestMatchers("/authenticated").authenticated()
                                 .requestMatchers("/authenticate").permitAll()
                                 .anyRequest().denyAll()

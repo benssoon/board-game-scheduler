@@ -122,6 +122,23 @@ public class GameService {
         return "Game " + toDelete.getTitle() + " has been deleted.";
     }
 
+    // Delete all games
+    public String deleteAllGames() {
+        Long protectedId = 1L;
+        List<Long> toDeleteIds = new ArrayList<>();
+        // Create a list of all IDs except for the first one.
+        this.gameRepository
+                .findAll()
+                .forEach(game ->
+                        toDeleteIds.add(game.getId()));
+        toDeleteIds.remove(protectedId); // Remove ID 1 from the list of all IDs.
+
+        toDeleteIds
+                .forEach(id ->
+                        System.out.println("\n"+this.deleteGameById(id)+"\n"));
+        return "All games except Game with id " + protectedId + " have been deleted.";
+    }
+
     public GameOutputDto removeEvent(Long eventId, Long gameId) {
         Game game = this.gameRepository.findById(gameId)
                 .orElseThrow(() ->
