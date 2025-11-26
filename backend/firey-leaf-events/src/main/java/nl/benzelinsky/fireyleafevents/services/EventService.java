@@ -1,5 +1,6 @@
 package nl.benzelinsky.fireyleafevents.services;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.PatchEventInputDto;
@@ -56,11 +57,21 @@ public class EventService {
     }
 
     // Get all Events
-    public List<EventOutputDto> getAllEvents() {
+    public List<EventOutputDto> getAllEvents(Long gameId) {
         List<EventOutputDto> allEvents = new ArrayList<>();
-        this.eventRepository.findAll()
-                .forEach(event ->
-                        allEvents.add(EventMapper.toOutputDto(event)));
+        if (gameId != null) {
+            if (!this.gameRepository.existsById(gameId)) {
+                throw new RecordNotFoundException("Game", gameId);
+            }
+            this.eventRepository.findEventsByGame_Id(gameId)
+                    .forEach(event ->
+                            allEvents.add(EventMapper.toOutputDto(event)));
+        }
+        else {
+            this.eventRepository.findAll()
+                    .forEach(event ->
+                            allEvents.add(EventMapper.toOutputDto(event)));
+        }
         return allEvents;
     }
 
@@ -69,7 +80,7 @@ public class EventService {
         return EventMapper.toOutputDto(
                 this.eventRepository.findById(id)
                         .orElseThrow(() ->
-                                new RecordNotFoundException("Event not found with id: " + id)));
+                                new RecordNotFoundException("Event", id)));
 
     }
 

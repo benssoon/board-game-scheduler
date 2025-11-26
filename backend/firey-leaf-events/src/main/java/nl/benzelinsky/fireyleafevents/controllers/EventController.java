@@ -39,8 +39,8 @@ public class EventController {
 
     // Get all Events
     @GetMapping
-    public ResponseEntity<List<EventOutputDto>> getAllEvents() {
-        return ResponseEntity.ok(this.service.getAllEvents());
+    public ResponseEntity<List<EventOutputDto>> getAllEvents(@RequestParam(required = false) Long gameId) {
+        return ResponseEntity.ok(this.service.getAllEvents(gameId));
     }
 
     // Get Event by ID
