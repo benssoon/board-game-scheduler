@@ -103,7 +103,7 @@ public class GameService {
             throw new HasActiveEventsException(id, eventIds);
         }
         else {
-            this.gameRepository.delete(toDelete);
+            this.gameRepository.deleteById(id);
         }
         return "Game " + toDelete.getTitle() + " has been deleted.";
     }

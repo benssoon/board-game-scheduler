@@ -17,4 +17,9 @@ public class HasActiveEventsException extends RuntimeException {
                 activeEvents.toString() +
                 "\nPlease remove those events before removing this game.");
     }
+    public HasActiveEventsException(String username, Map<Long, String> activeEvents) {
+        super("User with username " + username + " is currently hosting events:\n" +
+                activeEvents.toString() +
+                "\nPlease remove those events before removing this user.");
+    }
 }
