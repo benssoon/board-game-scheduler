@@ -71,6 +71,5 @@ public class Event {
         if (this.players.size() < this.game.getMinPlayers()) {
             this.setReadyToStart(false);
         }
-
     }
 }

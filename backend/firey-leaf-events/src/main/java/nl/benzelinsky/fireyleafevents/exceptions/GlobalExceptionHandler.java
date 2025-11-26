@@ -78,4 +78,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNotAPlayerException(NotAPlayerException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    //Game still has events when deleting
+    @ExceptionHandler(HasActiveEventsException.class)
+    public ResponseEntity<String> handleHasActiveEventsException(HasActiveEventsException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }

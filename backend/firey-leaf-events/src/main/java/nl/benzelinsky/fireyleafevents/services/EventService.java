@@ -107,20 +107,24 @@ public class EventService {
                 .forEach(player ->
                         removePlayer(player.getUsername(), toDelete.getId()));
         this.eventRepository.delete(toDelete);
-        return toDelete.getName() + " event has been deleted.";
+        return "Event with id " + id + " has been deleted.";
     }
 
-    // TODO Make deletes be able to handle decoupling of relations of events.
     // Delete all events (besides default event)
     public String deleteAll() {
-        List<Long> allIds = new ArrayList<>();
+        Long protectedId = 1L;
+        List<Long> toDeleteIds = new ArrayList<>();
+        // Create a list of all IDs except for the first one.
         this.eventRepository
                 .findAll()
                 .forEach(event ->
-                        allIds.add(event.getId()));
-        allIds.remove(Long.valueOf(1));
-        this.eventRepository.deleteAllById(allIds);
-        return "All events except " + this.eventRepository.getEventById(Long.valueOf(1)).getName() + " have been deleted.";
+                        toDeleteIds.add(event.getId()));
+        toDeleteIds.remove(protectedId); // Remove ID 1 from the list of all IDs.
+
+        toDeleteIds
+                .forEach(id ->
+                        System.out.println("\n"+this.deleteEventById(id)+"\n"));
+        return "All events except Event with id " + protectedId + " have been deleted.";
     }
 
     // Couple Event with Game
