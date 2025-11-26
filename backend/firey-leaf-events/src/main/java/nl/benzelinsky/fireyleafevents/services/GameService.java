@@ -115,12 +115,19 @@ public class GameService {
                 .orElseThrow(() ->
                         new RecordNotFoundException("Game", id));
         List<String> messages = new ArrayList<>();
+        List<String> eventNames = new ArrayList<>();
+        toDelete.getActiveEvents()
+                .forEach(event ->
+                        eventNames.add(event.getName()));
         // Iterate over a copy of toDelete.activeEvents to avoid a bug when deleting events from the same collection we're iterating over.
         new ArrayList<>(toDelete.getActiveEvents())
                 .forEach(event ->
                         messages.add(removeEvent(event.getId(), toDelete.getId())));
         this.gameRepository.delete(toDelete);
-        return "Game " + toDelete.getTitle() + " has been deleted.";
+        return "Deleting " + toDelete.getTitle() + " and its events:\n" +
+                "    " + eventNames.toString() + "\n" +
+                String.join("\n", messages) +
+                "\nGame with id " + toDelete.getId() + " has been deleted.";
     }
 
     // Delete all Games
