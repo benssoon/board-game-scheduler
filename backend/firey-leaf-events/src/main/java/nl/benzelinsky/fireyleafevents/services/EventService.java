@@ -55,7 +55,7 @@ public class EventService {
         return EventMapper.toOutputDto(event);
     }
 
-    // Get all events
+    // Get all Events
     public List<EventOutputDto> getAllEvents() {
         List<EventOutputDto> allEvents = new ArrayList<>();
         this.eventRepository.findAll()
@@ -64,7 +64,7 @@ public class EventService {
         return allEvents;
     }
 
-    // Get event by ID
+    // Get Event by ID
     public EventOutputDto getEventById(Long id) {
         return EventMapper.toOutputDto(
                 this.eventRepository.findById(id)
@@ -105,13 +105,13 @@ public class EventService {
         // Iterate over a copy of toDelete.players to avoid a bug when deleting players from the same collection we're iterating over.
         new ArrayList<>(toDelete.getPlayers())
                 .forEach(player ->
-                        removePlayer(player.getUsername(), toDelete.getId()));
+                        this.removePlayer(player.getUsername(), toDelete.getId()));
         this.eventRepository.delete(toDelete);
         return "Event with id " + id + " has been deleted.";
     }
 
     // Delete all events (besides default event)
-    public String deleteAll() {
+    public String deleteAllEvents() {
         Long protectedId = 1L;
         List<Long> toDeleteIds = new ArrayList<>();
         // Create a list of all IDs except for the first one.
@@ -176,6 +176,7 @@ public class EventService {
         return EventMapper.toOutputDto(event);
     }
 
+    // TODO add endpoint
     public EventOutputDto removePlayer(String username, Long eventId) {
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->

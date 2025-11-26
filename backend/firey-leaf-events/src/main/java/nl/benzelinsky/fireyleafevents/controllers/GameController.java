@@ -57,6 +57,12 @@ public class GameController {
         return ResponseEntity.ok(this.service.deleteGameById(id));
     }
 
+    // Force Delete Game by ID, including associated Events
+    @DeleteMapping("/{id}/forceDelete")
+    public ResponseEntity<String> deleteGameAndEvents(@PathVariable Long id) {
+        return ResponseEntity.ok(this.service.deleteGameAndEvents(id));
+    }
+
     // Delete all Games
     @DeleteMapping
     public ResponseEntity<String> deleteAllGames() {
