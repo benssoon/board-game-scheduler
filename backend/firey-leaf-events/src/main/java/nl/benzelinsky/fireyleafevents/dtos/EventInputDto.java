@@ -2,11 +2,13 @@ package nl.benzelinsky.fireyleafevents.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import nl.benzelinsky.fireyleafevents.models.Game;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@AllArgsConstructor
 public class EventInputDto {
 
     @NotBlank

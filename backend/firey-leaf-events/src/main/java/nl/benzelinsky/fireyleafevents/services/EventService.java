@@ -151,6 +151,7 @@ public class EventService {
         this.eventRepository.save(event);
     }
 
+    // TODO add endpoint
     // Add host to Event
     public void assignHostToEvent(String username, Long eventId) {
         User host = this.userRepository.findById(username)
@@ -164,14 +165,11 @@ public class EventService {
         this.eventRepository.save(event);
     }
 
-    /* TODO Add this to the controller */
-    /* TODO After that, check other todo's here */
-    /* TODO Then, make tests. */
     // Add player to Event
     public EventOutputDto addPlayer(String username, Long eventId) {
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + eventId));
+                        new RecordNotFoundException("Event", eventId));
         User player = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
@@ -187,7 +185,6 @@ public class EventService {
         return EventMapper.toOutputDto(event);
     }
 
-    // TODO add endpoint
     public EventOutputDto removePlayer(String username, Long eventId) {
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
