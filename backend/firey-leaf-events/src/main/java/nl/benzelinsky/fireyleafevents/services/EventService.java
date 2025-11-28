@@ -40,7 +40,7 @@ public class EventService {
         Long gameId = dtoIn.gameId;
         Game game = this.gameRepository.findById(gameId)
                         .orElseThrow(() ->
-                                new RecordNotFoundException("Game not found with id: " + gameId));
+                                new RecordNotFoundException("Game", gameId));
         event.setGame(game);
         game.addEvent(event);
 
