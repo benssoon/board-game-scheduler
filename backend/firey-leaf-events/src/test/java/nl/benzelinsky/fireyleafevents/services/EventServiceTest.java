@@ -3,6 +3,7 @@ package nl.benzelinsky.fireyleafevents.services;
 import lombok.extern.slf4j.Slf4j;
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
+import nl.benzelinsky.fireyleafevents.dtos.PatchEventInputDto;
 import nl.benzelinsky.fireyleafevents.exceptions.*;
 import nl.benzelinsky.fireyleafevents.mappers.EventMapper;
 import nl.benzelinsky.fireyleafevents.models.Event;
@@ -55,7 +56,8 @@ class EventServiceTest {
     private Game game1;
     private Game game2;
     private EventInputDto dtoIn;
-    //private Event createdEvent;
+    private PatchEventInputDto patchDtoInFull;
+    private PatchEventInputDto patchDtoInEmpty;
     private String eventNotFoundMessage;
     private String gameNotFoundMessage;
     private String userAlreadyJoinedMessage;
@@ -73,7 +75,8 @@ class EventServiceTest {
         this.game1 = new Game("Root", 2, 4);
         this.game2 = new Game("Arcs");
         this.dtoIn = new EventInputDto("Fun night", true, "Erehwon", 1L, LocalDateTime.parse("2025-12-31T23:59:59"), List.of());
-        //this.createdEvent = new Event(1L, "Fun night", false, false, false, LocalDateTime.parse("2025-12-31T23:59:59"), "Erehwon", List.of(), List.of(), game1, player1);
+        this.patchDtoInFull = new PatchEventInputDto("Fun night", true, "Erehwon", LocalDateTime.parse("2025-12-31T23:59:59"));
+        this.patchDtoInEmpty = new PatchEventInputDto();
         eventId = 1L;
         gameId = 1L;
         username = player1.getUsername();
@@ -303,15 +306,72 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Should return event with new data")
+    @DisplayName("Should return event with all new data")
     public void testUpdateEvent() {
         //arrange
         Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        event.setGame(game1);
+        EventOutputDto testDto = EventMapper.toOutputDto(event);
+
+        // change event to testDto because event is already set to what is expected
+        testDto.name = patchDtoInFull.name;
+        testDto.isHostPlaying = patchDtoInFull.isHostPlaying;
+        testDto.definitiveTime = patchDtoInFull.definitiveTime;
+        testDto.location = patchDtoInFull.location;
 
         //act
-        //EventOutputDto dto = eventService.updateEventById();
+        EventOutputDto dto = eventService.updateEventById(eventId, patchDtoInFull);
 
         //assert
+        assertEquals(testDto.id, dto.id);
+        assertEquals(testDto.name, dto.name);
+        assertEquals(testDto.game, dto.game);
+        assertEquals(testDto.isFull, dto.isFull);
+        assertEquals(testDto.isReadyToStart, dto.isReadyToStart);
+        assertEquals(testDto.isHostPlaying, dto.isHostPlaying);
+        assertEquals(testDto.definitiveTime, dto.definitiveTime);
+        assertEquals(testDto.possibleTimes, dto.possibleTimes);
+        assertEquals(testDto.players, dto.players);
+        assertEquals(testDto.location, dto.location);
+        assertEquals(testDto.host, dto.host);
+    }
+
+    @Test
+    @DisplayName("Should return event with no data changed")
+    public void testDoNotUpdateEvent() {
+        //arrange
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        event.setGame(game1);
+        EventOutputDto testDto = EventMapper.toOutputDto(event);
+
+        //act
+        EventOutputDto dto = eventService.updateEventById(eventId, patchDtoInEmpty);
+
+        //assert
+        assertEquals(testDto.id, dto.id);
+        assertEquals(testDto.name, dto.name);
+        assertEquals(testDto.game, dto.game);
+        assertEquals(testDto.isFull, dto.isFull);
+        assertEquals(testDto.isReadyToStart, dto.isReadyToStart);
+        assertEquals(testDto.isHostPlaying, dto.isHostPlaying);
+        assertEquals(testDto.definitiveTime, dto.definitiveTime);
+        assertEquals(testDto.possibleTimes, dto.possibleTimes);
+        assertEquals(testDto.players, dto.players);
+        assertEquals(testDto.location, dto.location);
+        assertEquals(testDto.host, dto.host);
+    }
+
+    @Test
+    @DisplayName("Should throw RecordNotFoundException")
+    public void testUpdateEventThrowsRecordNotFoundException() {
+        //arrange
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        //act
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.updateEventById(eventId, patchDtoInEmpty));
+
+        //assert
+        assertEquals(eventNotFoundMessage, exception.getMessage());
     }
 
     @Test

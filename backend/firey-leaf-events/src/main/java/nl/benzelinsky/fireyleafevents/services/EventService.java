@@ -85,10 +85,9 @@ public class EventService {
 
     // Update event by ID
     public EventOutputDto updateEventById(Long id, PatchEventInputDto dtoIn) {
-        String string = "name";
         Event toUpdate = this.eventRepository.findById(id)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + id));
+                        new RecordNotFoundException("Event", id));
 
         if (dtoIn.name != null) {
             toUpdate.setName(dtoIn.name);
