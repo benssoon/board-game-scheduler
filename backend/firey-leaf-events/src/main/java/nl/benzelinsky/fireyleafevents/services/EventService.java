@@ -81,7 +81,6 @@ public class EventService {
                 this.eventRepository.findById(id)
                         .orElseThrow(() ->
                                 new RecordNotFoundException("Event", id)));
-
     }
 
     // Update event by ID
