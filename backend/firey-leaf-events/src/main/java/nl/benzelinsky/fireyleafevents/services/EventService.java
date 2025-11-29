@@ -140,10 +140,10 @@ public class EventService {
     public void assignGameToEvent(Long gameId, Long eventId) {
         Game game = this.gameRepository.findById(gameId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Game not found with id: " + gameId));
+                        new RecordNotFoundException("Game", gameId));
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + eventId));
+                        new RecordNotFoundException("Event", eventId));
         event.setGame(game);
         game.addEvent(event);
         this.eventRepository.save(event);
@@ -157,7 +157,7 @@ public class EventService {
                         new UsernameNotFoundException(username));
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + eventId));
+                        new RecordNotFoundException("Event", eventId));
         event.setHost(host);
         host.hostEvent(event);
         this.eventRepository.save(event);

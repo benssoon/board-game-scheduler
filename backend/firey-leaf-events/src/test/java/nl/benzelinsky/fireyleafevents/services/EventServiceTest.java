@@ -63,6 +63,7 @@ class EventServiceTest {
     private String userAlreadyJoinedMessage;
     private String eventFullMessage;
     private String userNotFountMessage;
+    private String eventDeletedMessage;
 
     @BeforeEach
     public void setup() {
@@ -85,6 +86,7 @@ class EventServiceTest {
         userAlreadyJoinedMessage = "User with username \"" + username + "\" has already joined Event with id: " + eventId;
         eventFullMessage = "The event \"" + event.getName() + "\" is already full.";
         userNotFountMessage = "Cannot find user ";
+        eventDeletedMessage = "Event with id " + eventId + " has been deleted.";
     }
 
     @Test
@@ -375,6 +377,55 @@ class EventServiceTest {
     }
 
     @Test
+    @DisplayName("Should delete the correct event")
+    public void testDeleteEventById() {
+        //arrange
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+
+        //act
+        String message = eventService.deleteEventById(eventId);
+
+        //assert
+        assertEquals(eventDeletedMessage, message);
+    }
+
+    @Test
+    @DisplayName("Should remove all players from event")
+    public void testDeletingEventRemovesPlayers() {
+        //arrange
+        Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        Mockito.when(userRepository.findById(player1.getUsername())).thenReturn(Optional.of(player1));
+        Mockito.when(userRepository.findById(player2.getUsername())).thenReturn(Optional.of(player2));
+        Mockito.when(userRepository.findById(player3.getUsername())).thenReturn(Optional.of(player3));
+        Mockito.when(userRepository.findById(player4.getUsername())).thenReturn(Optional.of(player4));
+        event.setId(eventId);
+        event.setGame(game1);
+        event.addPlayer(player1);
+        event.addPlayer(player2);
+        event.addPlayer(player3);
+        event.addPlayer(player4);
+
+        //act
+        eventService.deleteEventById(eventId);
+
+        //assert
+        assertTrue(event.getPlayers().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should throw RecordNotFoundException")
+    public void testDeleteEventThrowsRecordNotFound() {
+        //arrange
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        //act
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.deleteEventById(eventId));
+
+        //assert
+        assertEquals(eventNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
     @DisplayName("Should add correct user to event")
     public void testAddUserToEvent() {
         //arrange (given)
@@ -391,12 +442,12 @@ class EventServiceTest {
 
     @Test
     @DisplayName("Should throw RecordNotFoundException")
-    public void testAddPlayerThrowEventException() {
+    public void testAddPlayerThrowsRecordNotFoundException() {
         //arrange
         Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //act
-        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.addPlayer("waterman", eventId));
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.addPlayer(username, eventId));
 
         //assert
         assertEquals(eventNotFoundMessage, exception.getMessage());
