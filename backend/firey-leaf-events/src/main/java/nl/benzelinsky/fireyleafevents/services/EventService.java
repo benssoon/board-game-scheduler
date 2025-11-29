@@ -149,6 +149,7 @@ public class EventService {
         if (game.getActiveEvents().contains(event)) {
             throw new GameAlreadyAssignedToEventException(game, event);
         }
+        event.getGame().removeEvent(event);
         event.setGame(game);
         game.addEvent(event);
         this.eventRepository.save(event);
