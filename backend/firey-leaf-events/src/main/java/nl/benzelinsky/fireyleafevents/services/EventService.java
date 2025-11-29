@@ -130,9 +130,11 @@ public class EventService {
                         toDeleteIds.add(event.getId()));
         toDeleteIds.remove(protectedId); // Remove ID 1 from the list of all IDs.
 
+        System.out.println();
         toDeleteIds
                 .forEach(id ->
-                        System.out.println("\n"+this.deleteEventById(id)+"\n"));
+                        System.out.println(this.deleteEventById(id)));
+        System.out.println();
         return "All events except Event with id " + protectedId + " have been deleted.";
     }
 

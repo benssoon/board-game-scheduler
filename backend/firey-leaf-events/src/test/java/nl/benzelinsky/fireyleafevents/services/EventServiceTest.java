@@ -46,13 +46,15 @@ class EventServiceTest {
 
     private Long eventId;
     private Long gameId;
-    private String username;
+    private String usernamePlayer1;
     private User player1;
     private User player2;
     private User player3;
     private User player4;
     private User userNotInEvent;
-    private Event event;
+    private Event event1;
+    private Event event2;
+    private Event event3;
     private Game game1;
     private Game game2;
     private EventInputDto dtoIn;
@@ -64,6 +66,7 @@ class EventServiceTest {
     private String eventFullMessage;
     private String userNotFountMessage;
     private String eventDeletedMessage;
+    private String allEventsDeletedMessage;
 
     @BeforeEach
     public void setup() {
@@ -72,7 +75,9 @@ class EventServiceTest {
         this.player3 = new User("piet", "1234", "Piet", "piet@piet.piet");
         this.player4 = new User("sint", "1234", "Klaas", "sint@nico.laas");
         this.userNotInEvent = new User("bob", "1234", "Bob", "bob@bob.bob");
-        this.event = new Event("Root night");
+        this.event1 = new Event("Root night");
+        this.event2 = new Event("Arcs night");
+        this.event3 = new Event("Game night");
         this.game1 = new Game("Root", 2, 4);
         this.game2 = new Game("Arcs");
         this.dtoIn = new EventInputDto("Fun night", true, "Erehwon", 1L, LocalDateTime.parse("2025-12-31T23:59:59"), List.of());
@@ -80,13 +85,14 @@ class EventServiceTest {
         this.patchDtoInEmpty = new PatchEventInputDto();
         eventId = 1L;
         gameId = 1L;
-        username = player1.getUsername();
+        usernamePlayer1 = player1.getUsername();
         eventNotFoundMessage = "Event not found with id: " + eventId;
         gameNotFoundMessage = "Game not found with id: " + gameId;
-        userAlreadyJoinedMessage = "User with username \"" + username + "\" has already joined Event with id: " + eventId;
-        eventFullMessage = "The event \"" + event.getName() + "\" is already full.";
+        userAlreadyJoinedMessage = "User with username \"" + usernamePlayer1 + "\" has already joined Event with id: " + eventId;
+        eventFullMessage = "The event \"" + event1.getName() + "\" is already full.";
         userNotFountMessage = "Cannot find user ";
         eventDeletedMessage = "Event with id " + eventId + " has been deleted.";
+        allEventsDeletedMessage = "All events except Event with id " + eventId + " have been deleted.";
     }
 
     @Test
@@ -95,14 +101,14 @@ class EventServiceTest {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player1));
         Mockito.when(gameRepository.findById(anyLong())).thenReturn(Optional.of(game1));
-        Mockito.when(eventRepository.save(any())).thenAnswer(inp -> {
-            Event e = inp.getArgument(0);
+        Mockito.when(eventRepository.save(any())).thenAnswer(invocation -> {
+            Event e = invocation.getArgument(0);
             e.setId(eventId);
             return e;
         });
 
         //act
-        EventOutputDto dtoOut = this.eventService.createEvent(dtoIn, username);
+        EventOutputDto dtoOut = this.eventService.createEvent(dtoIn, usernamePlayer1);
 
         //assert
         assertEquals(eventId, dtoOut.id);
@@ -129,7 +135,7 @@ class EventServiceTest {
         });
 
         //act
-        EventOutputDto dtoOutHostNotPlaying = this.eventService.createEvent(dtoHostNotPlaying, username);
+        EventOutputDto dtoOutHostNotPlaying = this.eventService.createEvent(dtoHostNotPlaying, usernamePlayer1);
 
         //assert
         assertFalse(dtoOutHostNotPlaying.players.contains(player1.getName()));
@@ -142,7 +148,7 @@ class EventServiceTest {
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player1));
 
         //act
-        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> this.eventService.createEvent(dtoIn, username));
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> this.eventService.createEvent(dtoIn, usernamePlayer1));
 
         //assert
         assertEquals(gameNotFoundMessage, exception.getMessage());
@@ -165,7 +171,7 @@ class EventServiceTest {
     @DisplayName("Should return all events")
     public void testGetEvents() {
         //arrange
-        List<Event> allEvents = Arrays.asList(this.event, new Event("Arcs"),new Event("Fort"));
+        List<Event> allEvents = Arrays.asList(this.event1, new Event("Arcs"),new Event("Fort"));
         allEvents.forEach(e -> {
             e.setGame(game1);
             e.setHost(player1);
@@ -202,7 +208,7 @@ class EventServiceTest {
     public void testGetEventsByGame() {
         //arrange
         List<Event> allEvents = new ArrayList<>();
-        allEvents.add(this.event);
+        allEvents.add(this.event1);
         allEvents.add(new Event("Arcs"));
         allEvents.add(new Event("Fort"));
         allEvents.forEach(e -> {
@@ -252,7 +258,7 @@ class EventServiceTest {
     @DisplayName("Should throw RecordNotFoundException")
     public void testGetEventsByNonExistingGame() {
         //arrange
-        List<Event> allEvents = Arrays.asList(this.event, new Event("Arcs"),new Event("Fort"));
+        List<Event> allEvents = Arrays.asList(this.event1, new Event("Arcs"),new Event("Fort"));
         allEvents.forEach(e -> {
             e.setGame(game1);
             e.setHost(player1);
@@ -269,28 +275,28 @@ class EventServiceTest {
     @DisplayName("Should get correct event")
     public void testGetEvent() {
         //arrange
-        event.setId(eventId);
-        event.setGame(game1);
-        event.setHost(player1);
-        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        event1.setId(eventId);
+        event1.setGame(game1);
+        event1.setHost(player1);
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
 
         //act
         EventOutputDto dto = eventService.getEventById(eventId);
 
         //assert
         assertEquals(eventId, dto.id);
-        assertEquals(event.getName(), dto.name);
-        assertEquals(event.getGame().getTitle(), dto.game);
-        assertEquals(event.isFull(), dto.isFull);
-        assertEquals(event.isReadyToStart(), dto.isReadyToStart);
-        assertEquals(event.isHostPlaying(), dto.isHostPlaying);
-        assertEquals(event.getDefinitiveTime(), dto.definitiveTime);
-        assertEquals(event.getHost().getName(), dto.host);
-        assertEquals(event.getLocation(), dto.location);
-        assertEquals(event.getPossibleTimes(), dto.possibleTimes);
-        event.getPlayers().forEach(p -> {
-            int pIndex = event.getPlayers().indexOf(p);
-            assertEquals(event.getName(), dto.players.get(pIndex));
+        assertEquals(event1.getName(), dto.name);
+        assertEquals(event1.getGame().getTitle(), dto.game);
+        assertEquals(event1.isFull(), dto.isFull);
+        assertEquals(event1.isReadyToStart(), dto.isReadyToStart);
+        assertEquals(event1.isHostPlaying(), dto.isHostPlaying);
+        assertEquals(event1.getDefinitiveTime(), dto.definitiveTime);
+        assertEquals(event1.getHost().getName(), dto.host);
+        assertEquals(event1.getLocation(), dto.location);
+        assertEquals(event1.getPossibleTimes(), dto.possibleTimes);
+        event1.getPlayers().forEach(p -> {
+            int pIndex = event1.getPlayers().indexOf(p);
+            assertEquals(event1.getName(), dto.players.get(pIndex));
         });
     }
 
@@ -311,9 +317,9 @@ class EventServiceTest {
     @DisplayName("Should return event with all new data")
     public void testUpdateEvent() {
         //arrange
-        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
-        event.setGame(game1);
-        EventOutputDto testDto = EventMapper.toOutputDto(event);
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+        event1.setGame(game1);
+        EventOutputDto testDto = EventMapper.toOutputDto(event1);
 
         // change event to testDto because event is already set to what is expected
         testDto.name = patchDtoInFull.name;
@@ -342,9 +348,9 @@ class EventServiceTest {
     @DisplayName("Should return event with no data changed")
     public void testDoNotUpdateEvent() {
         //arrange
-        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
-        event.setGame(game1);
-        EventOutputDto testDto = EventMapper.toOutputDto(event);
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+        event1.setGame(game1);
+        EventOutputDto testDto = EventMapper.toOutputDto(event1);
 
         //act
         EventOutputDto dto = eventService.updateEventById(eventId, patchDtoInEmpty);
@@ -380,7 +386,7 @@ class EventServiceTest {
     @DisplayName("Should delete the correct event")
     public void testDeleteEventById() {
         //arrange
-        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
 
         //act
         String message = eventService.deleteEventById(eventId);
@@ -393,23 +399,23 @@ class EventServiceTest {
     @DisplayName("Should remove all players from event")
     public void testDeletingEventRemovesPlayers() {
         //arrange
-        Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(event1));
         Mockito.when(userRepository.findById(player1.getUsername())).thenReturn(Optional.of(player1));
         Mockito.when(userRepository.findById(player2.getUsername())).thenReturn(Optional.of(player2));
         Mockito.when(userRepository.findById(player3.getUsername())).thenReturn(Optional.of(player3));
         Mockito.when(userRepository.findById(player4.getUsername())).thenReturn(Optional.of(player4));
-        event.setId(eventId);
-        event.setGame(game1);
-        event.addPlayer(player1);
-        event.addPlayer(player2);
-        event.addPlayer(player3);
-        event.addPlayer(player4);
+        event1.setId(eventId);
+        event1.setGame(game1);
+        event1.addPlayer(player1);
+        event1.addPlayer(player2);
+        event1.addPlayer(player3);
+        event1.addPlayer(player4);
 
         //act
         eventService.deleteEventById(eventId);
 
         //assert
-        assertTrue(event.getPlayers().isEmpty());
+        assertTrue(event1.getPlayers().isEmpty());
     }
 
     @Test
@@ -426,12 +432,43 @@ class EventServiceTest {
     }
 
     @Test
+    @DisplayName("Should delete all events except protected")
+    public void testDeleteAllEvents() {
+        //arrange
+        List<Event> allEvents = new ArrayList<>();
+        allEvents.add(event1);
+        allEvents.add(event2);
+        allEvents.add(event3);
+        event1.setId(1L);
+        event2.setId(2L);
+        event3.setId(3L);
+        Mockito.when(eventRepository.findAll()).thenReturn(allEvents);
+        Mockito.when(eventRepository.findById(event2.getId())).thenReturn(Optional.of(event2));
+        Mockito.when(eventRepository.findById(event3.getId())).thenReturn(Optional.of(event3));
+        Mockito.doAnswer(invocation ->
+        {
+            Event e = invocation.getArgument(0);
+            allEvents.remove(e);
+            return e;
+        }).when(eventRepository).delete(any());
+
+        //act
+        String message = eventService.deleteAllEvents();
+
+        //assert
+        assertEquals(allEventsDeletedMessage, message);
+        assertEquals(1, allEvents.size());
+        assertEquals(allEvents.getFirst(), event1);
+        assertEquals(allEvents.getLast(), event1);
+    }
+
+    @Test
     @DisplayName("Should add correct user to event")
     public void testAddUserToEvent() {
         //arrange (given)
-        event.setGame(game1);
+        event1.setGame(game1);
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player1));
-        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
 
         //act (when)
         EventOutputDto eventOutputDto = eventService.addPlayer("waterman", 1L);
@@ -447,7 +484,7 @@ class EventServiceTest {
         Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //act
-        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.addPlayer(username, eventId));
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.addPlayer(usernamePlayer1, eventId));
 
         //assert
         assertEquals(eventNotFoundMessage, exception.getMessage());
@@ -458,7 +495,7 @@ class EventServiceTest {
     public void testThrowPlayerException() {
         //arrange
         String username = userNotInEvent.getUsername();
-        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
         //act
@@ -473,16 +510,16 @@ class EventServiceTest {
     @DisplayName("Should throw UserAlreadyJoinedEventException")
     public void testThrowAlreadyJoinedException() {
         //arrange
-        event.setGame(game1);
-        event.addPlayer(player1);
-        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        event1.setGame(game1);
+        event1.addPlayer(player1);
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player1));
 
         //act
-        UserAlreadyJoinedEventException exception = assertThrowsExactly(UserAlreadyJoinedEventException.class, () -> eventService.addPlayer(username, eventId));
+        UserAlreadyJoinedEventException exception = assertThrowsExactly(UserAlreadyJoinedEventException.class, () -> eventService.addPlayer(usernamePlayer1, eventId));
 
         //assert
-        assertThrowsExactly(UserAlreadyJoinedEventException.class, () -> eventService.addPlayer(username, eventId));
+        assertThrowsExactly(UserAlreadyJoinedEventException.class, () -> eventService.addPlayer(usernamePlayer1, eventId));
         assertEquals(userAlreadyJoinedMessage, exception.getMessage());
     }
 
@@ -492,12 +529,12 @@ class EventServiceTest {
         //arrange
         String username = userNotInEvent.getUsername();
         Long id = 1L;
-        event.setGame(game1);
-        event.addPlayer(player1);
-        event.addPlayer(player2);
-        event.addPlayer(player3);
-        event.addPlayer(player4);
-        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        event1.setGame(game1);
+        event1.addPlayer(player1);
+        event1.addPlayer(player2);
+        event1.addPlayer(player3);
+        event1.addPlayer(player4);
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(userNotInEvent));
 
         //act
