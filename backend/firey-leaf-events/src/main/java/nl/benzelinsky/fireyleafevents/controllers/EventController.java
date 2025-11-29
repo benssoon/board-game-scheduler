@@ -76,10 +76,10 @@ public class EventController {
 
     // Couple Event with Game
     @PutMapping("/{eventId}/game/{gameId}")
-    public void assignGameToEvent(
+    public ResponseEntity<EventOutputDto> assignGameToEvent(
             @PathVariable("gameId") Long gameId,
             @PathVariable("eventId") Long eventId) {
-        this.service.assignGameToEvent(gameId, eventId);
+        return ResponseEntity.ok(this.service.assignGameToEvent(gameId, eventId));
     }
 
     // Add player to Event

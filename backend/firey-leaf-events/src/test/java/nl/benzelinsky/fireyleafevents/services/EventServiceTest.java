@@ -21,6 +21,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -460,6 +462,40 @@ class EventServiceTest {
         assertEquals(1, allEvents.size());
         assertEquals(allEvents.getFirst(), event1);
         assertEquals(allEvents.getLast(), event1);
+    }
+
+    @Test
+    @DisplayName("Should return event with newly added game")
+    public void testAssignGameToEvent() {
+        //arrange
+        Mockito.when(gameRepository.findById(anyLong())).thenReturn(Optional.of(game1));
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+
+        //act
+        EventOutputDto dto = eventService.assignGameToEvent(eventId, gameId);
+
+        //assert
+        assertEquals(event1.getGame(), game1);
+        assertTrue(game1.getActiveEvents().contains(event1));
+        assertEquals(game1.getTitle(), dto.game);
+    }
+
+    @Test
+    @DisplayName("Should remove event from game's activeEvents")
+    public void testAssignNewGameToExistingEvent() {
+        //arrange
+        event1.setGame(game1);
+        game1.addEvent(event1);
+        Mockito.when(gameRepository.findById(anyLong())).thenReturn(Optional.of(game2));
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+
+        //act
+        EventOutputDto dto = eventService.assignGameToEvent(eventId, gameId);
+
+        //assert
+        assertFalse(game1.getActiveEvents().contains(event1));
+        assertEquals(event1.getGame(), game2);
+        assertTrue(game2.getActiveEvents().contains(event1));
     }
 
     @Test

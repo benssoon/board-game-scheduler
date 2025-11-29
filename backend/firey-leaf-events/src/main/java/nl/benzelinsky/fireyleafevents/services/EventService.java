@@ -139,7 +139,7 @@ public class EventService {
     }
 
     // Couple Event with Game
-    public void assignGameToEvent(Long gameId, Long eventId) {
+    public EventOutputDto assignGameToEvent(Long gameId, Long eventId) {
         Game game = this.gameRepository.findById(gameId)
                 .orElseThrow(() ->
                         new RecordNotFoundException("Game", gameId));
@@ -149,6 +149,7 @@ public class EventService {
         event.setGame(game);
         game.addEvent(event);
         this.eventRepository.save(event);
+        return EventMapper.toOutputDto(event);
     }
 
     // TODO add endpoint
