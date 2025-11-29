@@ -146,6 +146,9 @@ public class EventService {
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
                         new RecordNotFoundException("Event", eventId));
+        if (game.getActiveEvents().contains(event)) {
+            throw new GameAlreadyAssignedToEventException(game, event);
+        }
         event.setGame(game);
         game.addEvent(event);
         this.eventRepository.save(event);
