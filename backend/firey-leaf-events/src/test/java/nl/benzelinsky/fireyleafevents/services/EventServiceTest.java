@@ -69,6 +69,7 @@ class EventServiceTest {
     private String allEventsDeletedMessage;
     private String gameAlreadyAssignedMessage;
     private String userAlreadyHostingMessage;
+    private String notAPlayerMessage;
 
     @BeforeEach
     public void setup() {
@@ -97,6 +98,7 @@ class EventServiceTest {
         allEventsDeletedMessage = "All events except Event with id " + eventId + " have been deleted.";
         gameAlreadyAssignedMessage = "Game with id " + gameId + " is already associated with Event with id: " + eventId;
         userAlreadyHostingMessage = "User with username " + usernamePlayer1 + " is already hosting event with id: " + eventId;
+        notAPlayerMessage = "User " + usernamePlayer1 + " is not a player in Event with id: " + eventId;
     }
 
     @Test
@@ -672,6 +674,44 @@ class EventServiceTest {
         //assert
         assertThrowsExactly(EventFullException.class, () -> eventService.addPlayer(username, id));
         assertEquals(eventFullMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw NotAPlayerException")
+    public void testRemoveNonPlayer() {
+        //arrange
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player1));
+
+        //act
+        NotAPlayerException exception = assertThrowsExactly(NotAPlayerException.class, () -> eventService.removePlayer(usernamePlayer1, eventId));
+
+        //assert
+        assertEquals(notAPlayerMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should return UsernameNotFoundException")
+    public void testRemoveNonUserPlayer() {
+        //arrange
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> eventService.removePlayer(usernamePlayer1, eventId));
+
+        //assert
+        assertEquals(userNotFoundMessage + usernamePlayer1, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should return RecordNotFoundException")
+    public void testRemovePlayerFromNonEvent() {
+
+        //act
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.removePlayer(usernamePlayer1, eventId));
+
+        //assert
+        assertEquals(eventNotFoundMessage, exception.getMessage());
     }
 
 }
