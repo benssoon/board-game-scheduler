@@ -90,4 +90,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGameAlreadyAssignedToEventException(GameAlreadyAssignedToEventException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    //User already hosting event
+    @ExceptionHandler(AlreadyHostingException.class)
+    public ResponseEntity<String> handleAlreadyHostingException(AlreadyHostingException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }

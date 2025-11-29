@@ -21,8 +21,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,10 +64,11 @@ class EventServiceTest {
     private String gameNotFoundMessage;
     private String userAlreadyJoinedMessage;
     private String eventFullMessage;
-    private String userNotFountMessage;
+    private String userNotFoundMessage;
     private String eventDeletedMessage;
     private String allEventsDeletedMessage;
     private String gameAlreadyAssignedMessage;
+    private String userAlreadyHostingMessage;
 
     @BeforeEach
     public void setup() {
@@ -93,10 +92,11 @@ class EventServiceTest {
         gameNotFoundMessage = "Game not found with id: " + gameId;
         userAlreadyJoinedMessage = "User with username \"" + usernamePlayer1 + "\" has already joined Event with id: " + eventId;
         eventFullMessage = "The event \"" + event1.getName() + "\" is already full.";
-        userNotFountMessage = "Cannot find user ";
+        userNotFoundMessage = "Cannot find user ";
         eventDeletedMessage = "Event with id " + eventId + " has been deleted.";
         allEventsDeletedMessage = "All events except Event with id " + eventId + " have been deleted.";
         gameAlreadyAssignedMessage = "Game with id " + gameId + " is already associated with Event with id: " + eventId;
+        userAlreadyHostingMessage = "User with username " + usernamePlayer1 + " is already hosting event with id: " + eventId;
     }
 
     @Test
@@ -168,7 +168,7 @@ class EventServiceTest {
         UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> eventService.createEvent(dtoIn, nonUsername));
 
         //assert
-        assertEquals(userNotFountMessage + nonUsername, exception.getMessage());
+        assertEquals(userNotFoundMessage + nonUsername, exception.getMessage());
     }
 
     @Test
@@ -526,6 +526,69 @@ class EventServiceTest {
 
         //assert
         assertEquals(gameNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should return event with new host assigned")
+    public void testAssignHostToEvent() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player2));
+        Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(event1));
+        event1.setGame(game1);
+        event1.setHost(player1);
+        player1.hostEvent(event1);
+
+        //act
+        EventOutputDto dto = eventService.assignHostToEvent(usernamePlayer1, eventId);
+
+        //assert
+        assertEquals(event1.getHost(), player2);
+        assertTrue(player2.getHostedEvents().contains(event1));
+        assertFalse(player1.getHostedEvents().contains(event1));
+    }
+
+    @Test
+    @DisplayName("Should throw AlreadyHostingException")
+    public void testReassignHostToEvent() {
+        //arrange
+        event1.setId(eventId);
+        event1.setGame(game1);
+        event1.setHost(player1);
+        player1.hostEvent(event1);
+        event1.setId(eventId);
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player1));
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+
+        //act
+        AlreadyHostingException exception = assertThrowsExactly(AlreadyHostingException.class, () -> eventService.assignHostToEvent(usernamePlayer1, eventId));
+
+        //assert
+        assertEquals(userAlreadyHostingMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw RecordNotFoundException")
+    public void testAssignHostToNonExistingEvent() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player1));
+
+        //act
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.assignHostToEvent(usernamePlayer1, eventId));
+
+        //assert
+        assertEquals(eventNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw UsernameNotFoundException")
+    public void testAssignNonExistingHostToEvent() {
+        //arrange
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> eventService.assignHostToEvent(usernamePlayer1, eventId));
+
+        //assert
+        assertEquals(userNotFoundMessage + usernamePlayer1, exception.getMessage());
     }
 
     @Test

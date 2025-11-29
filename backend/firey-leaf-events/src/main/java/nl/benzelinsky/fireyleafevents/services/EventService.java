@@ -158,16 +158,21 @@ public class EventService {
 
     // TODO add endpoint
     // Add host to Event
-    public void assignHostToEvent(String username, Long eventId) {
+    public EventOutputDto assignHostToEvent(String username, Long eventId) {
         User host = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
                         new RecordNotFoundException("Event", eventId));
+        if (host.getHostedEvents().contains(event)) {
+            throw new AlreadyHostingException(host, event);
+        }
+        event.getHost().stopHostingEvent(event);
         event.setHost(host);
         host.hostEvent(event);
         this.eventRepository.save(event);
+        return EventMapper.toOutputDto(event);
     }
 
     // Add player to Event
