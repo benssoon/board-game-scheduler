@@ -76,14 +76,14 @@ public class EventController {
 
     // Couple Event with Game
     @PutMapping("/{eventId}/game/{gameId}")
-    public void assignGameToEvent(
+    public ResponseEntity<EventOutputDto> assignGameToEvent(
             @PathVariable("gameId") Long gameId,
             @PathVariable("eventId") Long eventId) {
-        this.service.assignGameToEvent(gameId, eventId);
+        return ResponseEntity.ok(this.service.assignGameToEvent(gameId, eventId));
     }
 
     // Add player to Event
-    @PatchMapping("{eventId}/players/{username}")
+    @PatchMapping("{eventId}/add-player/{username}")
     public ResponseEntity<EventOutputDto> addPlayer(
             @PathVariable("username") String username,
             @PathVariable("eventId") Long eventId) {
@@ -91,11 +91,26 @@ public class EventController {
     }
 
     // Add current User as a player in Event
-    @PatchMapping("{eventId}/players")
+    @PatchMapping("{eventId}/join")
     public ResponseEntity<EventOutputDto> addCurrentUser(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("eventId") Long eventId) {
         String username = userDetails.getUsername();
         return ResponseEntity.ok(this.service.addPlayer(username, eventId));
+    }
+
+    @PatchMapping("{eventId}/remove-player/{username}")
+    public ResponseEntity<EventOutputDto> removePlayer(
+            @PathVariable("username") String username,
+            @PathVariable("eventId") Long eventId) {
+        return ResponseEntity.ok(this.service.removePlayer(username, eventId));
+    }
+
+    @PatchMapping("{eventId}/leave")
+    public ResponseEntity<EventOutputDto> removeCurrentUser (
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("eventId") Long eventId) {
+        String username = userDetails.getUsername();
+        return ResponseEntity.ok(this.service.removePlayer(username, eventId));
     }
 }

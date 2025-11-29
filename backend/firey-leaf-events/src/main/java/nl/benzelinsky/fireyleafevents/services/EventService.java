@@ -40,7 +40,7 @@ public class EventService {
         Long gameId = dtoIn.gameId;
         Game game = this.gameRepository.findById(gameId)
                         .orElseThrow(() ->
-                                new RecordNotFoundException("Game not found with id: " + gameId));
+                                new RecordNotFoundException("Game", gameId));
         event.setGame(game);
         game.addEvent(event);
 
@@ -81,15 +81,13 @@ public class EventService {
                 this.eventRepository.findById(id)
                         .orElseThrow(() ->
                                 new RecordNotFoundException("Event", id)));
-
     }
 
     // Update event by ID
     public EventOutputDto updateEventById(Long id, PatchEventInputDto dtoIn) {
-        String string = "name";
         Event toUpdate = this.eventRepository.findById(id)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + id));
+                        new RecordNotFoundException("Event", id));
 
         if (dtoIn.name != null) {
             toUpdate.setName(dtoIn.name);
@@ -132,46 +130,56 @@ public class EventService {
                         toDeleteIds.add(event.getId()));
         toDeleteIds.remove(protectedId); // Remove ID 1 from the list of all IDs.
 
+        System.out.println();
         toDeleteIds
                 .forEach(id ->
-                        System.out.println("\n"+this.deleteEventById(id)+"\n"));
+                        System.out.println(this.deleteEventById(id)));
+        System.out.println();
         return "All events except Event with id " + protectedId + " have been deleted.";
     }
 
     // Couple Event with Game
-    public void assignGameToEvent(Long gameId, Long eventId) {
+    public EventOutputDto assignGameToEvent(Long gameId, Long eventId) {
         Game game = this.gameRepository.findById(gameId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Game not found with id: " + gameId));
+                        new RecordNotFoundException("Game", gameId));
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + eventId));
+                        new RecordNotFoundException("Event", eventId));
+        if (game.getActiveEvents().contains(event)) {
+            throw new GameAlreadyAssignedToEventException(game, event);
+        }
+        event.getGame().removeEvent(event);
         event.setGame(game);
         game.addEvent(event);
         this.eventRepository.save(event);
+        return EventMapper.toOutputDto(event);
     }
 
+    // TODO add endpoint
     // Add host to Event
-    public void assignHostToEvent(String username, Long eventId) {
+    public EventOutputDto assignHostToEvent(String username, Long eventId) {
         User host = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + eventId));
+                        new RecordNotFoundException("Event", eventId));
+        if (host.getHostedEvents().contains(event)) {
+            throw new AlreadyHostingException(host, event);
+        }
+        event.getHost().stopHostingEvent(event);
         event.setHost(host);
         host.hostEvent(event);
         this.eventRepository.save(event);
+        return EventMapper.toOutputDto(event);
     }
 
-    /* TODO Add this to the controller */
-    /* TODO After that, check other todo's here */
-    /* TODO Then, make tests. */
     // Add player to Event
     public EventOutputDto addPlayer(String username, Long eventId) {
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->
-                        new RecordNotFoundException("Event not found with id: " + eventId));
+                        new RecordNotFoundException("Event", eventId));
         User player = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
@@ -187,7 +195,6 @@ public class EventService {
         return EventMapper.toOutputDto(event);
     }
 
-    // TODO add endpoint
     public EventOutputDto removePlayer(String username, Long eventId) {
         Event event = this.eventRepository.findById(eventId)
                 .orElseThrow(() ->

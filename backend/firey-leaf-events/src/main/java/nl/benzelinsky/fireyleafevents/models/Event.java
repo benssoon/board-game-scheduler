@@ -1,8 +1,7 @@
 package nl.benzelinsky.fireyleafevents.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,15 +9,18 @@ import java.util.List;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
+    @NonNull
     @Column(nullable = false)
     private String name;
 
@@ -50,6 +52,12 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "host_username")
     private User host;
+
+    // Constructor
+    public Event(String name, boolean isHostPlaying) {
+        this.name = name;
+        this.isHostPlaying = isHostPlaying;
+    }
 
     // Methods
     public void addPlayer(User player) {

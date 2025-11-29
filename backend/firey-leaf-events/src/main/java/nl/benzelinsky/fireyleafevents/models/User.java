@@ -1,32 +1,39 @@
 package nl.benzelinsky.fireyleafevents.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @Column(nullable = false, unique = true)
+    @NonNull
     private String username;
 
     @Column(nullable = false)
+    @NonNull
     private String password;
 
     @Column
     private String apiKey;
 
     @Column
+    @NonNull
     private String name;
 
     @Column(nullable = false, unique = true)
+    @NonNull
     private String emailAddress;
 
     @Column
@@ -42,7 +49,7 @@ public class User {
     private String address;
 
     @OneToMany(mappedBy = "host")
-    private List<Event> hostedEvents;
+    private List<Event> hostedEvents = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -66,7 +73,7 @@ public class User {
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> joinedEvents;
+    private List<Event> joinedEvents = new ArrayList<>();
 
     @OneToMany(
             targetEntity = Role.class,

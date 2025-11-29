@@ -84,4 +84,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleHasActiveEventsException(HasActiveEventsException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    //Game is already associated with event
+    @ExceptionHandler(GameAlreadyAssignedToEventException.class)
+    public ResponseEntity<String> handleGameAlreadyAssignedToEventException(GameAlreadyAssignedToEventException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    //User already hosting event
+    @ExceptionHandler(AlreadyHostingException.class)
+    public ResponseEntity<String> handleAlreadyHostingException(AlreadyHostingException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }
