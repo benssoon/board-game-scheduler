@@ -30,7 +30,7 @@ public class UserService {
     }
 
     // Create user
-    public String createUser(UserInputDto userInputDto) {
+    public ShortUserOutputDto createUser(UserInputDto userInputDto) {
         if (this.userRepository.existsUserByUsername(userInputDto.username)) {
             throw new UsernameUnavailableException(userInputDto.username);
         }
@@ -42,12 +42,16 @@ public class UserService {
         }
         userInputDto.apiKey = RandomStringGenerator.generateAlphaNumeric(20); // TODO unnecessary?
         userInputDto.password = passwordEncoder.encode(userInputDto.password);
-        User newUser = this.userRepository.save(UserMapper.toEntity(userInputDto));
-        return newUser.getUsername();
+        User newUser = UserMapper.toEntity(userInputDto);
+        this.userRepository.save(newUser);
+        for (String role : userInputDto.roles) {
+            addRole(newUser.getUsername(), role);
+        }
+        return UserMapper.toShortDto(newUser);
     }
 
     // Get all users
-    public List<ShortUserOutputDto> getUsers() {
+    public List<ShortUserOutputDto> getAllUsers() {
         List<ShortUserOutputDto> allUsers = new ArrayList<>();
         this.userRepository.findAll()
                 .forEach(user ->
@@ -60,14 +64,14 @@ public class UserService {
         return UserMapper.toShortDto(
                 this.userRepository.findById(username)
                         .orElseThrow(() ->
-                                new UsernameNotFoundException("User not found with username: " + username)));
+                                new UsernameNotFoundException(username)));
     }
 
     public UserOutputDto getUserWithPassword(String username) {
         return UserMapper.toFullDto(
                 this.userRepository.findById(username)
                         .orElseThrow(() ->
-                                new UsernameNotFoundException("User not found with username: " + username)));
+                                new UsernameNotFoundException(username)));
     }
     
     // Update user by username
@@ -113,16 +117,20 @@ public class UserService {
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
-        ShortUserOutputDto dtoOut = UserMapper.toShortDto(user);
-        return dtoOut.roles;
+        return user.getRoles();
     }
 
     public void addRole(String username, String roleName) {
-        roleName = "ROLE_" + roleName.toUpperCase();
+        final String fullRoleName = "ROLE_" + roleName.toUpperCase();
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
-        user.addRole(new Role(username, roleName));
+        user.getRoles().forEach(role -> {
+            if (role.getRole().equals(fullRoleName)) {
+                throw new AlreadyHasRoleException(username, fullRoleName);
+            }
+        });
+        user.addRole(new Role(username, fullRoleName));
         this.userRepository.save(user);
     }
 
@@ -130,7 +138,7 @@ public class UserService {
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
-        Role roleToRemove = user.getRoles().stream().filter((a) -> a.getRole().equalsIgnoreCase(role)).findAny()
+        Role roleToRemove = user.getRoles().stream().filter((a) -> a.getRole().equalsIgnoreCase("ROLE_"+role)).findAny()
                         .orElseThrow(() ->
                                 new RoleNotFoundException(role));
         user.removeRole(roleToRemove);

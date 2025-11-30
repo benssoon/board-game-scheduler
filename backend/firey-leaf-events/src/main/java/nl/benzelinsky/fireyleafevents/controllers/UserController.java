@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import nl.benzelinsky.fireyleafevents.dtos.PatchUserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
-import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
 import nl.benzelinsky.fireyleafevents.exceptions.BadRequestException;
 import nl.benzelinsky.fireyleafevents.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -29,21 +28,18 @@ public class UserController {
 
     // Create User
     @PostMapping
-    public ResponseEntity<UserOutputDto> createUser(@Valid @RequestBody UserInputDto dtoIn) {
-        String newUsername = this.userService.createUser(dtoIn);
-        for (String role : dtoIn.roles) {
-            this.userService.addRole(newUsername, role);
-        }
+    public ResponseEntity<ShortUserOutputDto> createUser(@Valid @RequestBody UserInputDto dtoIn) {
+        ShortUserOutputDto newUser = this.userService.createUser(dtoIn);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}").buildAndExpand(newUsername).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}").buildAndExpand(newUser.username).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
     // Get all Users
     @GetMapping(value = "")
-    public ResponseEntity<List<ShortUserOutputDto>> getUsers() {
-        List<ShortUserOutputDto> userDtos = this.userService.getUsers();
+    public ResponseEntity<List<ShortUserOutputDto>> getAllUsers() {
+        List<ShortUserOutputDto> userDtos = this.userService.getAllUsers();
         return ResponseEntity.ok().body(userDtos);
     }
 

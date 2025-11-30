@@ -3,6 +3,7 @@ package nl.benzelinsky.fireyleafevents.dtos;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import nl.benzelinsky.fireyleafevents.models.Role;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
