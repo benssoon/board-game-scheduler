@@ -1,8 +1,12 @@
 package nl.benzelinsky.fireyleafevents.services;
 
+import nl.benzelinsky.fireyleafevents.dtos.PatchUserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
+import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
+import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
 import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyExistsException;
+import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
 import nl.benzelinsky.fireyleafevents.exceptions.UsernameUnavailableException;
 import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
@@ -59,7 +63,9 @@ class UserServiceTest {
     private User user2;
     private User user3;
     private UserInputDto dtoIn;
-    private UserInputDto patchDto;
+    private UserInputDto shortUpdateDto;
+    private PatchUserInputDto patchDtoFull;
+    private PatchUserInputDto patchDtoEmpty;
 
     @BeforeEach
     void setUp() {
@@ -75,6 +81,9 @@ class UserServiceTest {
         user2 = new User("bob", "12345", "Bob", "bob@bob.bob");
         user3 = new User("saskia", "4321", "Saskia", "sas@sas.kia");
         dtoIn = new UserInputDto(username, password, apiKey, name, email, phone, age, area, address, rolesArray);
+        shortUpdateDto = new UserInputDto(username, "abcd", "Moishe", "moishe@oy.vey");
+        patchDtoFull = new PatchUserInputDto("abcd", "Moishe", "moishe@oy.vey", "123456789");
+        patchDtoEmpty = new PatchUserInputDto();
         usernameUnavailableMessage = "Username \"" + username + "\" is already taken.";
         userExistsEmailMessage = "A User already exists with email address \"" + email + "\".";
         userExistsPhoneMessage = "A User already exists with telephone number \"" + phone + "\".";
@@ -172,19 +181,170 @@ class UserServiceTest {
     }
 
     @Test
-    void getUser() {
+    @DisplayName("Should return the correct user")
+    void testGetUser() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        ShortUserOutputDto dto = userService.getUser(username);
+
+        //assert
+        assertEquals(user1.getUsername(), dto.username);
+        assertEquals(user1.getName(), dto.name);
+        assertEquals(user1.getEmailAddress(), dto.emailAddress);
+        assertEquals(user1.getTelephoneNumber(), dto.telephoneNumber);
+        assertEquals(user1.getAge(), dto.age);
+        assertEquals(user1.getArea(), dto.area);
+        assertEquals(user1.getAddress(), dto.address);
+        user1.getHostedEvents().forEach(e -> {
+            assertTrue(dto.hostedEvents.contains(e.getName()));
+        });
+        user1.getJoinedEvents().forEach(e -> {
+            assertTrue(dto.joinedEvents.contains(e.getName()));
+        });
+        user1.getRoles().forEach(r -> {
+            assertTrue(dto.roles.contains(r));
+        });
     }
 
     @Test
+    @DisplayName("Should throw RecordNotFoundException")
+    public void testGetUserThrowsRecordNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        //act
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> userService.getUser(username));
+
+        //assert
+        assertEquals(usernameNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should return full dto of correct user")
     void getUserWithPassword() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        UserOutputDto dto = userService.getUserWithPassword(username);
+
+        //assert
+        assertEquals(user1.getUsername(), dto.username);
+        assertEquals(user1.getPassword(), dto.password);
+        assertEquals(user1.getApiKey(), dto.apiKey);
+        assertEquals(user1.getName(), dto.name);
+        assertEquals(user1.getEmailAddress(), dto.emailAddress);
+        assertEquals(user1.getTelephoneNumber(), dto.telephoneNumber);
+        assertEquals(user1.getAge(), dto.age);
+        assertEquals(user1.getArea(), dto.area);
+        assertEquals(user1.getAddress(), dto.address);
+        user1.getHostedEvents().forEach(e -> {
+            assertTrue(dto.hostedEvents.contains(e.getName()));
+        });
+        user1.getJoinedEvents().forEach(e -> {
+            assertTrue(dto.joinedEvents.contains(e.getName()));
+        });
+        user1.getRoles().forEach(r -> {
+            assertTrue(dto.roles.contains(r));
+        });
     }
 
     @Test
+    @DisplayName("Should throw UsernameNotFoundException")
+    public void testGetUserWithPasswordThrowsUsernameNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.getUserWithPassword(username));
+
+        //assert
+        assertEquals(usernameNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should return user with updated values")
     void updateWholeUser() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        ShortUserOutputDto dto = userService.updateWholeUser(username, shortUpdateDto);
+
+        //assert
+        assertEquals(shortUpdateDto.password, user1.getPassword());
+        assertEquals(shortUpdateDto.name, user1.getName());
+        assertEquals(shortUpdateDto.emailAddress, user1.getEmailAddress());
+        assertEquals(shortUpdateDto.telephoneNumber, user1.getTelephoneNumber());
+        assertEquals(user1.getName(), dto.name);
+        assertEquals(user1.getEmailAddress(), dto.emailAddress);
+        assertEquals(user1.getTelephoneNumber(), dto.telephoneNumber);
     }
 
     @Test
-    void updateUser() {
+    @DisplayName("Should throw UsernameNotFoundException")
+    public void testUpdateWholeUserThrowsUsernameNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.updateWholeUser(username, shortUpdateDto));
+
+        //assert
+        assertEquals(usernameNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should return fully updated user")
+    void testUpdateUserAllAttributes() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        ShortUserOutputDto dto = userService.updateUser(username, patchDtoFull);
+
+        //assert
+        assertEquals(patchDtoFull.password, user1.getPassword());
+        assertEquals(patchDtoFull.name, user1.getName());
+        assertEquals(patchDtoFull.emailAddress, user1.getEmailAddress());
+        assertEquals(patchDtoFull.telephoneNumber, user1.getTelephoneNumber());
+        assertEquals(user1.getName(), dto.name);
+        assertEquals(user1.getEmailAddress(), dto.emailAddress);
+        assertEquals(user1.getTelephoneNumber(), dto.telephoneNumber);
+    }
+
+    @Test
+    @DisplayName("Should return unupdated user")
+    void testUpdateUserNoAttributes() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        ShortUserOutputDto dto = userService.updateUser(username, patchDtoEmpty);
+
+        //assert
+        assertEquals(password, user1.getPassword());
+        assertEquals(name, user1.getName());
+        assertEquals(email, user1.getEmailAddress());
+        assertEquals(null, user1.getTelephoneNumber());
+        assertEquals(user1.getName(), dto.name);
+        assertEquals(user1.getEmailAddress(), dto.emailAddress);
+        assertEquals(user1.getTelephoneNumber(), dto.telephoneNumber);
+    }
+
+    @Test
+    @DisplayName("Should throw UsernameNotFoundException")
+    public void testUpdateThrowsUsernameNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.updateUser(username, patchDtoFull));
+
+        //assert
+        assertEquals(usernameNotFoundMessage, exception.getMessage());
     }
 
     @Test
