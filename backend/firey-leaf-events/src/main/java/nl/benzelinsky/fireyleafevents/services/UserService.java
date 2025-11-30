@@ -117,16 +117,20 @@ public class UserService {
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
-        ShortUserOutputDto dtoOut = UserMapper.toShortDto(user);
-        return dtoOut.roles;
+        return user.getRoles();
     }
 
     public void addRole(String username, String roleName) {
-        roleName = "ROLE_" + roleName.toUpperCase();
+        final String fullRoleName = "ROLE_" + roleName.toUpperCase();
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
-        user.addRole(new Role(username, roleName));
+        user.getRoles().forEach(role -> {
+            if (role.getRole().equals(fullRoleName)) {
+                throw new AlreadyHasRoleException(username, fullRoleName);
+            }
+        });
+        user.addRole(new Role(username, fullRoleName));
         this.userRepository.save(user);
     }
 
@@ -134,7 +138,7 @@ public class UserService {
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
-        Role roleToRemove = user.getRoles().stream().filter((a) -> a.getRole().equalsIgnoreCase(role)).findAny()
+        Role roleToRemove = user.getRoles().stream().filter((a) -> a.getRole().equalsIgnoreCase("ROLE_"+role)).findAny()
                         .orElseThrow(() ->
                                 new RoleNotFoundException(role));
         user.removeRole(roleToRemove);

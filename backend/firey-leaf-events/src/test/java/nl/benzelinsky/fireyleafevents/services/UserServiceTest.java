@@ -4,10 +4,7 @@ import nl.benzelinsky.fireyleafevents.dtos.PatchUserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
-import nl.benzelinsky.fireyleafevents.exceptions.RecordNotFoundException;
-import nl.benzelinsky.fireyleafevents.exceptions.UserAlreadyExistsException;
-import nl.benzelinsky.fireyleafevents.exceptions.UsernameNotFoundException;
-import nl.benzelinsky.fireyleafevents.exceptions.UsernameUnavailableException;
+import nl.benzelinsky.fireyleafevents.exceptions.*;
 import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
 import nl.benzelinsky.fireyleafevents.models.Role;
@@ -43,7 +40,9 @@ class UserServiceTest {
     private String userExistsEmailMessage;
     private String userExistsPhoneMessage;
     private String usernameNotFoundMessage;
-    private String roleTestNotFoundMessage;
+    private String alreadyHasRoleMessage;
+    private String roleNotFoundMessage;
+    private String userDeletedMessage;
     private String hasActiveEventsMessage;
     private String username;
     private String password;
@@ -59,6 +58,7 @@ class UserServiceTest {
     private List<Game> favoriteGames;
     private List<Event> joinedEvents;
     private Set<Role> roles;
+    private String[] rolesArray = {"USER", "ADMIN"};
     private User user1;
     private User user2;
     private User user3;
@@ -76,7 +76,6 @@ class UserServiceTest {
         email = "ben@made.up";
         phone = "123456789";
         roles = new HashSet<>();
-        String[] rolesArray = {"USER", "ADMIN"};
         user1 = new User(username, password, name, email);
         user2 = new User("bob", "12345", "Bob", "bob@bob.bob");
         user3 = new User("saskia", "4321", "Saskia", "sas@sas.kia");
@@ -88,10 +87,9 @@ class UserServiceTest {
         userExistsEmailMessage = "A User already exists with email address \"" + email + "\".";
         userExistsPhoneMessage = "A User already exists with telephone number \"" + phone + "\".";
         usernameNotFoundMessage = "Cannot find user " + username;
-        roleTestNotFoundMessage = "Role TEST does not exist.";
-        hasActiveEventsMessage = "User with username " + username + " is currently hosting events:\n" +
-                user1.getHostedEvents().toString() +
-                "\nPlease remove those events before removing this user.";
+        alreadyHasRoleMessage = "User with username " + username + " already has role ROLE_" + rolesArray[0];
+        roleNotFoundMessage = "Role " + rolesArray[0] + " does not exist.";
+        userDeletedMessage = "User " + username + " has been deleted.";
     }
 
     @Test
@@ -209,13 +207,13 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw RecordNotFoundException")
-    public void testGetUserThrowsRecordNotFoundException() {
+    @DisplayName("Should throw UsernameNotFoundException")
+    public void testGetUserThrowsUsernameNotFoundException() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
         //act
-        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> userService.getUser(username));
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.getUser(username));
 
         //assert
         assertEquals(usernameNotFoundMessage, exception.getMessage());
@@ -336,7 +334,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Should throw UsernameNotFoundException")
-    public void testUpdateThrowsUsernameNotFoundException() {
+    public void testUpdateUserThrowsUsernameNotFoundException() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
@@ -348,18 +346,171 @@ class UserServiceTest {
     }
 
     @Test
-    void getRoles() {
+    @DisplayName("Should return all roles of specified user")
+    public void testGetRoles() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+        user1.addRole(new Role(username, rolesArray[0]));
+        user1.addRole(new Role(username, rolesArray[1]));
+
+        //act
+        Set<Role> fetchedRoles = userService.getRoles(username);
+
+        //assert
+        fetchedRoles.forEach(role -> {
+            assertTrue(user1.getRoles().contains(role));
+        });
+        user1.getRoles().forEach(role -> {
+            assertTrue(fetchedRoles.contains(role));
+        });
     }
 
     @Test
+    @DisplayName("Should return UsernameNotFoundException")
+    public void testGetRolesThrowsUsernameNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.getRoles(username));
+
+        //assert
+        assertEquals(usernameNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should add role to user")
     void addRole() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        userService.addRole(username, rolesArray[0]);
+
+        //assert
+        user1.getRoles().forEach(role -> assertEquals("ROLE_" + rolesArray[0], role.getRole()));
     }
 
     @Test
-    void removeRole() {
+    @DisplayName("Should throw UsernameNotFoundException")
+    public void testAddRoleThrowsUsernameNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.addRole(username, rolesArray[0]));
+
+        //assert
+        assertEquals(usernameNotFoundMessage, exception.getMessage());
     }
 
     @Test
-    void deleteUser() {
+    @DisplayName("Should throw AlreadyHasRoleException")
+    public void testAddRoleThrowsAlreadyHasRoleException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+        user1.addRole(new Role(username, "ROLE_" + rolesArray[0]));
+
+        //act
+        AlreadyHasRoleException exception = assertThrowsExactly(AlreadyHasRoleException.class, () -> userService.addRole(username, rolesArray[0]));
+
+        //assert
+        assertEquals(alreadyHasRoleMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should remove role from user")
+    void testRemoveRole() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+        user1.addRole(new Role(username, "ROLE_" + rolesArray[0]) );
+
+        //act
+        userService.removeRole(username, rolesArray[0]);
+
+        //assert
+        user1.getRoles().forEach(role -> assertNotEquals("ROLE_" + rolesArray[0], role.getRole()));
+    }
+
+    @Test
+    @DisplayName("Should throw UsernameNotFoundException")
+    public void testRemoveRoleThrowsUsernameNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.removeRole(username, rolesArray[0]));
+
+        //assert
+        assertEquals(usernameNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw RoleNotFoundException")
+    public void testRemoveRoleThrowsRoleNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        RoleNotFoundException exception = assertThrowsExactly(RoleNotFoundException.class, () -> userService.removeRole(username, rolesArray[0]));
+
+        //assert
+        assertEquals(roleNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should delete user")
+    void testDeleteUser() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        String message = userService.deleteUser(username);
+
+        //assert
+        assertEquals(userDeletedMessage, message);
+    }
+
+    @Test
+    @DisplayName("Should throw UsernameNotFoundException")
+    public void testDeleteUserThrowsUsernameNotFoundException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        //act
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.deleteUser(username));
+
+        //assert
+        assertEquals(usernameNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw HasActiveEventsException")
+    public void testDeleteUserThrowsHasActiveEventsException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+        Event newEvent = new Event("Root Night");
+        newEvent.setId(1L);
+        user1.hostEvent(newEvent);
+        Event newEvent2 = new Event("Arcs Night");
+        newEvent2.setId(2L);
+        user1.hostEvent(newEvent2);
+
+        List<String> events = new ArrayList<>();
+            Map<Long, String> eventIds = new HashMap<>();
+            user1.getHostedEvents()
+                    .forEach(event -> {
+                        events.add(event.getName());
+                        eventIds.put(event.getId(), event.getName());
+                    });
+        hasActiveEventsMessage = "User with username " + username + " is currently hosting events:\n" +
+                eventIds.toString() +
+                "\nPlease remove those events before removing this user.";
+
+        //act
+        HasActiveEventsException exception = assertThrowsExactly(HasActiveEventsException.class, () -> userService.deleteUser(username));
+
+        //assert
+        assertEquals(hasActiveEventsMessage, exception.getMessage());
     }
 }
