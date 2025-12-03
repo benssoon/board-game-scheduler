@@ -14,9 +14,10 @@ VALUES ('Root',
         99);
 
 INSERT INTO users (username, password, name, email_address, telephone_number, age, area, address)
-VALUES ('ben','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Ben', 'ben.z@test.none', '0123456789', 34, 'Rotterdam', 'Wijmerts'),
-       ('ellen','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Ellen', 'ellen.z@test.none', '0123456789', 32, 'Takoma Park', 'Willow'),
-       ('bob','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Bob', 'bob@test.none', '0123456789', 37, 'Den Haag', 'Grote Markt');
+VALUES ('ben','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Ben', 'ben.z@test.none', '0123456789', 34, 'Rotterdam', 'Erewhon'),
+       ('ellen','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Ellen', 'ellen@test.none', '0123456789', 32, 'Flatland', 'Pineapple Street'),
+       ('bob','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Bob', 'bob@test.none', '0123456789', 37, 'Den Haag', 'Grote Markt'),
+       ('test','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Test', 'test@test.none', '0123456789', 99, 'Rotterdam', 'Erewhon');
 
 INSERT INTO roles (username, role)
 VALUES ('ben', 'ROLE_ADMIN'),

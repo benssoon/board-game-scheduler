@@ -33,7 +33,7 @@ public class EventMapper {
         outputDto.definitiveTime = event.getDefinitiveTime();
         outputDto.possibleTimes = event.getPossibleTimes();
         List<String> players = new ArrayList<>();
-        event.getPlayers().forEach((player) -> players.add(player.getName()));
+        event.getPlayers().forEach((player) -> players.add(player.getUsername()));
         outputDto.players = players;
         outputDto.location = event.getLocation();
         if (event.getHost() != null) { // TODO Unnecessary?
