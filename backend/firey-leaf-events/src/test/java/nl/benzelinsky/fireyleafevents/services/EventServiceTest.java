@@ -605,7 +605,7 @@ class EventServiceTest {
         EventOutputDto eventOutputDto = eventService.addPlayer("waterman", 1L);
 
         //assert (then)
-        assertEquals(player1.getName(), eventOutputDto.players.getLast());
+        assertEquals(player1.getUsername(), eventOutputDto.players.getLast());
     }
 
     @Test

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -32,7 +33,10 @@ public class EventController {
         String username = userDetails.getUsername();
         EventOutputDto eventOutputDto = this.service.createEvent(eventInputDto, username);
 
-        URI location = URI.create("/events/" + eventOutputDto.id);
+        URI location = URI.create(
+                ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/" + eventOutputDto.id).toUriString());
 
         return ResponseEntity.created(location).body(eventOutputDto);
     }
@@ -83,7 +87,7 @@ public class EventController {
     }
 
     // Add player to Event
-    @PatchMapping("{eventId}/add-player/{username}")
+    @PatchMapping("/{eventId}/add-player/{username}")
     public ResponseEntity<EventOutputDto> addPlayer(
             @PathVariable("username") String username,
             @PathVariable("eventId") Long eventId) {
@@ -91,7 +95,7 @@ public class EventController {
     }
 
     // Add current User as a player in Event
-    @PatchMapping("{eventId}/join")
+    @PatchMapping("/{eventId}/join")
     public ResponseEntity<EventOutputDto> addCurrentUser(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("eventId") Long eventId) {
@@ -99,14 +103,14 @@ public class EventController {
         return ResponseEntity.ok(this.service.addPlayer(username, eventId));
     }
 
-    @PatchMapping("{eventId}/remove-player/{username}")
+    @PatchMapping("/{eventId}/remove-player/{username}")
     public ResponseEntity<EventOutputDto> removePlayer(
             @PathVariable("username") String username,
             @PathVariable("eventId") Long eventId) {
         return ResponseEntity.ok(this.service.removePlayer(username, eventId));
     }
 
-    @PatchMapping("{eventId}/leave")
+    @PatchMapping("/{eventId}/leave")
     public ResponseEntity<EventOutputDto> removeCurrentUser (
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("eventId") Long eventId) {
