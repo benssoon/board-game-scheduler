@@ -7,6 +7,7 @@ import GamesPage from './pages/GamesPage/GamesPage.jsx';
 import PlayersPage from './pages/PlayersPage/PlayersPage.jsx';
 
 import logo from './assets/placeholder.webp';
+import Login from './pages/Login/Login.jsx';
 
 function App() {
     return (
@@ -36,12 +37,19 @@ function App() {
                     to="/profile">
                     <img src={logo} alt="Profile"/>
                 </NavLink>
+                {/*TODO Remove this link once the redirect is set up on the profile page*/}
+                <NavLink
+                    className="profile-icon"
+                    to="/login">
+                    <img src={logo} alt="Login"/>
+                </NavLink>
             </nav>
 
             <Routes>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/events" element={<EventsPage/>}/>
+                <Route path="/login" element={<Login/>}/>
                 <Route path="/profile" element={<Profile/>}/>
+                <Route path="/events" element={<EventsPage/>}/>
                 <Route path="/games" element={<GamesPage/>}/>
                 <Route path="/players" element={<PlayersPage/>}/>
             </Routes>

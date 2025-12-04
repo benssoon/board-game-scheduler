@@ -24,10 +24,14 @@ export async function fetchObject(e, type, id, setObject) {
 //</editor-fold>
 
 //<editor-fold desc="Post Requests">
-export async function createEvent(e, data) {
+export async function createEventPostRequest(e, data, user) {
     e.preventDefault();
     try {
-        const response = await axios.post(API+'/events', data)
+        const response = await axios.post(API+'/events', data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+        })
         console.log(response);
     } catch (e) {
         const response = e.response.data;

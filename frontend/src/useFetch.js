@@ -2,14 +2,10 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {API} from './globalConstants.js';
 
-function useFetch(endpoint) {
+function useFetch(endpoint, config) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-
-    function delay(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
 
     useEffect(() => {
         if(!endpoint) return; // Do not fetch data if there is no endpoint passed (i.e. for error/loading cards).
@@ -20,11 +16,10 @@ function useFetch(endpoint) {
             setLoading(true);
             setError(false);
             try {
-                const response = await axios.get(url);
+                const response = await axios.get(url, config);
                 setData(response.data);
             } catch (er) {
                 setError(er);
-                console.log("Here comes the error:")
                 console.error(er);
                 console.error(er.message);
                 console.error(endpoint);

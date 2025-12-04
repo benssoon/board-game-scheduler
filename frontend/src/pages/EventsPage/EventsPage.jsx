@@ -7,15 +7,15 @@ import Card from '../../components/Card/Card.jsx';
 // Libraries
 
 // Functions
-import {useEffect, useState} from 'react';
-import {createEvent, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
+import {useContext, useState} from 'react';
+import {createEventPostRequest, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
 import {handleFormChange} from '../../helpers/handlers.js';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
-import useFetch from '../../useFetch.js';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
 function EventsPage() {
-
+    const {user} = useContext(AuthContext);
     //<editor-fold desc="State">
     const initialEventFormState = {
         title: '',
@@ -39,7 +39,7 @@ function EventsPage() {
 
     function handleEventSubmit(e) {
         setEventFormState(initialEventFormState);
-        createEvent(e, eventFormState);
+        createEventPostRequest(e, eventFormState);
     }
     //</editor-fold>
 
