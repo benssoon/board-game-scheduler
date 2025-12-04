@@ -2,7 +2,7 @@ import './DisplayGrid.css';
 import Card from '../Card/Card.jsx';
 import useFetch from '../../useFetch.js';
 
-function DisplayGrid({type}) {
+function DisplayGrid({ type, preview }) {
     const endpoint = '/' + type + 's';
     const { data: collection, loading, error } = useFetch(endpoint);
     return (
@@ -11,14 +11,14 @@ function DisplayGrid({type}) {
                 <p>Loading...</p>
                 :
                 collection.map((item) => {
-                        return (<Card
-                                key={item.id}
-                                type={type}
-                                data={item}
-                                className={type + " card"}
-                            />
-                        )
-                    })
+                    return (<Card
+                            key={item.id}
+                            type={type}
+                            data={item}
+                            className={type + " card"}
+                        />
+                    )
+                })
             }
         </div>
     );

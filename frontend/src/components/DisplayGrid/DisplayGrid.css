@@ -1,0 +1,10 @@
+.displayGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--card-spacing);
+}
+
+.displayPreview {
+    display: flex;
+    gap: var(--card-spacing);
+}
