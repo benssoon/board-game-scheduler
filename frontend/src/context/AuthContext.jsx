@@ -1,6 +1,8 @@
 import {createContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
+import useFetch from '../useFetch.js';
+import {API} from '../globalConstants.js';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext({});
@@ -11,32 +13,35 @@ function AuthContextProvider({children}) {
         user: null,
         status: 'pending',
     });
+    const {data} = useFetch(`/users/${jwtDecode(localStorage.getItem('token')).sub}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
-            const decoded = jwtDecode(token);
-            console.log(decoded);
+        if (token && data) {
             setAuth({
                 isAuth: true,
                 user: {
-                    username: decoded.username,
-                    email: decoded.email,
-                    roles: decoded.roles,
+                    username: data.username,
+                    email: data.email,
                 },
                 status: 'done',
             });
-        } else {
+        }
+        if (!token) {
             setAuth({
                 isAuth: false,
                 user: null,
                 status: 'done',
             });
         }
-    }, []);
+    }, [data]);
 
-    const data = {
+    const authorization = {
         isAuth: auth['isAuth'],
         user: auth['user'],
         login: login,
@@ -66,7 +71,7 @@ function AuthContextProvider({children}) {
     }
 
     return (
-        <AuthContext.Provider value={data}>
+        <AuthContext.Provider value={authorization}>
             {auth.status === 'pending'
                 ? <p>Loading...</p>
                 : children
