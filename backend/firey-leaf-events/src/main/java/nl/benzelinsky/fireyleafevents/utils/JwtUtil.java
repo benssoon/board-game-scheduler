@@ -51,6 +51,7 @@ public class JwtUtil {
 
     private String createToken(Map<String, Object> claims, String subject) {
         long validPeriod = 1000 * 60 * 60 * 24; // Consider shortening this, or even extending it.
+        System.out.println(System.currentTimeMillis()+validPeriod);
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(claims)

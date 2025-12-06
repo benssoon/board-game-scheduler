@@ -1,8 +1,9 @@
 import {createContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
-import useFetch from '../useFetch.js';
+import useFetch from '../helpers/useFetch.js';
 import {API} from '../globalConstants.js';
+import axios from 'axios';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext({});
@@ -13,61 +14,80 @@ function AuthContextProvider({children}) {
         user: null,
         status: 'pending',
     });
-    const {data} = useFetch(`/users/${jwtDecode(localStorage.getItem('token')).sub}`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-    });
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token && data) {
+        if (token) {
+            const decoded = jwtDecode(token);
+            if (Date.now()/1000 < decoded.exp ? true : false) {
+                fetchUserData(decoded.sub, token);
+            } else {
+                logout();
+            }
+        } else {
+            setAuth({
+                ...auth,
+                status: 'done',
+            });
+        }
+    }, []);
+
+    async function fetchUserData(username, token) {
+        try {
+            const result = await axios.get(`${API}/users/${username}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log(result.data);
             setAuth({
                 isAuth: true,
+                // TODO What is the point of user? Where is it ever used?
                 user: {
-                    username: data.username,
-                    email: data.email,
+                    username: result.data.username,
+                    email: result.data.email,
                 },
                 status: 'done',
             });
         }
-        if (!token) {
+        catch (er) {
+            console.error(er);
             setAuth({
                 isAuth: false,
                 user: null,
                 status: 'done',
             });
         }
-    }, [data]);
+
+    }
+
+    function login(token) {
+        localStorage.setItem('token', token);
+        const username = jwtDecode(token).sub;
+        fetchUserData(username, token);
+        console.log(auth.user.username + ' is logged in!');
+        navigate("/profile");
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        console.log(auth.user.username + ' is logged out.');
+        setAuth({
+            ...auth,
+            isAuth: false,
+            user: null,
+            status: 'done',
+        });
+        navigate("/");
+    }
 
     const authorization = {
         isAuth: auth['isAuth'],
         user: auth['user'],
         login: login,
         logout: logout,
-    }
-
-    function login(response) {
-        localStorage.setItem('token', response.jwt);
-        setAuth({
-            ...auth,
-            isAuth: true,
-            user: response.user,
-        });
-        console.log(response.user.username + ' is logged in!');
-        navigate("/profile");
-    }
-
-    function logout() {
-        localStorage.removeItem('token');
-        setAuth({
-            ...auth,
-            isAuth: false,
-            user: null,
-        });
-        console.log(auth.user.username + ' is logged out.');
-        navigate("/");
     }
 
     return (

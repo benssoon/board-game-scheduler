@@ -8,7 +8,6 @@ import './Home.css';
 // Functions
 import {useState} from 'react';
 import {fetchObject} from '../../helpers/httpRequests.js';
-import Preview from '../../components/Preview/Preview.jsx';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 
 function Home() {
@@ -47,8 +46,9 @@ function Home() {
         <>
             <h1>Home</h1>
 
-            <Preview/>
+            <DisplayGrid type="event" preview={true}/>
             <DisplayGrid type="game" preview={true}/>
+            <DisplayGrid type="user" preview={true}/>
 
             {/*<editor-fold desc="Get Event Form">*/}
             <form onSubmit={(e) => handleSubmit(e, 'event', 'eventId', setEvent)}>

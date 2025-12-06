@@ -1,7 +1,8 @@
 export function handleFormChange(e, formState, setFormState) {
     const changedFieldName = e.target.name;
-    const newValue = e.target.value;
-
+    const newValue = e.target.type === 'checkbox' ?
+        e.target.checked
+        : e.target.value;
     setFormState({
         ...formState,
         [changedFieldName]: newValue,

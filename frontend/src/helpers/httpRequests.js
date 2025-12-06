@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {API} from '../globalConstants.js';
+import {jwtDecode} from 'jwt-decode';
 
 //<editor-fold desc="Get Requests">
 export async function fetchObject(e, type, id, setObject) {
@@ -24,14 +25,14 @@ export async function fetchObject(e, type, id, setObject) {
 //</editor-fold>
 
 //<editor-fold desc="Post Requests">
-export async function createEventPostRequest(e, data, user) {
+export async function createEventPostRequest(e, data) {
     e.preventDefault();
     try {
         const response = await axios.post(API+'/events', data, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             }
-        })
+        });
         console.log(response);
     } catch (e) {
         const response = e.response.data;
@@ -99,8 +100,12 @@ export async function createGame(e, data) {
 export async function deleteEvent(e, id) {
     e.preventDefault();
     try {
-        const response = await axios.delete(`${API}/events/${id}`)
-        console.log(response.data);
+        const response = await axios.delete(`${API}/events/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+        });
+        console.log(response);
     } catch (er) {
         console.error(er.message + ': ' + er.response.data);
         console.error(`${API}/events/${id}`);
@@ -114,8 +119,13 @@ export async function deleteGame(e) {
 
 export async function deleteEvents(e) {
     e.preventDefault();
+    console.log(jwtDecode(localStorage.getItem('token')).sub);
     try {
-        const response = await axios.delete(`${API}/events/deleteAll`)
+        const response = await axios.delete(`${API}/events/deleteAll`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
         console.log(response.data);
     } catch (er) {
         console.error(er);
