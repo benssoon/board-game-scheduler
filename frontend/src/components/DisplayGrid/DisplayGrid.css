@@ -6,6 +6,7 @@
 
 .displayPreview {
     display: flex;
+    width: 100%;
     gap: var(--card-spacing);
     overflow: scroll;
     overflow-y: hidden;

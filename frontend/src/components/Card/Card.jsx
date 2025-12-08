@@ -1,6 +1,7 @@
 import './Card.css';
 
 function Card({type, data, className}) {
+    const date = new Date(data.definitiveTime).toLocaleDateString("en-NL", {year: "numeric", month: "long", day: "numeric",});
     return (
         <article className={className}>
             <div className="placeholder"></div>
@@ -14,11 +15,11 @@ function Card({type, data, className}) {
                 {data.location && <li>Location: {data.location}</li>}
                 {data.players && data.players.length>0 && <li>Players:
                     <ul>{data.players.map((player) => {
-                        return (<li key={player}>player</li>);
+                        return (<li key={player}>{player}</li>);
                     })}</ul>
                 </li>}
                 {data.possibleTimes && <li>Possible times: {data.possibleTimes}</li>}
-                {data.definitiveTime && <li>Definitive time: {data.definitiveTime}</li>}
+                {data.definitiveTime && <li>Date: {date}</li>}
             </ul>
         </article>
     )

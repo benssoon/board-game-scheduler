@@ -6,7 +6,7 @@ import {handleFormChange} from '../../helpers/handlers.js';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
-import {concatKeysValues} from '../../helpers/helpers.js';
+import {concatKeysValues} from '../../helpers/processingAndFormatting.js';
 
 function GamesPage() {
     //<editor-fold desc="State">

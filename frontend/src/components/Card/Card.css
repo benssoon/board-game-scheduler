@@ -13,10 +13,6 @@
     text-align: left;
 }
 
-.game ul {
-    text-align: center;
-}
-
 .event li ul {
     list-style-type: circle;
 }
@@ -44,5 +40,5 @@
 
 .game, .user {
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
 }

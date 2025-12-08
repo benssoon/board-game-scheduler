@@ -27,26 +27,31 @@ export async function fetchObject(e, type, id, setObject) {
 //<editor-fold desc="Post Requests">
 export async function createEventPostRequest(e, data) {
     e.preventDefault();
-    try {
-        const response = await axios.post(API+'/events', data, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const response = await axios.post(API + '/events', data, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            console.log(response);
+        } catch (e) {
+            const response = e.response.data;
+            const missingKeys = Object.keys(response);
+            console.error(e);
+            let errors = [];
+            for (const key in missingKeys) {
+                const missingKey = missingKeys[key]
+                const keyProblem = response[missingKey]
+                const err = `"${missingKey}" ${keyProblem}`;
+                console.error(err);
+                errors.push(err);
+                return errors;
             }
-        });
-        console.log(response);
-    } catch (e) {
-        const response = e.response.data;
-        const missingKeys = Object.keys(response);
-        console.error(e);
-        let errors = [];
-        for (const key in missingKeys) {
-            const missingKey = missingKeys[key]
-            const keyProblem = response[missingKey]
-            const err = `"${missingKey}" ${keyProblem}`;
-            console.error(err);
-            errors.push(err);
-            return errors;
         }
+    } else {
+        console.error('User must be logged in to create new events.');
     }
 }
 
