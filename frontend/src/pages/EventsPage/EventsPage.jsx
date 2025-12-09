@@ -14,6 +14,8 @@ import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import FormField from '../../components/FormField/FormField.jsx';
 import {cleanupData} from '../../helpers/processingAndFormatting.js';
+import DatePicker from 'react-multi-date-picker';
+import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
 function EventsPage() {
     //<editor-fold desc="State">
@@ -23,7 +25,9 @@ function EventsPage() {
         gameId: 0,
         isHostPlaying: false,
         definitiveTime: '',
+        possibleTimes: [],
     }
+    const [date, setDate] = useState(new Date());
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
     const [updated, setUpdated] = useState(0);
@@ -168,6 +172,19 @@ function EventsPage() {
                     formState={eventFormState}
                     errors={formError}
                     handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                />
+                <DatePicker
+                    name="possibleTimes"
+                    id="possibleTimes"
+                    multiple={true}
+                    plugins={[
+                        <TimePicker position="bottom"/>
+                    ]}
+                    value={date}
+                    onChange={setDate}
+                    //todo test the following:
+                    /*value={eventFormState.possibleTimes}
+                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}*/
                 />
                 <button type="submit">Submit</button>
             </form>
