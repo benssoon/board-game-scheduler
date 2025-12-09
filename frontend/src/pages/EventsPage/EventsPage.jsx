@@ -2,20 +2,18 @@
 import './EventsPage.css';
 
 // Components
-import Card from '../../components/Card/Card.jsx';
+import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
+import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 
 // Libraries
 
 // Functions
-import {useContext, useState} from 'react';
-import {createEventPostRequest, deleteEvent, deleteEvents} from '../../helpers/httpRequests.js';
-import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
+import {useState} from 'react';
 import {handleFormChange} from '../../helpers/handlers.js';
-import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
-import {AuthContext} from '../../context/AuthContext.jsx';
+import axios from 'axios';
+import {API} from '../../globalConstants.js';
 
 function EventsPage() {
-    const {user} = useContext(AuthContext);
     //<editor-fold desc="State">
     const initialEventFormState = {
         name: '',
@@ -25,6 +23,7 @@ function EventsPage() {
     }
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
+    const [updated, setUpdated] = useState(0);
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
@@ -38,13 +37,73 @@ function EventsPage() {
         }
     }
 
-    function handleEventSubmit(e) {
+    async function handleEventSubmit(e) {
+        e.preventDefault();
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const response = await axios.post(API + '/events', eventFormState, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                console.log(response);
+            } catch (er) {
+                const response = er.response.data;
+                const missingKeys = Object.keys(response);
+                console.error(er);
+                if (er.status === 403) {
+                    console.error(er.response.data);
+                    return er.response.data;
+                }
+                //TODO send errors to an object stored in state, like with create game
+                const errors = [];
+                for (const key in missingKeys) {
+                    const missingKey = missingKeys[key]
+                    const keyProblem = response[missingKey]
+                    const err = `"${missingKey}" ${keyProblem}`;
+                    console.error(err);
+                    errors.push(err);
+                    return errors;
+                }
+            }
+        } else {
+            console.error('User must be logged in to create new events.');
+        }
         setEventFormState(initialEventFormState);
-        createEventPostRequest(e, eventFormState);
+        setUpdated(updated+1);
     }
 
-    function handleDeleteEventSubmit(e) {
-        deleteEvent(e, eventId);
+    async function handleDeleteEventSubmit(e) {
+        e.preventDefault();
+        try {
+            const response = await axios.delete(`${API}/events/${eventId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            });
+            console.log(response);
+        } catch (er) {
+            console.error(er.message + ': ' + er.response.data);
+            console.error(`${API}/events/${eventId}`);
+        }
+        await new Promise(r => setTimeout(r, 2000)); // small delay
+        setUpdated(updated+1);
+    }
+
+    async function deleteEvents(e) {
+        e.preventDefault();
+        try {
+            const response = await axios.delete(`${API}/events/deleteAll`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            console.log(response.data);
+        } catch (er) {
+            console.error(er);
+        }
+        setUpdated(updated+1);
     }
     //</editor-fold>
 
@@ -112,6 +171,7 @@ function EventsPage() {
                 <FiltersBox/>
                 <DisplayGrid
                     type="event"
+                    updated={updated}
                 />
             </section>
             {/*</editor-fold>*/}

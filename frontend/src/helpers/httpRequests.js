@@ -45,7 +45,8 @@ export async function createEventPostRequest(e, data) {
                 console.error(er.response.data);
                 return er.response.data;
             }
-            let errors = [];
+            //TODO send errors to an object stored in state, like with create game
+            const errors = [];
             for (const key in missingKeys) {
                 const missingKey = missingKeys[key]
                 const keyProblem = response[missingKey]
