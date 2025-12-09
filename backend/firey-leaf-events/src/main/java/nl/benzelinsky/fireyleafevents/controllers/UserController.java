@@ -3,6 +3,7 @@ package nl.benzelinsky.fireyleafevents.controllers;
 import jakarta.validation.Valid;
 import nl.benzelinsky.fireyleafevents.dtos.PatchUserInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
+import nl.benzelinsky.fireyleafevents.dtos.TinyUserOutputDto;
 import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
 import nl.benzelinsky.fireyleafevents.exceptions.BadRequestException;
 import nl.benzelinsky.fireyleafevents.services.UserService;
@@ -38,8 +39,8 @@ public class UserController {
 
     // Get all Users
     @GetMapping(value = "")
-    public ResponseEntity<List<ShortUserOutputDto>> getAllUsers() {
-        List<ShortUserOutputDto> userDtos = this.userService.getAllUsers();
+    public ResponseEntity<List<TinyUserOutputDto>> getAllUsers() {
+        List<TinyUserOutputDto> userDtos = this.userService.getAllUsers();
         return ResponseEntity.ok().body(userDtos);
     }
 

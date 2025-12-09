@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
-import {API} from './globalConstants.js';
+import {API} from '../globalConstants.js';
 
 function useFetch(endpoint, config) {
     const [data, setData] = useState(null);

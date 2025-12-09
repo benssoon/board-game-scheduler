@@ -1,0 +1,13 @@
+.displayGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--card-spacing);
+}
+
+.displayPreview {
+    display: flex;
+    width: 100%;
+    gap: var(--card-spacing);
+    overflow: scroll;
+    overflow-y: hidden;
+}

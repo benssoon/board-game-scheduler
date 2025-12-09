@@ -1,10 +1,11 @@
 .card {
     background-color: var(--color-secondary);
     display: flex;
-    max-width: 320px;
+    max-width: 920px;
     height: 218px;
     padding: 20px 10px;
     border-radius: var(--rounding-gentle);
+    gap: 1rem;
 }
 
 .card ul {
@@ -12,8 +13,8 @@
     text-align: left;
 }
 
-.game ul {
-    text-align: center;
+.event li ul {
+    list-style-type: circle;
 }
 
 .card .placeholder {
@@ -21,6 +22,7 @@
     border-radius: var(--rounding-gentle);
 }
 
+/* Placeholder specs */
 .event .placeholder {
     width: 160px;
 }
@@ -30,7 +32,13 @@
     width: 320px;
 }
 
+.user .placeholder {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+}
+
 .game, .user {
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
 }

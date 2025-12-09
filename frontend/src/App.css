@@ -44,9 +44,3 @@ button {
     flex-direction: column;
     gap: 10px;
 }
-
-.displayGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--card-spacing);
-}

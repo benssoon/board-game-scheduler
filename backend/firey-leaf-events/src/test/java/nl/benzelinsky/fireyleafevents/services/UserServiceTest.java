@@ -1,9 +1,6 @@
 package nl.benzelinsky.fireyleafevents.services;
 
-import nl.benzelinsky.fireyleafevents.dtos.PatchUserInputDto;
-import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
-import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
-import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
+import nl.benzelinsky.fireyleafevents.dtos.*;
 import nl.benzelinsky.fireyleafevents.exceptions.*;
 import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
@@ -154,26 +151,19 @@ class UserServiceTest {
         Mockito.when(userRepository.findAll()).thenReturn(allUsers);
 
         //act
-        List<ShortUserOutputDto> dtoUsers = userService.getAllUsers();
+        List<TinyUserOutputDto> dtoUsers = userService.getAllUsers();
 
         //assert
         allUsers.forEach(u -> {
-            ShortUserOutputDto dto = dtoUsers.get(allUsers.indexOf(u));
+            TinyUserOutputDto dto = dtoUsers.get(allUsers.indexOf(u));
             assertEquals(u.getUsername(), dto.username);
             assertEquals(u.getName(), dto.name);
-            assertEquals(u.getEmailAddress(), dto.emailAddress);
-            assertEquals(u.getTelephoneNumber(), dto.telephoneNumber);
-            assertEquals(u.getAge(), dto.age);
             assertEquals(u.getArea(), dto.area);
-            assertEquals(u.getAddress(), dto.address);
             u.getHostedEvents().forEach(e -> {
                 assertTrue(dto.hostedEvents.contains(e.getName()));
             });
             u.getJoinedEvents().forEach(e -> {
                 assertTrue(dto.joinedEvents.contains(e.getName()));
-            });
-            u.getRoles().forEach(r -> {
-                assertTrue(dto.roles.contains(r));
             });
         });
     }

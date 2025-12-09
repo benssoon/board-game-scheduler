@@ -3,6 +3,7 @@ import {API} from '../../globalConstants.js';
 import {useContext, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import axios from 'axios';
+import {handleFormChange} from '../../helpers/handlers.js';
 
 function Login() {
     const URL = API + '/authenticate'
@@ -11,24 +12,23 @@ function Login() {
         password: '',
     });
     const {login} = useContext(AuthContext);
-
-    function handleChange(e) {
-        setData({
-            ...data,
-            [e.target.name]: e.target.value,
-        });
-    }
+    const {logout} = useContext(AuthContext);
 
     async function authenticate(e) {
         e.preventDefault();
+        console.log(data);
         try {
             const response = await axios.post(URL, data);
             console.log(response);
-            login(response.data);
+            login(response.data.jwt);
+            console.log('tried');
         }
         catch (er) {
-            console.error(er.response.data.error);
+            console.error(er);
+            console.error(er.response);
+            console.error('erred')
         }
+        console.log('got through.')
     }
 
     return (
@@ -42,7 +42,7 @@ function Login() {
                     id="username"
                     name="username"
                     value={data.username}
-                    onChange={handleChange}
+                    onChange={(e) => handleFormChange(e, data, setData)}
                 />
                 <label htmlFor="password">Password</label>
                 <input
@@ -50,10 +50,14 @@ function Login() {
                     id="password"
                     name="password"
                     value={data.password}
-                    onChange={handleChange}
+                    onChange={(e) => handleFormChange(e, data, setData)}
                 />
                 <button type="submit">Login</button>
             </form>
+
+            <h2>Logout</h2>
+
+            <button type="submit" onClick={() => logout()}>Logout</button>
         </>
     );
 }

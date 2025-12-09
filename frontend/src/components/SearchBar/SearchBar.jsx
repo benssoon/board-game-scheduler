@@ -10,7 +10,7 @@ function SearchBar() {
         <div className="searchBar">
             <input
                 value={searchText}
-                onChange={(e) => handleTextChange(e, setSearchText())}
+                onChange={(e) => handleTextChange(e, setSearchText)}
             />
             <button className="searchButton">O</button>
         </div>

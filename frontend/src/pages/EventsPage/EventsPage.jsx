@@ -18,9 +18,10 @@ function EventsPage() {
     const {user} = useContext(AuthContext);
     //<editor-fold desc="State">
     const initialEventFormState = {
-        title: '',
+        name: '',
         location: '',
-        isFull: false,
+        gameId: 0,
+        isHostPlaying: false,
     }
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
@@ -41,6 +42,10 @@ function EventsPage() {
         setEventFormState(initialEventFormState);
         createEventPostRequest(e, eventFormState);
     }
+
+    function handleDeleteEventSubmit(e) {
+        deleteEvent(e, eventId);
+    }
     //</editor-fold>
 
     return (
@@ -50,12 +55,12 @@ function EventsPage() {
             {/*<editor-fold desc="Create Event Form">*/}
             <h2>Create Event</h2>
             <form onSubmit={handleEventSubmit}>
-                <label htmlFor="eventTitle">Event title:</label>
+                <label htmlFor="eventName">Event name:</label>
                 <input
                     type="text"
-                    name="title"
-                    id="eventTitle"
-                    value={eventFormState.title}
+                    name="name"
+                    id="eventName"
+                    value={eventFormState.name}
                     onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
                 <label htmlFor="eventLocation">Location:</label>
@@ -66,12 +71,28 @@ function EventsPage() {
                     value={eventFormState.location}
                     onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
+                <label htmlFor="gameId">Game ID:</label>
+                <input
+                    type="number"
+                    name="gameId"
+                    id="gameId"
+                    value={eventFormState.gameId}
+                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                />
+                <label htmlFor="isHostPlaying">Will you also be playing?</label>
+                <input
+                    type="checkbox"
+                    name="isHostPlaying"
+                    id="isHostPlaying"
+                    checked={eventFormState.isHostPlaying}
+                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                />
                 <button type="submit">Submit</button>
             </form>
             {/*</editor-fold>*/}
 
             {/*<editor-fold desc="Delete Event Form">*/}
-            <form onSubmit={(e) => deleteEvent(e, eventId)}>
+            <form onSubmit={handleDeleteEventSubmit}>
                 <label htmlFor="deleteEventId">Event ID:</label>
                 <input
                     type="number"

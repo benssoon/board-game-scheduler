@@ -4,7 +4,7 @@ export function concatKeysValues(obj) {
     for (const key in keys) {
         const beforeColon = keys[key]
         const afterColon = obj[beforeColon]
-        const msg = `"${beforeColon}" ${afterColon}`;
+        const msg = `"${beforeColon}": ${afterColon}`;
         concatenated.push(msg);
     }
     return concatenated;

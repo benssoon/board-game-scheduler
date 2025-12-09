@@ -1,9 +1,6 @@
 package nl.benzelinsky.fireyleafevents.services;
 
-import nl.benzelinsky.fireyleafevents.dtos.PatchUserInputDto;
-import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
-import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
-import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
+import nl.benzelinsky.fireyleafevents.dtos.*;
 import nl.benzelinsky.fireyleafevents.exceptions.*;
 import nl.benzelinsky.fireyleafevents.mappers.UserMapper;
 import nl.benzelinsky.fireyleafevents.models.Role;
@@ -51,11 +48,11 @@ public class UserService {
     }
 
     // Get all users
-    public List<ShortUserOutputDto> getAllUsers() {
-        List<ShortUserOutputDto> allUsers = new ArrayList<>();
+    public List<TinyUserOutputDto> getAllUsers() {
+        List<TinyUserOutputDto> allUsers = new ArrayList<>();
         this.userRepository.findAll()
                 .forEach(user ->
-                        allUsers.add(UserMapper.toShortDto(user)));
+                        allUsers.add(UserMapper.toTinyDto(user)));
         return allUsers;
     }
 
