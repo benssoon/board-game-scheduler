@@ -71,7 +71,7 @@ function GamesPage() {
             {/*<editor-fold desc="Create Game Form">*/}
             {/*Make this a component!*/}
             <h2>Create Game</h2>
-            <form onSubmit={handleGameSubmit} className="gameForm">
+            <form onSubmit={handleGameSubmit} className="create-form">
                 <FormField
                     ref={titleRef}
                     label="Game title"

@@ -4,4 +4,10 @@
 
 .form-field {
     display: flex;
+    flex-direction: column;
+}
+
+.form-field em {
+    color: darkred;
+    font-weight: bold;
 }

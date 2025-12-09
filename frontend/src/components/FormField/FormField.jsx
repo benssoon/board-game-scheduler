@@ -1,7 +1,7 @@
 import './FormField.css';
 import {useEffect, useState} from 'react';
 
-function FormField({ref, label, type, id, name, formState, handleChange, errors}) {
+function FormField({ref, isRequired, label, type, id, name, formState, handleChange, errors}) {
     const [error, setError] = useState('');
     useEffect(() => {
         if (errors && name in errors) {
@@ -19,7 +19,7 @@ function FormField({ref, label, type, id, name, formState, handleChange, errors}
     return (
         <>
             <span className="form-field">
-                <label htmlFor={id}>{label}:</label>
+                <label htmlFor={id}>{label}{isRequired && <em>*</em>}:</label>
                 <input
                     ref={ref}
                     type={type}

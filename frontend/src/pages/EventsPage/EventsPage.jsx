@@ -8,10 +8,11 @@ import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 // Libraries
 
 // Functions
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import {handleFormChange} from '../../helpers/handlers.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
+import FormField from '../../components/FormField/FormField.jsx';
 
 function EventsPage() {
     //<editor-fold desc="State">
@@ -24,7 +25,10 @@ function EventsPage() {
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
     const [updated, setUpdated] = useState(0);
+    const [formError, setFormError] = useState(null);
     //</editor-fold>
+
+    const nameRef = useRef(null);
 
     //<editor-fold desc="Handlers">
     function handleDeleteChange(e) {
@@ -113,38 +117,43 @@ function EventsPage() {
 
             {/*<editor-fold desc="Create Event Form">*/}
             <h2>Create Event</h2>
-            <form onSubmit={handleEventSubmit}>
-                <label htmlFor="eventName">Event name:</label>
-                <input
+            <form onSubmit={handleEventSubmit} className="create-form">
+                <FormField
+                    ref={nameRef}
+                    isRequired={true}
+                    label="Event name"
                     type="text"
                     name="name"
                     id="eventName"
-                    value={eventFormState.name}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                    formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
-                <label htmlFor="eventLocation">Location:</label>
-                <input
+                <FormField
+                    label="Location"
                     type="text"
                     name="location"
                     id="eventLocation"
-                    value={eventFormState.location}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                    formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
-                <label htmlFor="gameId">Game ID:</label>
-                <input
+                <FormField
+                    label="Game ID"
                     type="number"
                     name="gameId"
                     id="gameId"
-                    value={eventFormState.gameId}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                    formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
-                <label htmlFor="isHostPlaying">Will you also be playing?</label>
-                <input
+                <FormField
+                    label="Will you also be playing?"
                     type="checkbox"
                     name="isHostPlaying"
                     id="isHostPlaying"
-                    checked={eventFormState.isHostPlaying}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                    formState={eventFormState}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
                 <button type="submit">Submit</button>
             </form>
