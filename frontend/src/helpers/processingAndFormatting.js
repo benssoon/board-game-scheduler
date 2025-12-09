@@ -9,3 +9,12 @@ export function concatKeysValues(obj) {
     }
     return concatenated;
 }
+
+export function cleanupData(data) {
+    return  Object.fromEntries( // Return an object with empty strings converted to null.
+        Object.entries(data).map(([key, value]) => {
+                return [key, value === false ? value : value || null]
+            }
+        )
+    );
+}

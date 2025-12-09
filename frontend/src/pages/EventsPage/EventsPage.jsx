@@ -13,6 +13,7 @@ import {handleFormChange} from '../../helpers/handlers.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import FormField from '../../components/FormField/FormField.jsx';
+import {cleanupData} from '../../helpers/processingAndFormatting.js';
 
 function EventsPage() {
     //<editor-fold desc="State">
@@ -21,6 +22,7 @@ function EventsPage() {
         location: '',
         gameId: 0,
         isHostPlaying: false,
+        definitiveTime: '',
     }
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
@@ -43,10 +45,13 @@ function EventsPage() {
 
     async function handleEventSubmit(e) {
         e.preventDefault();
+        console.log(eventFormState)
+        const cleanData = cleanupData(eventFormState);
+        console.log(cleanData)
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await axios.post(API + '/events', eventFormState, {
+                const response = await axios.post(API + '/events', cleanData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
@@ -55,11 +60,8 @@ function EventsPage() {
             } catch (er) {
                 const response = er.response.data;
                 const missingKeys = Object.keys(response);
-                console.error(er);
-                if (er.status === 403) {
-                    console.error(er.response.data);
-                    return er.response.data;
-                }
+                console.error(er.response.data);
+                setFormError(er.response.data)
                 //TODO send errors to an object stored in state, like with create game
                 const errors = [];
                 for (const key in missingKeys) {
@@ -76,6 +78,7 @@ function EventsPage() {
         }
         setEventFormState(initialEventFormState);
         setUpdated(updated+1);
+        nameRef.current.focus();
     }
 
     async function handleDeleteEventSubmit(e) {
@@ -153,6 +156,16 @@ function EventsPage() {
                     name="isHostPlaying"
                     id="isHostPlaying"
                     formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                />
+                <FormField
+                    label="Definitive time"
+                    type="datetime-local"
+                    name="definitiveTime"
+                    id="definitiveTime"
+                    formState={eventFormState}
+                    errors={formError}
                     handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
                 <button type="submit">Submit</button>

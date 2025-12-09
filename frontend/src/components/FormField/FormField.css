@@ -11,3 +11,12 @@
     color: darkred;
     font-weight: bold;
 }
+
+.checkbox {
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.datetime-local {
+
+}

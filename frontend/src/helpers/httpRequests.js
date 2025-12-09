@@ -96,14 +96,10 @@ export async function createGamePostRequest(e, data, setErrorArray, setErrorObje
         });
         console.log(response);
     } catch (er) {
-        //console.error(er);
-        //console.log(er.response.data)
         const errors = concatKeysValues(er.response.data);
-        //console.log(errors);
         setErrorArray(errors);
         setErrorObject(er.response.data);
-        console.log(data);
-        console.log(er.response);
+        console.error(er.response.data);
     }
 }
 //</editor-fold>

@@ -6,7 +6,7 @@ import {handleFormChange} from '../../helpers/handlers.js';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
-import {concatKeysValues} from '../../helpers/processingAndFormatting.js';
+import {cleanupData, concatKeysValues} from '../../helpers/processingAndFormatting.js';
 import FormField from '../../components/FormField/FormField.jsx';
 
 function GamesPage() {
@@ -49,12 +49,7 @@ function GamesPage() {
 
     function handleGameSubmit(e) {
         e.preventDefault();
-        const cleanData = Object.fromEntries( // Return an object with empty strings converted to null.
-            Object.entries(gameFormState).map(([key, value]) =>
-                [key, value || null]
-            )
-        );
-        console.log(cleanData)
+        const cleanData = cleanupData(gameFormState);
         createGamePostRequest(e, cleanData, setErrorArray, setFormError);
         setGameFormState(initialGameFormState);
         titleRef.current.focus();

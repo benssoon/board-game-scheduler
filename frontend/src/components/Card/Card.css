@@ -1,7 +1,7 @@
 .card {
     background-color: var(--color-secondary);
     display: flex;
-    max-width: 920px;
+    width: 350px;
     height: 218px;
     padding: 20px 10px;
     border-radius: var(--rounding-gentle);
