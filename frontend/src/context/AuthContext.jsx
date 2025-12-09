@@ -1,7 +1,6 @@
 import {createContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
-import useFetch from '../helpers/useFetch.js';
 import {API} from '../globalConstants.js';
 import axios from 'axios';
 

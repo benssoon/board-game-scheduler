@@ -2,10 +2,10 @@ import './DisplayGrid.css';
 import Card from '../Card/Card.jsx';
 import useFetch from '../../helpers/useFetch.js';
 
-function DisplayGrid({ type, preview }) {
+function DisplayGrid({type, preview, updated}) {
     const classname = preview ? "displayPreview" : "displayGrid";
-    const endpoint = '/' + type + 's';
-    const { data: collection, loading, error } = useFetch(endpoint);
+    const endpoint = `/${type}s`
+    const { data: collection, loading, error } = useFetch(endpoint, {}, updated);
     return (
         <div className={classname}>
             {loading || !collection ?

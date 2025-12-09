@@ -2,14 +2,15 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {API} from '../globalConstants.js';
 
-function useFetch(endpoint, config) {
+function useFetch(endpoint, config, updated) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
     useEffect(() => {
+        console.log(updated);
         if(!endpoint) return; // Do not fetch data if there is no endpoint passed (i.e. for error/loading cards).
-        const controller = new AbortController();
+        const controller = new AbortController(); //TODO what should I do with this?
         const url = API + endpoint;
 
         async function fetchData() {
@@ -24,6 +25,7 @@ function useFetch(endpoint, config) {
                 console.error(er.message);
                 console.error(endpoint);
             }
+            console.log(updated && 'updated?')
             setLoading(false);
         }
 
@@ -32,7 +34,7 @@ function useFetch(endpoint, config) {
         return function cleanup() {
             controller.abort();
         }
-    }, [endpoint]);
+    }, [endpoint, updated]);
 
     return {data, loading, error};
 }
