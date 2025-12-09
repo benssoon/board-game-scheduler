@@ -41,8 +41,8 @@ function FormField({ref, isRequired, label, type, id, name, formState, handleCha
                     value={formState[name]}
                     onChange={handleChange}
                 />
+                {errors && error}
             </span>
-            {errors && error}
         </>
     );
 }

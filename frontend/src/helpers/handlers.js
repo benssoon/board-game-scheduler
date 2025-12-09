@@ -15,6 +15,9 @@ export function handleFormChange(e, formState, setFormState) {
             break;
     }
 
+    if (name === 'gameId' && newValue < 0) {
+        newValue = 0;
+    }
     setFormState({
         ...formState,
         [name]: newValue,

@@ -57,6 +57,7 @@ function EventsPage() {
                     }
                 });
                 console.log(response);
+                setFormError(null);
             } catch (er) {
                 const response = er.response.data;
                 const missingKeys = Object.keys(response);
