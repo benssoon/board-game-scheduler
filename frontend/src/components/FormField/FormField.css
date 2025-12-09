@@ -1,0 +1,7 @@
+.field-error {
+    color: red;
+}
+
+.form-field {
+    display: flex;
+}

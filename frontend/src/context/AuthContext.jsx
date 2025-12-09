@@ -41,7 +41,6 @@ function AuthContextProvider({children}) {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log(result.data);
             setAuth({
                 isAuth: true,
                 // TODO What is the point of user? Where is it ever used?
@@ -67,7 +66,7 @@ function AuthContextProvider({children}) {
         localStorage.setItem('token', token);
         const username = jwtDecode(token).sub;
         fetchUserData(username, token);
-        console.log(auth.user.username + ' is logged in!');
+        console.log(username + ' is logged in!');
         navigate("/profile");
     }
 

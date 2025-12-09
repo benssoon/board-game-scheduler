@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {API} from '../globalConstants.js';
 import {jwtDecode} from 'jwt-decode';
+import {concatKeysValues} from './processingAndFormatting.js';
 
 //<editor-fold desc="Get Requests">
 export async function fetchObject(e, type, id, setObject) {
@@ -36,10 +37,14 @@ export async function createEventPostRequest(e, data) {
                 }
             });
             console.log(response);
-        } catch (e) {
-            const response = e.response.data;
+        } catch (er) {
+            const response = er.response.data;
             const missingKeys = Object.keys(response);
-            console.error(e);
+            console.error(er);
+            if (er.status === 403) {
+                console.error(er.response.data);
+                return er.response.data;
+            }
             let errors = [];
             for (const key in missingKeys) {
                 const missingKey = missingKeys[key]
@@ -79,24 +84,25 @@ export async function createUser(e) {
     }
 }
 
-export async function createGame(e, data) {
+export async function createGamePostRequest(e, data, setErrorArray, setErrorObject) {
     e.preventDefault();
+    const token = localStorage.getItem('token');
     try {
-        const response = await axios.post(API+'/games', data)
+        const response = await axios.post(API+'/games', data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         console.log(response);
     } catch (er) {
-        const response = er.response.data;
-        const missingKeys = Object.keys(response);
-        console.error(er);
-        let errors = [];
-        for (const key in missingKeys) {
-            const missingKey = missingKeys[key]
-            const keyProblem = response[missingKey]
-            const err = `"${missingKey}" ${keyProblem}`;
-            errors.push(err);
-        }
-        console.log(errors);
-        return errors;
+        //console.error(er);
+        //console.log(er.response.data)
+        const errors = concatKeysValues(er.response.data);
+        //console.log(errors);
+        setErrorArray(errors);
+        setErrorObject(er.response.data);
+        console.log(data);
+        console.log(er.response);
     }
 }
 //</editor-fold>

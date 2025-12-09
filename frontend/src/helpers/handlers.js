@@ -2,7 +2,9 @@ export function handleFormChange(e, formState, setFormState) {
     const changedFieldName = e.target.name;
     const newValue = e.target.type === 'checkbox' ?
         e.target.checked
-        : e.target.value;
+        : e.target.value === '' ?
+            null
+            : e.target.value;
     setFormState({
         ...formState,
         [changedFieldName]: newValue,
@@ -10,7 +12,7 @@ export function handleFormChange(e, formState, setFormState) {
 }
 
 export function handleTextChange(e, state, setState) {
-    const newValue = e.target.value;
+    const newValue = e.target.value === '' ? null : e.target.value;
 
     setState(newValue);
 }
