@@ -38,7 +38,10 @@ function FormField({ref, isRequired, label, type, id, name, formState, handleCha
                     type={type}
                     name={name}
                     id={id}
-                    value={formState[name]}
+                    {...(type === 'checkbox' ?
+                            {checked: formState[name]}
+                            : {value: formState[name]}
+                    )}
                     onChange={handleChange}
                 />
                 {errors && error}

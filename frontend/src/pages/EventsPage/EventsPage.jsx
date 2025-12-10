@@ -41,9 +41,6 @@ function EventsPage() {
     const nameRef = useRef(null);
 
     //<editor-fold desc="Effects">
-    useEffect(() => {
-        console.log(eventFormState)
-    }, [eventFormState]);
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
@@ -59,9 +56,7 @@ function EventsPage() {
 
     async function handleEventSubmit(e) {
         e.preventDefault();
-        console.log(eventFormState)
         const cleanData = cleanupData(eventFormState);
-        console.log(cleanData)
         const token = localStorage.getItem('token');
         if (token) {
             try {
@@ -121,7 +116,7 @@ function EventsPage() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            console.log(response.data);
+            console.log(response);
         } catch (er) {
             console.error(er);
         }
