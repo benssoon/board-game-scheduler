@@ -5,3 +5,9 @@
     border: solid 2px var(--color-tertiary);
     padding: 2px;
 }
+
+.pills {
+    display: flex;
+    list-style: none;
+    gap: var(--filter-items-spacing);
+}

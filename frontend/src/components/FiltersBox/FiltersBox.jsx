@@ -6,16 +6,23 @@ import Pill from '../Pill/Pill.jsx';
 import {useState} from 'react';
 
 function FiltersBox({setParam}) {
-
-    const [pillVisible, togglePillVisible] = useState(true);
-
+    const [filters, setFilters] = useState([]);
     return (
         <div className="filtersBox">
             <SearchBar
                 setParam={setParam}
+                filterItem={setFilters}
             />
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
+            <ul className="pills">
+                {filters.map((item) => {
+                return <li key={item.id}>
+                    <Pill
+                        item={item}
+                        setFilters={setFilters}
+                    />
+                </li>
+            })}
+            </ul>
         </div>
     );
 }

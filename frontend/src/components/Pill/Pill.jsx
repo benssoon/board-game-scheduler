@@ -1,14 +1,18 @@
 import './Pill.css';
 
-function Pill( {toggleVisible} ) {
+function Pill( {item, setFilters} ) {
 
     function deletePill() {
-        toggleVisible(false);
+        setFilters(prev => {
+            prev.filter((it) => {
+                it.id !== item.id
+            })
+        })
     }
 
     return (
         <div className="pill">
-            <span>Hello</span>
+            <span>{item.name}</span>
             <button
                 className="deletePill"
                 onClick={deletePill}

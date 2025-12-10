@@ -3,15 +3,12 @@ import {useEffect, useMemo, useState} from 'react';
 import useFetch from '../../helpers/useFetch.js';
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 
-function SearchBar({setParam}) {
+function SearchBar({setParam, filterItem}) {
 
     const [searchText, setSearchText] = useState('');
+    const [selectedGameId, setSelectedGameId] = useState(0);
 
     const {data: games} = useFetch('/games');
-
-    useEffect(() => {
-        console.log(matchingGames)
-    }, [searchText]);
 
     const matchingGames = useMemo(() => {
         if (!searchText) return [];
@@ -24,11 +21,28 @@ function SearchBar({setParam}) {
     // Add a search parameter to the url used for DisplayGrid
     function handleSubmit(e) {
         e.preventDefault();
-        setParam('gameId=7');
+        if (selectedGameId > 0) {
+            setParam(`gameId=${selectedGameId}`);
+            filterItem(prev => [
+                ...prev,
+                {
+                    id: selectedGameId,
+                    name: searchText,
+                },
+            ]);
+        } else {
+            console.error("Please select a game from the dropdown")
+        }
     }
 
-    function handleSearchChange(e) {
-        setSearchText(e.target.value)
+    function handleTextChange(e) {
+        setSearchText(e.target.value);
+        setSelectedGameId(0);
+    }
+
+    function handleSelect(game) {
+        setSelectedGameId(game.id);
+        setSearchText(game.title);
     }
 
     return (
@@ -37,7 +51,7 @@ function SearchBar({setParam}) {
                 <input
                     className="searchBar"
                     value={searchText}
-                    onChange={handleSearchChange}
+                    onChange={handleTextChange}
                 />
                 <button type="submit" className="searchButton">O</button>
             </form>
@@ -45,10 +59,7 @@ function SearchBar({setParam}) {
             <SearchDropdown
                 visible={matchingGames.length > 0}
                 items={matchingGames}
-                onSelect={(game) => {
-                    setParam(`gameId=${game.id}`);
-                    setSearchText(game.title);
-                }}
+                onSelect={handleSelect}
             />
 
         </div>

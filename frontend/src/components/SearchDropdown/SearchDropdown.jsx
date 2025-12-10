@@ -8,7 +8,7 @@ function SearchDropdown({visible, items, onSelect}) {
                 return <li
                     key={item.id}
                     className={"dropdownItem"}
-                    onSelect={onSelect}
+                    onClick={() => onSelect(item)}
                 >
                     {item.title}
                 </li>
