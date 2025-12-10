@@ -15,6 +15,7 @@ export function handleFormChange(e, formState, setFormState) {
             break;
     }
 
+    // Don't allow gameId to be set to negative.
     if (name === 'gameId' && newValue < 0) {
         newValue = 0;
     }

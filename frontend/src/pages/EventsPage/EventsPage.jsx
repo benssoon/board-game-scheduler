@@ -8,14 +8,15 @@ import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 // Libraries
 
 // Functions
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {handleFormChange} from '../../helpers/handlers.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import FormField from '../../components/FormField/FormField.jsx';
 import {cleanupData} from '../../helpers/processingAndFormatting.js';
-import DatePicker from 'react-multi-date-picker';
+import DatePicker, {DateObject} from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
+import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 
 function EventsPage() {
     //<editor-fold desc="State">
@@ -27,6 +28,9 @@ function EventsPage() {
         definitiveTime: '',
         possibleTimes: [],
     }
+    const [dates, setDates] = useState([
+
+    ]);
     const [date, setDate] = useState(new Date());
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
@@ -35,6 +39,12 @@ function EventsPage() {
     //</editor-fold>
 
     const nameRef = useRef(null);
+
+    //<editor-fold desc="Effects">
+    useEffect(() => {
+        console.log(eventFormState)
+    }, [eventFormState]);
+    //</editor-fold>
 
     //<editor-fold desc="Handlers">
     function handleDeleteChange(e) {
@@ -176,15 +186,13 @@ function EventsPage() {
                 <DatePicker
                     name="possibleTimes"
                     id="possibleTimes"
-                    multiple={true}
+                    sort
                     plugins={[
-                        <TimePicker position="bottom"/>
+                        <DatePanel />,
+                        <TimePicker />,
                     ]}
-                    value={date}
-                    onChange={setDate}
-                    //todo test the following:
-                    /*value={eventFormState.possibleTimes}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}*/
+                    value={eventFormState.possibleTimes}
+                    onChange={(date) => {setEventFormState({...eventFormState, possibleTimes: date})}}
                 />
                 <button type="submit">Submit</button>
             </form>
