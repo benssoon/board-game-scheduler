@@ -4,4 +4,19 @@
 
 .form-field {
     display: flex;
+    flex-direction: column;
+}
+
+.form-field em {
+    color: darkred;
+    font-weight: bold;
+}
+
+.checkbox {
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.datetime-local {
+
 }

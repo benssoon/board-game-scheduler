@@ -1,7 +1,9 @@
 import './Card.css';
+import {parseDate} from '../../helpers/processingAndFormatting.js';
 
 function Card({type, data, className}) {
-    const date = new Date(data.definitiveTime).toLocaleDateString("en-NL", {year: "numeric", month: "long", day: "numeric",});
+    //const dateOptions = {year: "numeric", month: "long", day: "numeric",};
+    //const defDate = new Date(data.definitiveTime).toLocaleDateString("en-NL", dateOptions);
     return (
         <article className={className}>
             <div className="placeholder"></div>
@@ -18,8 +20,12 @@ function Card({type, data, className}) {
                         return (<li key={player}>{player}</li>);
                     })}</ul>
                 </li>}
-                {data.possibleTimes && <li>Possible times: {data.possibleTimes}</li>}
-                {data.definitiveTime && <li>Date: {date}</li>}
+                {data.possibleTimes && data.possibleTimes.length>0 && <li>Possible Times:
+                    <ul>{data.possibleTimes.map((time) => {
+                        return (<li key={time}>{parseDate(time)}</li>);
+                    })}</ul>
+                </li>}
+                {data.definitiveTime && <li>Date: {parseDate(data.definitiveTime)}</li>}
             </ul>
         </article>
     )

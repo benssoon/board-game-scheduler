@@ -8,10 +8,15 @@ import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 // Libraries
 
 // Functions
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {handleFormChange} from '../../helpers/handlers.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
+import FormField from '../../components/FormField/FormField.jsx';
+import {cleanupData} from '../../helpers/processingAndFormatting.js';
+import DatePicker, {DateObject} from 'react-multi-date-picker';
+import TimePicker from 'react-multi-date-picker/plugins/time_picker';
+import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 
 function EventsPage() {
     //<editor-fold desc="State">
@@ -20,10 +25,22 @@ function EventsPage() {
         location: '',
         gameId: 0,
         isHostPlaying: false,
+        definitiveTime: '',
+        possibleTimes: [],
     }
+    const [dates, setDates] = useState([
+
+    ]);
+    const [date, setDate] = useState(new Date());
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
     const [updated, setUpdated] = useState(0);
+    const [formError, setFormError] = useState(null);
+    //</editor-fold>
+
+    const nameRef = useRef(null);
+
+    //<editor-fold desc="Effects">
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
@@ -39,23 +56,22 @@ function EventsPage() {
 
     async function handleEventSubmit(e) {
         e.preventDefault();
+        const cleanData = cleanupData(eventFormState);
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await axios.post(API + '/events', eventFormState, {
+                const response = await axios.post(API + '/events', cleanData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
                 });
                 console.log(response);
+                setFormError(null);
             } catch (er) {
                 const response = er.response.data;
                 const missingKeys = Object.keys(response);
-                console.error(er);
-                if (er.status === 403) {
-                    console.error(er.response.data);
-                    return er.response.data;
-                }
+                console.error(er.response.data);
+                setFormError(er.response.data)
                 //TODO send errors to an object stored in state, like with create game
                 const errors = [];
                 for (const key in missingKeys) {
@@ -72,6 +88,7 @@ function EventsPage() {
         }
         setEventFormState(initialEventFormState);
         setUpdated(updated+1);
+        nameRef.current.focus();
     }
 
     async function handleDeleteEventSubmit(e) {
@@ -99,7 +116,7 @@ function EventsPage() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            console.log(response.data);
+            console.log(response);
         } catch (er) {
             console.error(er);
         }
@@ -113,38 +130,64 @@ function EventsPage() {
 
             {/*<editor-fold desc="Create Event Form">*/}
             <h2>Create Event</h2>
-            <form onSubmit={handleEventSubmit}>
-                <label htmlFor="eventName">Event name:</label>
-                <input
+            <form onSubmit={handleEventSubmit} className="create-form">
+                <FormField
+                    ref={nameRef}
+                    isRequired={true}
+                    label="Event name"
                     type="text"
                     name="name"
                     id="eventName"
-                    value={eventFormState.name}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                    formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
-                <label htmlFor="eventLocation">Location:</label>
-                <input
+                <FormField
+                    label="Location"
                     type="text"
                     name="location"
                     id="eventLocation"
-                    value={eventFormState.location}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                    formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
-                <label htmlFor="gameId">Game ID:</label>
-                <input
+                <FormField
+                    label="Game ID"
                     type="number"
                     name="gameId"
                     id="gameId"
-                    value={eventFormState.gameId}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                    formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
-                <label htmlFor="isHostPlaying">Will you also be playing?</label>
-                <input
+                <FormField
+                    label="Will you also be playing?"
                     type="checkbox"
                     name="isHostPlaying"
                     id="isHostPlaying"
-                    checked={eventFormState.isHostPlaying}
-                    onChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                    formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                />
+                <FormField
+                    label="Definitive time"
+                    type="datetime-local"
+                    name="definitiveTime"
+                    id="definitiveTime"
+                    formState={eventFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
+                />
+                <DatePicker
+                    name="possibleTimes"
+                    id="possibleTimes"
+                    sort
+                    plugins={[
+                        <DatePanel />,
+                        <TimePicker />,
+                    ]}
+                    value={eventFormState.possibleTimes}
+                    onChange={(date) => {setEventFormState({...eventFormState, possibleTimes: date})}}
                 />
                 <button type="submit">Submit</button>
             </form>
