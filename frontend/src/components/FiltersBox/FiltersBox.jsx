@@ -5,22 +5,15 @@ import Pill from '../Pill/Pill.jsx';
 
 import {useState} from 'react';
 
-function FiltersBox() {
+function FiltersBox({setParam}) {
 
     const [pillVisible, togglePillVisible] = useState(true);
 
     return (
         <div className="filtersBox">
-            <SearchBar/>
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
-            { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
+            <SearchBar
+                setParam={setParam}
+            />
             { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
             { pillVisible && <Pill toggleVisible={togglePillVisible}/> }
         </div>

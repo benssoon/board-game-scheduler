@@ -1,9 +1,15 @@
-.searchBar {
+.searchBarContainer {
     display: flex;
+    position: relative; /* Anchor dropdown */
+    width: auto;
 }
 
 .searchButton {
     border-radius: 0 var(--rounding-gentle) var(--rounding-gentle) 0;
     border: solid var(--color-secondary);
     background-color: var(--color-secondary);
+}
+
+.searchBar {
+    flex: 1;
 }

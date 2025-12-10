@@ -1,0 +1,13 @@
+/* Dropdown absolutely positioned relative to .searchBar */
+.dropdownList {
+    position: absolute;
+    top: 100%;              /* directly under the bar */
+    left: 0;
+    right: 0;
+    background: var(--color-tertiary);
+    color: var(--color-primary);
+    font-weight: bold;
+    border: solid var(--color-accent) 2px;
+    border-top: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}

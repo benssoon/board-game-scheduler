@@ -12,9 +12,11 @@ export function concatKeysValues(obj) {
 
 export function cleanupData(data) {
     // Convert possible dates to standard iso format
-    data.possibleTimes = data.possibleTimes.map((datetime) => {
-        return datetime.toDate().toISOString();
-    });
+    if ('possibleTimes' in data) {
+        data.possibleTimes = data.possibleTimes.map((datetime) => {
+            return datetime.toDate().toISOString();
+        });
+    }
     return  Object.fromEntries( // Return an object with empty strings converted to null.
         Object.entries(data).map(([key, value]) => {
             // Convert date string to iso string
