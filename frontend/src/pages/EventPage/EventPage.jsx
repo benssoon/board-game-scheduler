@@ -6,7 +6,7 @@ import useFetch from '../../helpers/useFetch.js';
 function EventPage() {
     const {id} = useParams();
     const {data: event, loading, error} = useFetch(`/events/${id}`)
-    const {data: game, loading, error} = useFetch('/games/') //TODO ID here!!
+    //const {data: game, loading, error} = useFetch('/games/') //TODO ID here!!
     console.log(event)
     return (
         event ?
@@ -21,7 +21,7 @@ function EventPage() {
                     <p>Time: {event.definitiveTime}</p>
                     <p>Game: {event.game}</p>
                     <p>Host: {event.host}</p>
-                    {event.isFull ? <p>Event full!</p> : }
+                    {event.isFull ? <p>Event full!</p> : <p>Not full</p>}
                     <p>Can take place</p>
                     <p>Location</p>
                     <p>Possible Times</p>
