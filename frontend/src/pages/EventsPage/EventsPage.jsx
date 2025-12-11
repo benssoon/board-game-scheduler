@@ -17,6 +17,7 @@ import {cleanupData} from '../../helpers/processingAndFormatting.js';
 import DatePicker, {DateObject} from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
+import SearchBar from '../../components/SearchBar/SearchBar.jsx';
 
 function EventsPage() {
     //<editor-fold desc="State">
@@ -151,6 +152,10 @@ function EventsPage() {
                     errors={formError}
                     handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
+                {/*<SearchBar
+                    handleChange????????
+                How do I make it so this can be used in a form as well?
+                />*/}
                 <FormField
                     label="Will you also be playing?"
                     type="checkbox"

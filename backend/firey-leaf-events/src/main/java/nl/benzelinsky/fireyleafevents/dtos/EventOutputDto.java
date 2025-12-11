@@ -6,6 +6,7 @@ import java.util.List;
 public class EventOutputDto {
     public Long id;
     public String name;
+    public String description;
     public String game;
     public Boolean isFull;
     public Boolean isReadyToStart;

@@ -19,6 +19,7 @@ function FiltersBox({setParam}) {
                     <Pill
                         item={item}
                         setFilters={setFilters}
+                        setParam={setParam}
                     />
                 </li>
             })}

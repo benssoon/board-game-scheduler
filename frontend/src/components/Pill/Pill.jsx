@@ -1,12 +1,17 @@
 import './Pill.css';
 
-function Pill( {item, setFilters} ) {
+function Pill( {item, setFilters, setParam} ) {
 
     function deletePill() {
         setFilters(prev => {
-            prev.filter((it) => {
-                it.id !== item.id
-            })
+            return prev.filter((it) => {
+                it.id !== item.id;
+            });
+        });
+        setParam(prev => {
+            if (prev === `gameId=${item.id}`) {
+                return '';
+            }
         })
     }
 

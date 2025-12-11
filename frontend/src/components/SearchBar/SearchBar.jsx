@@ -53,7 +53,7 @@ function SearchBar({setParam, filterItem}) {
                     value={searchText}
                     onChange={handleTextChange}
                 />
-                <button type="submit" className="searchButton">O</button>
+                {filterItem && <button type="submit" className="searchButton">O</button>}
             </form>
 
             <SearchDropdown

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PatchEventInputDto {
     public String name;
+    public String description;
     public Boolean isHostPlaying;
     public String location;
     public LocalDateTime definitiveTime;

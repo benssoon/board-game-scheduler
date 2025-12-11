@@ -92,6 +92,9 @@ public class EventService {
         if (dtoIn.name != null) {
             toUpdate.setName(dtoIn.name);
         }
+        if (dtoIn.description != null) {
+            toUpdate.setDescription(dtoIn.description);
+        }
         if (dtoIn.isHostPlaying != null) {
             toUpdate.setHostPlaying(dtoIn.isHostPlaying);
         }

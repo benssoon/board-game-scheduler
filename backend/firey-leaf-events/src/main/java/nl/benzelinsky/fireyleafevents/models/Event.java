@@ -24,6 +24,9 @@ public class Event {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String description;
+
     @Column(nullable = false)
     private boolean isFull;
 
