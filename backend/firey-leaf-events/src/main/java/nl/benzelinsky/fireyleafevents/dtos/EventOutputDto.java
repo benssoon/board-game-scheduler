@@ -7,7 +7,7 @@ public class EventOutputDto {
     public Long id;
     public String name;
     public String description;
-    public String game;
+    public GameOutputDto game;
     public Boolean isFull;
     public Boolean isReadyToStart;
     public Boolean isHostPlaying;

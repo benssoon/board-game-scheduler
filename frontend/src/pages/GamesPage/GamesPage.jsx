@@ -19,6 +19,7 @@ function GamesPage() {
         minAge: 0,
         maxAge: 99,
     }
+    const [param, setParam] = useState('');
     const [gameFormState, setGameFormState] = useState(initialGameFormState);
     const [gameId, setGameId] = useState(2);
     const [errorArray, setErrorArray] = useState([])
@@ -175,6 +176,7 @@ function GamesPage() {
                 <FiltersBox/>
                 <DisplayGrid
                     type="game"
+                    param={param}
                 />
             </section>
             {/*</editor-fold>*/}

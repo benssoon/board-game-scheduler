@@ -3,6 +3,7 @@ import {parseDate} from '../../helpers/processingAndFormatting.js';
 import {Link} from 'react-router-dom';
 
 function Card({type, data, className}) {
+    console.log(data)
     //const dateOptions = {year: "numeric", month: "long", day: "numeric",};
     //const defDate = new Date(data.definitiveTime).toLocaleDateString("en-NL", dateOptions);
     return (
@@ -13,7 +14,7 @@ function Card({type, data, className}) {
                     {data.title && <li>Title: {data.title}</li>}
                     {data.username && <li>Username: {data.username}</li>}
                     {data.name && !data.username && <li>Name: {data.name}</li>}
-                    {data.game && <li>Game: {data.game}</li>}
+                    {data.game?.id && <li>Game: {data.game.title}</li>}
                     {data.host && <li>Host: {data.host}</li>}
                     {data.isFull && <li>Game full</li>}
                     {data.location && <li>Location: {data.location}</li>}

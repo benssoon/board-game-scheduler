@@ -4,10 +4,9 @@ import useFetch from '../../helpers/useFetch.js';
 
 function DisplayGrid({type, preview, updated, param}) {
     const classname = preview ? "displayPreview" : "displayGrid";
-    console.log(type)
-    console.log(param && ' is not falsy')
     const endpoint = `/${type}s` + (param && `?${param}`)
     const { data: collection, loading, error } = useFetch(endpoint, {}, updated);
+    console.log(collection)
     return (
         <div className={classname}>
             {loading || !collection ?

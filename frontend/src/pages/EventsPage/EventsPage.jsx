@@ -29,9 +29,6 @@ function EventsPage() {
         definitiveTime: '',
         possibleTimes: [],
     }
-    const [dates, setDates] = useState([
-
-    ]);
     const [param, setParam] = useState('');
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);

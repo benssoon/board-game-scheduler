@@ -28,7 +28,7 @@ public class EventMapper {
         outputDto.id = event.getId();
         outputDto.name = event.getName();
         outputDto.description = event.getDescription();
-        outputDto.game = event.getGame().getTitle();
+        outputDto.game = GameMapper.toOutputDto(event.getGame());
         outputDto.isFull = event.isFull();
         outputDto.isReadyToStart = event.isReadyToStart();
         outputDto.isHostPlaying = event.isHostPlaying();
