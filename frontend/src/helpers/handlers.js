@@ -24,9 +24,3 @@ export function handleFormChange(e, formState, setFormState) {
         [name]: newValue,
     });
 }
-
-export function handleTextChange(e, state, setState) {
-    const newValue = e.target.value === '' ? null : e.target.value;
-
-    setState(newValue);
-}

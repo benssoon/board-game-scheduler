@@ -13,6 +13,7 @@ public class EventInputDto {
 
     @NotBlank
     public String name;
+    public String description;
     @NotNull
     public Boolean isHostPlaying;
     @NotBlank

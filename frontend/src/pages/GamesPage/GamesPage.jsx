@@ -6,7 +6,7 @@ import {handleFormChange} from '../../helpers/handlers.js';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
-import {cleanupData, concatKeysValues} from '../../helpers/processingAndFormatting.js';
+import {cleanupData} from '../../helpers/processingAndFormatting.js';
 import FormField from '../../components/FormField/FormField.jsx';
 
 function GamesPage() {
@@ -47,11 +47,30 @@ function GamesPage() {
         }
     }
 
-    function handleGameSubmit(e) {
+    async function handleGameSubmit(e) {
         e.preventDefault();
         const cleanData = cleanupData(gameFormState);
-        createGamePostRequest(e, cleanData, setErrorArray, setFormError);
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const response = await axios.post(API + '/games', cleanData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                console.log(response);
+            } catch (er) {
+                const response = er.response.data
+                setFormError(response);
+                console.error(response);
+                return response;
+            }
+        } else {
+            console.error('User must be logged in to create new events.');
+            //TODO add on-page error
+        }
         setGameFormState(initialGameFormState);
+        //TODO add updated state to reload DisplayGrid
         titleRef.current.focus();
     }
     //</editor-fold>

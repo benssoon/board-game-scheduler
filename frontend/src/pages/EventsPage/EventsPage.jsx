@@ -17,6 +17,7 @@ import {cleanupData} from '../../helpers/processingAndFormatting.js';
 import DatePicker, {DateObject} from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
+import SearchBar from '../../components/SearchBar/SearchBar.jsx';
 
 function EventsPage() {
     //<editor-fold desc="State">
@@ -31,7 +32,7 @@ function EventsPage() {
     const [dates, setDates] = useState([
 
     ]);
-    const [date, setDate] = useState(new Date());
+    const [param, setParam] = useState('');
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
     const [updated, setUpdated] = useState(0);
@@ -69,22 +70,13 @@ function EventsPage() {
                 setFormError(null);
             } catch (er) {
                 const response = er.response.data;
-                const missingKeys = Object.keys(response);
-                console.error(er.response.data);
-                setFormError(er.response.data)
-                //TODO send errors to an object stored in state, like with create game
-                const errors = [];
-                for (const key in missingKeys) {
-                    const missingKey = missingKeys[key]
-                    const keyProblem = response[missingKey]
-                    const err = `"${missingKey}" ${keyProblem}`;
-                    console.error(err);
-                    errors.push(err);
-                    return errors;
-                }
+                console.error(response);
+                setFormError(response)
+                return response;
             }
         } else {
             console.error('User must be logged in to create new events.');
+            //TODO add on-page error
         }
         setEventFormState(initialEventFormState);
         setUpdated(updated+1);
@@ -160,6 +152,10 @@ function EventsPage() {
                     errors={formError}
                     handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                 />
+                {/*<SearchBar
+                    handleChange????????
+                How do I make it so this can be used in a form as well?
+                />*/}
                 <FormField
                     label="Will you also be playing?"
                     type="checkbox"
@@ -211,10 +207,13 @@ function EventsPage() {
 
             {/*<editor-fold desc="Events Grid">*/}
             <section className="categoryBox">
-                <FiltersBox/>
+                <FiltersBox
+                    setParam={setParam} // Set param inside FiltersBox and give param to DisplayGrid
+                />
                 <DisplayGrid
                     type="event"
                     updated={updated}
+                    param={param}
                 />
             </section>
             {/*</editor-fold>*/}

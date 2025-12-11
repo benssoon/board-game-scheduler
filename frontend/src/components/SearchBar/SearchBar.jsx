@@ -1,18 +1,67 @@
 import './SearchBar.css';
-import {useState} from 'react';
-import {handleTextChange} from '../../helpers/handlers.js';
+import {useEffect, useMemo, useState} from 'react';
+import useFetch from '../../helpers/useFetch.js';
+import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 
-function SearchBar() {
+function SearchBar({setParam, filterItem}) {
 
     const [searchText, setSearchText] = useState('');
+    const [selectedGameId, setSelectedGameId] = useState(0);
+
+    const {data: games} = useFetch('/games');
+
+    const matchingGames = useMemo(() => {
+        if (!searchText) return [];
+        const lowered = searchText.toLowerCase();
+        return games.filter((game) => {
+            return game.title.toLowerCase().includes(lowered)
+        });
+    }, [searchText, games]);
+
+    // Add a search parameter to the url used for DisplayGrid
+    function handleSubmit(e) {
+        e.preventDefault();
+        if (selectedGameId > 0) {
+            setParam(`gameId=${selectedGameId}`);
+            filterItem(prev => [
+                ...prev,
+                {
+                    id: selectedGameId,
+                    name: searchText,
+                },
+            ]);
+        } else {
+            console.error("Please select a game from the dropdown")
+        }
+    }
+
+    function handleTextChange(e) {
+        setSearchText(e.target.value);
+        setSelectedGameId(0);
+    }
+
+    function handleSelect(game) {
+        setSelectedGameId(game.id);
+        setSearchText(game.title);
+    }
 
     return (
-        <div className="searchBar">
-            <input
-                value={searchText}
-                onChange={(e) => handleTextChange(e, setSearchText)}
+        <div className="searchBarContainer">
+            <form onSubmit={handleSubmit}>
+                <input
+                    className="searchBar"
+                    value={searchText}
+                    onChange={handleTextChange}
+                />
+                {filterItem && <button type="submit" className="searchButton">O</button>}
+            </form>
+
+            <SearchDropdown
+                visible={matchingGames.length > 0}
+                items={matchingGames}
+                onSelect={handleSelect}
             />
-            <button className="searchButton">O</button>
+
         </div>
     );
 }

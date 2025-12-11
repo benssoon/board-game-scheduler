@@ -4,10 +4,12 @@ import EventsPage from './pages/EventsPage/EventsPage.jsx';
 import {NavLink, Route, Routes} from 'react-router-dom';
 import Profile from './pages/Profile/Profile.jsx';
 import GamesPage from './pages/GamesPage/GamesPage.jsx';
-import PlayersPage from './pages/PlayersPage/PlayersPage.jsx';
+import UsersPage from './pages/UsersPage/UsersPage.jsx';
 
 import logo from './assets/placeholder.webp';
 import Login from './pages/Login/Login.jsx';
+import EventPage from './pages/EventPage/EventPage.jsx';
+import GamePage from './pages/GamePage/GamePage.jsx';
 
 function App() {
     return (
@@ -28,8 +30,8 @@ function App() {
                         Games
                     </NavLink></li>
                     <li><NavLink
-                        to="/players">
-                        Players
+                        to="/users">
+                        Users
                     </NavLink></li>
                 </ul>
                 <NavLink
@@ -37,7 +39,7 @@ function App() {
                     to="/profile">
                     <img src={logo} alt="Profile"/>
                 </NavLink>
-                {/*TODO Remove this link once the redirect is set up on the profile page*/}
+                {/*TODO Remove this link once the redirect (to login?) is set up on the profile page*/}
                 <NavLink
                     className="profile-icon"
                     to="/login">
@@ -51,7 +53,9 @@ function App() {
                 <Route path="/profile" element={<Profile/>}/>
                 <Route path="/events" element={<EventsPage/>}/>
                 <Route path="/games" element={<GamesPage/>}/>
-                <Route path="/players" element={<PlayersPage/>}/>
+                <Route path="/users" element={<UsersPage/>}/>
+                <Route path="/events/:id" element={<EventPage/>}/>
+                <Route path="/games/:id" element={<GamePage/>}/>
             </Routes>
         </>
     )

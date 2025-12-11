@@ -1,14 +1,23 @@
 import './Pill.css';
 
-function Pill( {toggleVisible} ) {
+function Pill( {item, setFilters, setParam} ) {
 
     function deletePill() {
-        toggleVisible(false);
+        setFilters(prev => {
+            return prev.filter((it) => {
+                it.id !== item.id;
+            });
+        });
+        setParam(prev => {
+            if (prev === `gameId=${item.id}`) {
+                return '';
+            }
+        })
     }
 
     return (
         <div className="pill">
-            <span>Hello</span>
+            <span>{item.name}</span>
             <button
                 className="deletePill"
                 onClick={deletePill}

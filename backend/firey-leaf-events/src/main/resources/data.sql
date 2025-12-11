@@ -26,6 +26,7 @@ VALUES ('ben', 'ROLE_ADMIN'),
        ('bob', 'ROLE_USER');
 
 INSERT INTO events (name,
+                    description,
                     definitive_time,
                     is_full,
                     is_ready_to_start,
@@ -34,6 +35,7 @@ INSERT INTO events (name,
                     game_id,
                     host_username)
 VALUES ('Game night',
+        'ROOT! ROOT! ROOT! ROOT!',
         TIMESTAMP '2025-10-31 23:11:11',
         FALSE,
         FALSE,
