@@ -1,5 +1,4 @@
 import './InfoBox.css';
-import useFetch from '../../helpers/useFetch.js';
 
 function InfoBox({type, children}) {
 

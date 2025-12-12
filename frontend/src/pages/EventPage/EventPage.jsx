@@ -4,10 +4,13 @@ import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import useFetch from '../../helpers/useFetch.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
+import {useState} from 'react';
 
 function EventPage() {
+    const [updated, setUpdated] = useState(0);
+
     const {id} = useParams();
-    const {data: event, loading, error} = useFetch(`/events/${id}`)
+    const {data: event, loading, error} = useFetch(`/events/${id}`, {}, updated)
 
     async function joinEvent() {
         const token = localStorage.getItem('token');
@@ -19,7 +22,8 @@ function EventPage() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log(response)
+                console.log(response);
+                setUpdated(updated+1);
             } catch (er) {
                 console.error(er);
                 console.error(er.response.data)
@@ -39,7 +43,8 @@ function EventPage() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log(response)
+                console.log(response);
+                setUpdated(updated+1);
             } catch (er) {
                 console.error(er);
                 console.error(er.response.data)
