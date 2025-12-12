@@ -95,7 +95,7 @@ public class EventController {
     }
 
     // Add current User as a player in Event
-    @PatchMapping("/{eventId}/join")
+    @PostMapping("/{eventId}/join")
     public ResponseEntity<EventOutputDto> addCurrentUser(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("eventId") Long eventId) {

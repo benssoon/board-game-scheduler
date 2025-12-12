@@ -3,7 +3,6 @@ import {parseDate} from '../../helpers/processingAndFormatting.js';
 import {Link} from 'react-router-dom';
 
 function Card({type, data, className}) {
-    console.log(data)
     //const dateOptions = {year: "numeric", month: "long", day: "numeric",};
     //const defDate = new Date(data.definitiveTime).toLocaleDateString("en-NL", dateOptions);
     return (

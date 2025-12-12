@@ -55,10 +55,10 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
                                 // Events
-                                .requestMatchers(HttpMethod.POST, "/events").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PATCH, "/events/{eventId}/join").hasRole("USER")
-                                .requestMatchers(HttpMethod.PATCH, "/events/{eventId}/leave").hasRole("USER")
-                                .requestMatchers(HttpMethod.PATCH, "/events/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/events").hasRole("USER")
+                                .requestMatchers(HttpMethod.POST, "/events/{eventId}/join").hasRole("USER")
+                                .requestMatchers(HttpMethod.POST, "/events/{eventId}/leave").hasRole("USER")
+                                .requestMatchers(HttpMethod.PATCH, "/events/**").hasRole("USER")
                                 .requestMatchers(HttpMethod.DELETE, "/events").hasRole("ADMIN") // Delete all events
                                 .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN") // Delete event by id
                                 // User profile

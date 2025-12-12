@@ -6,7 +6,6 @@ function DisplayGrid({type, preview, updated, param}) {
     const classname = preview ? "displayPreview" : "displayGrid";
     const endpoint = `/${type}s` + (param && `?${param}`)
     const { data: collection, loading, error } = useFetch(endpoint, {}, updated);
-    console.log(collection)
     return (
         <div className={classname}>
             {loading || !collection ?
