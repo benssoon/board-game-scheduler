@@ -29,6 +29,26 @@ function EventPage() {
         }
     }
 
+    async function leaveEvent() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            console.log(token)
+            try {
+                const response = await axios.post(`${API}/events/${id}/leave`, {}, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                console.log(response)
+            } catch (er) {
+                console.error(er);
+                console.error(er.response.data)
+            }
+        } else {
+            console.log('must be logged in');
+        }
+    }
+
     return (
         event ?
             <>
@@ -47,6 +67,7 @@ function EventPage() {
                     <p>Location</p>
                     <p>Possible Times</p>
                     <button type="submit" onClick={joinEvent}>Join</button>
+                    <button type="submit" onClick={leaveEvent}>Leave</button>
                 </InfoBox>
                 <InfoBox
                     type="participants"
