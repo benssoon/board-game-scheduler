@@ -1,5 +1,5 @@
 // CSS
-import './EventsPage.css';
+import './Events.css';
 
 // Components
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
@@ -19,7 +19,7 @@ import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import SearchBar from '../../components/SearchBar/SearchBar.jsx';
 
-function EventsPage() {
+function Events() {
     //<editor-fold desc="State">
     const initialEventFormState = {
         name: '',
@@ -218,4 +218,4 @@ function EventsPage() {
     );
 }
 
-export default EventsPage;
+export default Events;

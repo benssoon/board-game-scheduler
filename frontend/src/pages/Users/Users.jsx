@@ -1,6 +1,6 @@
-import './UsersPage.css';
+import './Users.css';
 
-function UsersPage() {
+function Users() {
     return (
         <>
             <h2>Players</h2>
@@ -8,4 +8,4 @@ function UsersPage() {
     );
 }
 
-export default UsersPage;
+export default Users;

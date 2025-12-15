@@ -1,8 +1,8 @@
-import './GamePage.css';
+import './Game.css';
 import {useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
 
-function GamePage() {
+function Game() {
     const {id} = useParams();
     const {data: game, loading, error} = useFetch(`/games/${id}`)
     return (
@@ -12,4 +12,4 @@ function GamePage() {
     );
 }
 
-export default GamePage;
+export default Game;

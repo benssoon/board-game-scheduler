@@ -13,17 +13,34 @@ VALUES ('Root',
         10,
         99);
 
+INSERT INTO games (title,
+                   min_players,
+                   max_players,
+                   complexity,
+                   min_age,
+                   max_age)
+VALUES ('Arcs',
+        2,
+        4,
+        'very high',
+        10,
+        99);
+
 INSERT INTO users (username, password, name, email_address, telephone_number, age, area, address)
 VALUES ('ben','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Ben', 'ben.z@test.none', '0123456789', 34, 'Rotterdam', 'Erewhon'),
        ('ellen','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Ellen', 'ellen@test.none', '0123456789', 32, 'Flatland', 'Pineapple Street'),
        ('bob','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Bob', 'bob@test.none', '0123456789', 37, 'Den Haag', 'Grote Markt'),
-       ('test','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Test', 'test@test.none', '0123456789', 99, 'Rotterdam', 'Erewhon');
+       ('test_admin','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Test', 'test.admin@test.none', '0123456789', 99, 'Rotterdam', 'Erewhon'),
+       ('test_user','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Test', 'test.user@test.none', '0123456789', 99, 'Rotterdam', 'Erewhon'),
+       ('test_none','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Test', 'test.none@test.none', '0123456789', 99, 'Rotterdam', 'Erewhon');
 
 INSERT INTO roles (username, role)
 VALUES ('ben', 'ROLE_ADMIN'),
        ('ellen', 'ROLE_USER'),
        ('ben', 'ROLE_USER'),
-       ('bob', 'ROLE_USER');
+       ('bob', 'ROLE_USER'),
+       ('test_admin', 'ROLE_ADMIN'),
+       ('test_user', 'ROLE_USER');
 
 INSERT INTO events (name,
                     description,
@@ -47,4 +64,4 @@ VALUES ('Game night',
 INSERT INTO player_events (event_id, username)
 VALUES (1, 'ben'),
        (1, 'ellen'),
-       (1, 'bob')
+       (1, 'bob');

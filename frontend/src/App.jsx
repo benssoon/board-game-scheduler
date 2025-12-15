@@ -1,15 +1,16 @@
 import './App.css'
 import Home from './pages/Home/Home.jsx';
-import EventsPage from './pages/EventsPage/EventsPage.jsx';
+import Events from './pages/Events/Events.jsx';
 import {NavLink, Route, Routes} from 'react-router-dom';
 import Profile from './pages/Profile/Profile.jsx';
-import GamesPage from './pages/GamesPage/GamesPage.jsx';
-import UsersPage from './pages/UsersPage/UsersPage.jsx';
+import Games from './pages/Games/Games.jsx';
+import Users from './pages/Users/Users.jsx';
 
 import logo from './assets/placeholder.webp';
 import Login from './pages/Login/Login.jsx';
-import EventPage from './pages/EventPage/EventPage.jsx';
-import GamePage from './pages/GamePage/GamePage.jsx';
+import Event from './pages/Event/Event.jsx';
+import Game from './pages/Game/Game.jsx';
+import EditEvent from './pages/EditEvent/EditEvent.jsx';
 
 function App() {
     return (
@@ -49,13 +50,14 @@ function App() {
 
             <Routes>
                 <Route path="/" element={<Home/>}/>
+                <Route path="/users" element={<Users/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/profile" element={<Profile/>}/>
-                <Route path="/events" element={<EventsPage/>}/>
-                <Route path="/games" element={<GamesPage/>}/>
-                <Route path="/users" element={<UsersPage/>}/>
-                <Route path="/events/:id" element={<EventPage/>}/>
-                <Route path="/games/:id" element={<GamePage/>}/>
+                <Route path="/events" element={<Events/>}/>
+                <Route path="/events/:id" element={<Event/>}/>
+                <Route path="/events/:id/edit" element={<EditEvent/>}/>
+                <Route path="/games" element={<Games/>}/>
+                <Route path="/games/:id" element={<Game/>}/>
             </Routes>
         </>
     )

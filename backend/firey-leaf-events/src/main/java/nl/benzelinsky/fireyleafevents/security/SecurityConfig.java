@@ -55,16 +55,17 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
                                 // Events
-                                .requestMatchers(HttpMethod.POST, "/events").hasRole("USER")
-                                .requestMatchers(HttpMethod.POST, "/events/{eventId}/join").hasRole("USER")
-                                .requestMatchers(HttpMethod.POST, "/events/{eventId}/leave").hasRole("USER")
-                                .requestMatchers(HttpMethod.PATCH, "/events/**").hasRole("USER")
+                                .requestMatchers(HttpMethod.POST, "/events").hasRole("USER") // Create event must be a user
+                                .requestMatchers(HttpMethod.POST, "/events/*/join").hasRole("USER") // Join/leave event, must be  user
+                                .requestMatchers(HttpMethod.POST, "/events/*/leave").hasRole("USER")
+                                .requestMatchers(HttpMethod.PATCH, "/events/**").hasRole("USER") // User can update event
+                                .requestMatchers(HttpMethod.PUT, "/events/**").hasRole("USER") // User can fully update
                                 .requestMatchers(HttpMethod.DELETE, "/events").hasRole("ADMIN") // Delete all events
                                 .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN") // Delete event by id
                                 // User profile
-                                .requestMatchers(HttpMethod.GET, "/users/{username}").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/users/{username}").authenticated()
-                                .requestMatchers(HttpMethod.PATCH, "/users/{username}").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/users/*").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/users/*").authenticated()
+                                .requestMatchers(HttpMethod.PATCH, "/users/*").authenticated()
                                 // Games
                                 .requestMatchers(HttpMethod.POST, "/games").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.PATCH, "/games/**").hasRole("ADMIN")
