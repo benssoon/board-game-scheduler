@@ -1,24 +1,17 @@
 import './InfoBox.css';
 import {useNavigate} from 'react-router-dom';
+import {useContext} from 'react';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
-function InfoBox({type, children, parentPage, parentType}) {
+function InfoBox({type, children, parentPage, parentType, resourceType}) {
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
-
-    function hanldeClick() {
-        if (token) {
-            navigate(`${parentPage}/edit`)
-        } else {
-            console.error('User must be logged in to create new events.');
-            //TODO add on-page error
-        }
-    }
+    const {isAuth} = useContext(AuthContext);
 
     return (
         <>
             <h2>{type.charAt(0).toUpperCase() + type.slice(1)} {parentType}</h2>
             <section>
-                {type === 'about' && <button type="button" onClick={hanldeClick}>Edit</button>}
+                {isAuth && type === 'about' && <button type="button" onClick={() => navigate(`${parentPage}/edit`)}>Edit</button>}
                 {children}
             </section>
         </>

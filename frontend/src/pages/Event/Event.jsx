@@ -4,13 +4,15 @@ import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import useFetch from '../../helpers/useFetch.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
 function Event() {
     const [updated, setUpdated] = useState(0);
     const [gameId, setGameId] = useState(0);
 
     const {id} = useParams();
+    const {isAuth} = useContext(AuthContext)
     const navigate = useNavigate();
     const {data: event, loading, error} = useFetch(`/events/${id}`, {}, updated)
 
@@ -111,6 +113,7 @@ function Event() {
                 <h2>{event.name}</h2>
                 <InfoBox
                     type="about"
+                    resourceType="event"
                     parentPage={`/events/${id}`}
                 >
                     <p>{event.description}</p>
