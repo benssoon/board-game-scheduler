@@ -1,9 +1,13 @@
 package nl.benzelinsky.fireyleafevents.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
+@Setter
+@Getter
 @Entity
 @IdClass(RoleKey.class)
 @Table(name = "roles")
@@ -23,19 +27,4 @@ public class Role implements Serializable {
         this.role = role;
     }
 
-    public String getUsername() {
-        return this.username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getRole() {
-        return this.role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

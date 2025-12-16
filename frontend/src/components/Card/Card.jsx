@@ -13,8 +13,8 @@ function Card({type, data, className}) {
                     {data.title && <li>Title: {data.title}</li>}
                     {data.username && <li>Username: {data.username}</li>}
                     {data.name && !data.username && <li>Name: {data.name}</li>}
-                    {data.game && <li>Game: {data.game}</li>}
-                    {data.host && <li>Host: {data.host}</li>}
+                    {data.game?.id && <li>Game: {data.game.title}</li>}
+                    {data.host && <li>Host: {data.host.username}</li>}
                     {data.isFull && <li>Game full</li>}
                     {data.location && <li>Location: {data.location}</li>}
                     {data.players && data.players.length > 0 && <li>Players:

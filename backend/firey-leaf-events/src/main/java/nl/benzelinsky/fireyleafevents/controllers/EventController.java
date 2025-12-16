@@ -87,7 +87,7 @@ public class EventController {
     }
 
     // Add player to Event
-    @PatchMapping("/{eventId}/add-player/{username}")
+    @PostMapping("/{eventId}/add-player/{username}")
     public ResponseEntity<EventOutputDto> addPlayer(
             @PathVariable("username") String username,
             @PathVariable("eventId") Long eventId) {
@@ -95,7 +95,7 @@ public class EventController {
     }
 
     // Add current User as a player in Event
-    @PatchMapping("/{eventId}/join")
+    @PostMapping("/{eventId}/join")
     public ResponseEntity<EventOutputDto> addCurrentUser(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("eventId") Long eventId) {
@@ -103,14 +103,14 @@ public class EventController {
         return ResponseEntity.ok(this.service.addPlayer(username, eventId));
     }
 
-    @PatchMapping("/{eventId}/remove-player/{username}")
+    @PostMapping("/{eventId}/remove-player/{username}")
     public ResponseEntity<EventOutputDto> removePlayer(
             @PathVariable("username") String username,
             @PathVariable("eventId") Long eventId) {
         return ResponseEntity.ok(this.service.removePlayer(username, eventId));
     }
 
-    @PatchMapping("/{eventId}/leave")
+    @PostMapping("/{eventId}/leave")
     public ResponseEntity<EventOutputDto> removeCurrentUser (
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("eventId") Long eventId) {

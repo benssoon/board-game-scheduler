@@ -70,24 +70,32 @@ class EventServiceTest {
     private String gameAlreadyAssignedMessage;
     private String userAlreadyHostingMessage;
     private String notAPlayerMessage;
+    private List<LocalDateTime> possibleTimes;
+    private LocalDateTime definitiveTime;
 
     @BeforeEach
     public void setup() {
+        this.eventId = 1L;
+        this.gameId = 1L;
         this.player1 = new User("waterman", "1234", "Kyle", "waterman@root.root");
         this.player2 = new User("ben", "1234", "Ben", "ben@ben.ben");
         this.player3 = new User("piet", "1234", "Piet", "piet@piet.piet");
         this.player4 = new User("sint", "1234", "Klaas", "sint@nico.laas");
         this.userNotInEvent = new User("bob", "1234", "Bob", "bob@bob.bob");
         this.event1 = new Event("Root night");
+        this.event1.setId(eventId);
+        this.event1.setHost(player1);
+        this.definitiveTime = LocalDateTime.parse("2025-12-31T23:59:59");
+        this.possibleTimes = Arrays.asList(LocalDateTime.parse("2025-12-31T23:59:59"), LocalDateTime.parse("2025-01-02T23:59:59"));
+        this.event1.setPossibleTimes(possibleTimes);
         this.event2 = new Event("Arcs night");
         this.event3 = new Event("Game night");
         this.game1 = new Game("Root", 2, 4);
+        this.game1.setId(gameId);
         this.game2 = new Game("Arcs");
-        this.dtoIn = new EventInputDto("Fun night", "We're gonna play a lot of board games", true, "Erehwon", 1L, LocalDateTime.parse("2025-12-31T23:59:59"), List.of());
-        this.patchDtoInFull = new PatchEventInputDto("Fun night", "We're gonna play a lot of board games", true, "Erehwon", LocalDateTime.parse("2025-12-31T23:59:59"));
+        this.dtoIn = new EventInputDto("Fun night", "We're gonna play a lot of board games", true, "Erehwon", 1L, definitiveTime, possibleTimes);
+        this.patchDtoInFull = new PatchEventInputDto("Fun night", "We're gonna play a lot of board games", true, "Erehwon", definitiveTime, possibleTimes );
         this.patchDtoInEmpty = new PatchEventInputDto();
-        eventId = 1L;
-        gameId = 1L;
         usernamePlayer1 = player1.getUsername();
         eventNotFoundMessage = "Event not found with id: " + eventId;
         gameNotFoundMessage = "Game not found with id: " + gameId;
@@ -122,7 +130,7 @@ class EventServiceTest {
         assertEquals(dtoIn.description, dtoOut.description);
         assertEquals(dtoIn.isHostPlaying, dtoOut.isHostPlaying);
         assertEquals(dtoIn.location, dtoOut.location);
-        assertEquals(game1.getTitle(), dtoOut.game);
+        assertEquals(game1.getId(), dtoOut.game.id);
         assertEquals(dtoIn.definitiveTime, dtoOut.definitiveTime);
         assertEquals(dtoIn.possibleTimes, dtoOut.possibleTimes);
     }
@@ -195,12 +203,12 @@ class EventServiceTest {
             assertEquals(e.getId(), dto.id);
             assertEquals(e.getName(), dto.name);
             assertEquals(e.getDescription(), dto.description);
-            assertEquals(e.getGame().getTitle(), dto.game);
+            assertEquals(e.getGame().getId(), dto.game.id);
             assertEquals(e.isFull(), dto.isFull);
             assertEquals(e.isReadyToStart(), dto.isReadyToStart);
             assertEquals(e.isHostPlaying(), dto.isHostPlaying);
             assertEquals(e.getDefinitiveTime(), dto.definitiveTime);
-            assertEquals(e.getHost().getName(), dto.host);
+            assertEquals(e.getHost().getUsername(), dto.host.username);
             assertEquals(e.getLocation(), dto.location);
             assertEquals(e.getPossibleTimes(), dto.possibleTimes);
             e.getPlayers().forEach(p -> {
@@ -247,12 +255,12 @@ class EventServiceTest {
             assertEquals(e.getId(), dto.id);
             assertEquals(e.getName(), dto.name);
             assertEquals(e.getDescription(), dto.description);
-            assertEquals(e.getGame().getTitle(), dto.game);
+            assertEquals(e.getGame().getId(), dto.game.id);
             assertEquals(e.isFull(), dto.isFull);
             assertEquals(e.isReadyToStart(), dto.isReadyToStart);
             assertEquals(e.isHostPlaying(), dto.isHostPlaying);
             assertEquals(e.getDefinitiveTime(), dto.definitiveTime);
-            assertEquals(e.getHost().getName(), dto.host);
+            assertEquals(e.getHost().getUsername(), dto.host.username);
             assertEquals(e.getLocation(), dto.location);
             assertEquals(e.getPossibleTimes(), dto.possibleTimes);
             e.getPlayers().forEach(p -> {
@@ -296,12 +304,12 @@ class EventServiceTest {
         assertEquals(eventId, dto.id);
         assertEquals(event1.getName(), dto.name);
         assertEquals(event1.getDescription(), dto.description);
-        assertEquals(event1.getGame().getTitle(), dto.game);
+        assertEquals(event1.getGame().getId(), dto.game.id);
         assertEquals(event1.isFull(), dto.isFull);
         assertEquals(event1.isReadyToStart(), dto.isReadyToStart);
         assertEquals(event1.isHostPlaying(), dto.isHostPlaying);
         assertEquals(event1.getDefinitiveTime(), dto.definitiveTime);
-        assertEquals(event1.getHost().getName(), dto.host);
+        assertEquals(event1.getHost().getUsername(), dto.host.username);
         assertEquals(event1.getLocation(), dto.location);
         assertEquals(event1.getPossibleTimes(), dto.possibleTimes);
         event1.getPlayers().forEach(p -> {
@@ -345,7 +353,7 @@ class EventServiceTest {
         assertEquals(testDto.id, dto.id);
         assertEquals(testDto.name, dto.name);
         assertEquals(testDto.description, dto.description);
-        assertEquals(testDto.game, dto.game);
+        assertEquals(testDto.game.id, dto.game.id);
         assertEquals(testDto.isFull, dto.isFull);
         assertEquals(testDto.isReadyToStart, dto.isReadyToStart);
         assertEquals(testDto.isHostPlaying, dto.isHostPlaying);
@@ -353,7 +361,7 @@ class EventServiceTest {
         assertEquals(testDto.possibleTimes, dto.possibleTimes);
         assertEquals(testDto.players, dto.players);
         assertEquals(testDto.location, dto.location);
-        assertEquals(testDto.host, dto.host);
+        assertEquals(testDto.host.username, dto.host.username);
     }
 
     @Test
@@ -371,7 +379,7 @@ class EventServiceTest {
         assertEquals(testDto.id, dto.id);
         assertEquals(testDto.name, dto.name);
         assertEquals(testDto.description, dto.description);
-        assertEquals(testDto.game, dto.game);
+        assertEquals(testDto.game.id, dto.game.id);
         assertEquals(testDto.isFull, dto.isFull);
         assertEquals(testDto.isReadyToStart, dto.isReadyToStart);
         assertEquals(testDto.isHostPlaying, dto.isHostPlaying);
@@ -379,7 +387,7 @@ class EventServiceTest {
         assertEquals(testDto.possibleTimes, dto.possibleTimes);
         assertEquals(testDto.players, dto.players);
         assertEquals(testDto.location, dto.location);
-        assertEquals(testDto.host, dto.host);
+        assertEquals(testDto.host.username, dto.host.username);
     }
 
     @Test
@@ -491,7 +499,7 @@ class EventServiceTest {
         assertFalse(game1.getActiveEvents().contains(event1));
         assertEquals(event1.getGame(), game2);
         assertTrue(game2.getActiveEvents().contains(event1));
-        assertEquals(game2.getTitle(), dto.game);
+        assertEquals(game2.getId(), dto.game.id);
     }
 
     @Test

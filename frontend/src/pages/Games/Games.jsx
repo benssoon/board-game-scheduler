@@ -1,4 +1,4 @@
-import './GamesPage.css';
+import './Games.css';
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
 import {useEffect, useRef, useState} from 'react';
 import {createGamePostRequest, deleteGame, deleteGames} from '../../helpers/httpRequests.js';
@@ -9,7 +9,7 @@ import {API} from '../../globalConstants.js';
 import {cleanupData} from '../../helpers/processingAndFormatting.js';
 import FormField from '../../components/FormField/FormField.jsx';
 
-function GamesPage() {
+function Games() {
     //<editor-fold desc="State">
     const initialGameFormState = {
         title: '',
@@ -19,6 +19,7 @@ function GamesPage() {
         minAge: 0,
         maxAge: 99,
     }
+    const [param, setParam] = useState('');
     const [gameFormState, setGameFormState] = useState(initialGameFormState);
     const [gameId, setGameId] = useState(2);
     const [errorArray, setErrorArray] = useState([])
@@ -175,6 +176,7 @@ function GamesPage() {
                 <FiltersBox/>
                 <DisplayGrid
                     type="game"
+                    param={param}
                 />
             </section>
             {/*</editor-fold>*/}
@@ -182,4 +184,4 @@ function GamesPage() {
     );
 }
 
-export default GamesPage;
+export default Games;

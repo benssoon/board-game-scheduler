@@ -16,7 +16,7 @@ import java.util.*;
 @Service
 public class UserService {
 
-    private  final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 

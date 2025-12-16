@@ -4,6 +4,7 @@ import {useContext, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import axios from 'axios';
 import {handleFormChange} from '../../helpers/handlers.js';
+import {Navigate} from 'react-router-dom';
 
 function Login() {
     const URL = API + '/authenticate'
@@ -11,8 +12,7 @@ function Login() {
         username: '',
         password: '',
     });
-    const {login} = useContext(AuthContext);
-    const {logout} = useContext(AuthContext);
+    const {login, logout, isAuth} = useContext(AuthContext);
 
     async function authenticate(e) {
         e.preventDefault();
@@ -21,14 +21,15 @@ function Login() {
             const response = await axios.post(URL, data);
             console.log(response);
             login(response.data.jwt);
-            console.log('tried');
         }
         catch (er) {
             console.error(er);
             console.error(er.response);
-            console.error('erred')
         }
-        console.log('got through.')
+    }
+
+    if (isAuth) {
+        return <Navigate to={"/profile"}/>
     }
 
     return (
@@ -54,10 +55,6 @@ function Login() {
                 />
                 <button type="submit">Login</button>
             </form>
-
-            <h2>Logout</h2>
-
-            <button type="submit" onClick={() => logout()}>Logout</button>
         </>
     );
 }

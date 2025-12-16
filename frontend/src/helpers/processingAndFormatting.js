@@ -11,6 +11,7 @@ export function concatKeysValues(obj) {
 }
 
 export function cleanupData(data) {
+    console.log(data)
     // Convert possible dates to standard iso format
     if ('possibleTimes' in data) {
         data.possibleTimes = data.possibleTimes.map((datetime) => {

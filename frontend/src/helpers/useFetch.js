@@ -11,7 +11,6 @@ function useFetch(endpoint, config, updated) {
         if(!endpoint) return; // Do not fetch data if there is no endpoint passed (i.e. for error/loading cards).
         const controller = new AbortController(); //TODO what should I do with this?
         const url = API + endpoint;
-        console.log(url)
         async function fetchData() {
             setLoading(true);
             setError(false);
@@ -19,10 +18,9 @@ function useFetch(endpoint, config, updated) {
                 const response = await axios.get(url, config);
                 setData(response.data);
             } catch (er) {
-                setError(er);
+                console.error('Error in useFetch:')
                 console.error(er);
-                console.error(er.message);
-                console.error(endpoint);
+                setError(er);
             }
             setLoading(false);
         }

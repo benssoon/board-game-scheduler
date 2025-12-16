@@ -30,7 +30,7 @@ public class UserMapper {
         outputDto.username = user.getUsername();
         outputDto.name = user.getName();
         outputDto.area = user.getArea();
-        // Only send back the name of the event to prevent recursion. TODO add @JsonSerialize in the output DTO instead.
+        // Only send back the name of the event to prevent recursion. TODO add @JsonSerialize in the output DTO instead?
         List<String> hostedEvents = new ArrayList<>();
         user.getHostedEvents().forEach((event) -> hostedEvents.add(event.getName()));
         outputDto.hostedEvents = hostedEvents;

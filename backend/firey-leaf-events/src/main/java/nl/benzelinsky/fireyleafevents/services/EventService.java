@@ -104,6 +104,9 @@ public class EventService {
         if (dtoIn.location != null) {
             toUpdate.setLocation(dtoIn.location);
         }
+        if (dtoIn.possibleTimes != null) {
+            toUpdate.setPossibleTimes(dtoIn.possibleTimes);
+        }
 
         this.eventRepository.save(toUpdate);
         return EventMapper.toOutputDto(toUpdate);
@@ -192,6 +195,9 @@ public class EventService {
         if (event.isFull()) {
             throw new EventFullException(event.getName());
         }
+        if (player == event.getHost()) {
+            event.setHostPlaying(true);
+        }
         event.addPlayer(player);
         player.joinEvent(event);
         this.eventRepository.save(event);
@@ -206,6 +212,9 @@ public class EventService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
         if (event.getPlayers().contains(player)) {
+            if (player == event.getHost()) {
+                event.setHostPlaying(false);
+            }
             event.removePlayer(player);
             player.leaveEvent(event);
             this.eventRepository.save(event);

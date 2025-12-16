@@ -11,7 +11,7 @@ public class GameInputDto {
     @Size(min = 3, max = 128)
     public String title;
 
-    @Size(min = 32, max = 256)
+    @Size(min = 12, max = 1024)
     public String description;
 
     @Positive
