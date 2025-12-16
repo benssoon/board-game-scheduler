@@ -1,5 +1,5 @@
 import './Event.css';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import useFetch from '../../helpers/useFetch.js';
 import axios from 'axios';
@@ -11,6 +11,7 @@ function Event() {
     const [gameId, setGameId] = useState(0);
 
     const {id} = useParams();
+    const navigate = useNavigate();
     const {data: event, loading, error} = useFetch(`/events/${id}`, {}, updated)
 
     async function joinEvent() {
@@ -73,8 +74,8 @@ function Event() {
         } else {
             console.log('User must be logged in.')
         }
-        await new Promise(r => setTimeout(r, 2000)); // small delay
         setUpdated(updated+1);
+        navigate("/events");
     }
 
     async function handleSubmitChangeGame(e) {
