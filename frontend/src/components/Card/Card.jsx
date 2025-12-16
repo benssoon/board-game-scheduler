@@ -14,7 +14,7 @@ function Card({type, data, className}) {
                     {data.username && <li>Username: {data.username}</li>}
                     {data.name && !data.username && <li>Name: {data.name}</li>}
                     {data.game?.id && <li>Game: {data.game.title}</li>}
-                    {data.host && <li>Host: {data.host}</li>}
+                    {data.host && <li>Host: {data.host.username}</li>}
                     {data.isFull && <li>Game full</li>}
                     {data.location && <li>Location: {data.location}</li>}
                     {data.players && data.players.length > 0 && <li>Players:

@@ -1,13 +1,19 @@
 package nl.benzelinsky.fireyleafevents.controllers;
 
 import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.BeforeEach;
+import nl.benzelinsky.fireyleafevents.models.Event;
+import nl.benzelinsky.fireyleafevents.models.Game;
+import nl.benzelinsky.fireyleafevents.models.Role;
+import nl.benzelinsky.fireyleafevents.models.User;
+import nl.benzelinsky.fireyleafevents.repositories.EventRepository;
+import nl.benzelinsky.fireyleafevents.repositories.GameRepository;
+import nl.benzelinsky.fireyleafevents.repositories.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesPattern;
@@ -29,6 +36,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 class EventControllerIntegrationTest {
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    EventRepository eventRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    private GameRepository gameRepository;
 
     @Test
     @DisplayName("Should create correct Event")
@@ -63,11 +81,11 @@ class EventControllerIntegrationTest {
     @Test
     @DisplayName("Should add player with username test to event with ID 1")
     void testAddPlayer() throws Exception {
-        String username = "test";
+        String username = "test_user";
         Long eventId = 1L;
 
         MvcResult result = this.mockMvc
-                .perform(MockMvcRequestBuilders.patch("/events/" + eventId + "/add-player/" + username))
+                .perform(MockMvcRequestBuilders.post("/events/" + eventId + "/add-player/" + username))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 

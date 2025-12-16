@@ -15,5 +15,5 @@ public class EventOutputDto {
     public List<LocalDateTime> possibleTimes;
     public List<String> players; // TODO Is this the best way to prevent recursion?
     public String location;
-    public String host;
+    public TinyUserOutputDto host;
 }

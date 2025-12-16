@@ -12,9 +12,10 @@ function Event() {
     const [gameId, setGameId] = useState(0);
 
     const {id} = useParams();
-    const {isAuth} = useContext(AuthContext)
     const navigate = useNavigate();
     const {data: event, loading, error} = useFetch(`/events/${id}`, {}, updated)
+    const {user} = useContext(AuthContext);
+    const isHost = event?.host.username === user.username;
 
     async function joinEvent() {
         const token = localStorage.getItem('token');
@@ -58,28 +59,6 @@ function Event() {
         }
     }
 
-    async function deleteEvent() {
-        const token = localStorage.getItem('token')
-        if (token) {
-            try {
-                const response = await axios.delete(`${API}/events/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
-                console.log(response);
-            } catch (er) {
-                console.error(er.message);
-                console.error(er.response)
-                console.error(`${API}/events/${id}`);
-            }
-        } else {
-            console.log('User must be logged in.')
-        }
-        setUpdated(updated+1);
-        navigate("/events");
-    }
-
     async function handleSubmitChangeGame(e) {
         e.preventDefault();
         const token = localStorage.getItem('token');
@@ -107,14 +86,22 @@ function Event() {
         setGameId(newValue);
     }
 
+    async function handleRemovePlayer() {
+        /*try {
+            const response = await axios.
+        } catch (er) {
+
+        }*/
+    }
+
     return (
         event ?
             <>
                 <h2>{event.name}</h2>
                 <InfoBox
                     type="about"
-                    resourceType="event"
                     parentPage={`/events/${id}`}
+                    isEditable={user.username === event.host.username}
                 >
                     <p>{event.description}</p>
                 </InfoBox>
@@ -123,21 +110,20 @@ function Event() {
                 >
                     <p>Time: {event.definitiveTime}</p>
                     <p>Game: <Link to={`/games/${event.game.id}`}>{event.game.title}</Link></p>
-                    <p>Host: {event.host}</p>
+                    <p>Host: {event.host.username}</p>
                     {event.isFull ? <p>Event full!</p> : <p>Not full</p>}
                     {event.isReadyToStart ? <p>Can take place</p> : <p>Waiting for more players...</p>}
                     <p>Location: {event.location}</p>
                     <p>Possible Times: {event.possibleTimes}</p>
                     <button type="submit" onClick={joinEvent}>Join</button>
                     <button type="submit" onClick={leaveEvent}>Leave</button>
-                    <button type="submit" onClick={deleteEvent}>Delete</button>
                 </InfoBox>
                 <InfoBox
                     type="participants"
                 >
                     <ul>
                         {event?.players.map((player) => {
-                            return <li key={player}>{player}</li>
+                            return <li key={player}>{player}{isHost && <button type="button" onClick={handleRemovePlayer}>Remove</button>}</li>
                         })}
                     </ul>
                 </InfoBox>

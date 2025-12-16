@@ -38,9 +38,7 @@ public class EventMapper {
         event.getPlayers().forEach((player) -> players.add(player.getUsername()));
         outputDto.players = players;
         outputDto.location = event.getLocation();
-        if (event.getHost() != null) { // TODO Unnecessary?
-            outputDto.host = event.getHost().getName();
-        }
+        outputDto.host = UserMapper.toTinyDto(event.getHost());
 
         return outputDto;
     }

@@ -1,7 +1,7 @@
 import './EventForm.css';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import {cleanupData} from '../../helpers/processingAndFormatting.js';
-import {useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import {API} from '../../globalConstants.js';
 import axios from 'axios';
 import {handleFormChange} from '../../helpers/handlers.js';
@@ -9,6 +9,7 @@ import FormField from '../../components/FormField/FormField.jsx';
 import {useNavigate, useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
 import {DateObject} from 'react-multi-date-picker';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
 
 function EventForm({type}) {
@@ -29,6 +30,7 @@ function EventForm({type}) {
     }
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const navigate = useNavigate();
+    const {user} = useContext(AuthContext);
 
     useEffect(() => {
         if (event) {
@@ -82,34 +84,60 @@ function EventForm({type}) {
 
     async function handleUpdateEventSubmit(e) {
         e.preventDefault();
-        const cleanData = cleanupData(eventFormState);
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.patch(API + `/events/${id}`, cleanData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+        if (user.username === event?.host.username) {
+            const cleanData = cleanupData(eventFormState);
+            const token = localStorage.getItem('token');
+            try {
+                const response = await axios.patch(API + `/events/${id}`, cleanData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                console.log(response);
+                setFormError(null);
+                setSubmitError(null);
+            } catch (er) {
+                console.error(er)
+                const response = er.response.data;
+                if (er.status === 400) {
+                    setFormError(response);
+                } else {
+                    setSubmitError(response);
                 }
-            });
-            console.log(response);
-            setFormError(null);
-            setSubmitError(null);
-        } catch (er) {
-            console.error(er)
-            const response = er.response.data;
-            if (er.status === 400) {
-                setFormError(response);
-            } else {
-                setSubmitError(response);
+                return response;
             }
-            return response;
+            setUpdated(updated + 1);
+            nameRef.current.focus();
+            if (id) {
+                navigate(`/events/${id}`);
+            } else {
+                navigate('/events');
+            }
+        } else {
+            console.log(`User ${event.host.username} must be logged in to edit this event.`)
+        }
+    }
+
+    async function deleteEvent() {
+        if (user.username === event?.host.username) {
+            const token = localStorage.getItem('token')
+            try {
+                const response = await axios.delete(`${API}/events/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                console.log(response);
+            } catch (er) {
+                console.error(er.message);
+                console.error(er.response)
+                console.error(`${API}/events/${id}`);
+            }
+        } else {
+            console.log(`User ${event.host.username} must be logged in to delete this event.`)
         }
         setUpdated(updated+1);
-        nameRef.current.focus();
-        if (id) {
-            navigate(`/events/${id}`);
-        } else {
-            navigate('/events');
-        }
+        navigate("/events");
     }
 
     return (
@@ -188,6 +216,7 @@ function EventForm({type}) {
                         {submitError}
                     </span>}
                 </form>
+                {type === 'edit' && <button type="button" onClick={deleteEvent}>Delete</button>}
             </InfoBox>
         </>
     );

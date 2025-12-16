@@ -10,6 +10,8 @@ export const AuthContext = createContext({});
 function AuthContextProvider({children}) {
     const [auth, setAuth] = useState({
         isAuth: false,
+        isAdmin: false,
+        isUser: false,
         user: null,
         status: 'pending',
     });
@@ -40,12 +42,27 @@ function AuthContextProvider({children}) {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            const u = result.data
             setAuth({
                 isAuth: true,
-                // TODO What is the point of user? Where is it ever used?
+                isAdmin: u.roles.some((role) => {
+                    console.log(role.role === 'ROLE_ADMIN')
+                    return role.role === 'ROLE_ADMIN'
+                }),
+                isUser: u.roles.some((role) => {
+                    return role.role === 'ROLE_USER'
+                }),
                 user: {
-                    username: result.data.username,
-                    email: result.data.email,
+                    username: u.username,
+                    email: u.email,
+                    name: u.name,
+                    address: u.address,
+                    telephoneNumber: u.telephoneNumber,
+                    age: u.age,
+                    area: u.area,
+                    hostedEvents: u.hostedEvents,
+                    joinedEvents: u.joinedEvents,
+                    roles: u.roles,
                 },
                 status: 'done',
             });
@@ -82,8 +99,10 @@ function AuthContextProvider({children}) {
     }
 
     const authorization = {
-        isAuth: auth['isAuth'],
-        user: auth['user'],
+        isAuth: auth.isAuth,
+        isUser: auth.isUser,
+        isAdmin: auth.isAdmin,
+        user: auth.user,
         login: login,
         logout: logout,
     }
