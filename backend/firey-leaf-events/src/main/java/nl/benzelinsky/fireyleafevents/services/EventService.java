@@ -104,6 +104,9 @@ public class EventService {
         if (dtoIn.location != null) {
             toUpdate.setLocation(dtoIn.location);
         }
+        if (dtoIn.possibleTimes != null) {
+            toUpdate.setPossibleTimes(dtoIn.possibleTimes);
+        }
 
         this.eventRepository.save(toUpdate);
         return EventMapper.toOutputDto(toUpdate);

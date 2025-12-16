@@ -88,7 +88,7 @@ class EventServiceTest {
         this.game1.setId(gameId);
         this.game2 = new Game("Arcs");
         this.dtoIn = new EventInputDto("Fun night", "We're gonna play a lot of board games", true, "Erehwon", 1L, LocalDateTime.parse("2025-12-31T23:59:59"), List.of());
-        this.patchDtoInFull = new PatchEventInputDto("Fun night", "We're gonna play a lot of board games", true, "Erehwon", LocalDateTime.parse("2025-12-31T23:59:59"));
+        this.patchDtoInFull = new PatchEventInputDto("Fun night", "We're gonna play a lot of board games", true, "Erehwon", LocalDateTime.parse("2025-12-31T23:59:59"), Arrays.asList(LocalDateTime.parse("2025-12-31T23:59:59"), LocalDateTime.parse("2025-01-02T23:59:59")) );
         this.patchDtoInEmpty = new PatchEventInputDto();
         usernamePlayer1 = player1.getUsername();
         eventNotFoundMessage = "Event not found with id: " + eventId;

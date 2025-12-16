@@ -11,6 +11,7 @@ import Login from './pages/Login/Login.jsx';
 import Event from './pages/Event/Event.jsx';
 import Game from './pages/Game/Game.jsx';
 import EditEvent from './pages/EditEvent/EditEvent.jsx';
+import CreateEvent from './pages/CreateEvent/CreateEvent.jsx';
 
 function App() {
     return (
@@ -54,8 +55,9 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/profile" element={<Profile/>}/>
                 <Route path="/events" element={<Events/>}/>
+                <Route path="/events/create" element={<CreateEvent/>}/>
                 <Route path="/events/:id" element={<Event/>}/>
-                <Route path="/events/:id/edit" element={<EditEvent/>}/>
+                <Route path="/events/:id/edit" element={<EditEvent/>}/> {/*TODO secure by checking that only users can access*/}
                 <Route path="/games" element={<Games/>}/>
                 <Route path="/games/:id" element={<Game/>}/>
             </Routes>

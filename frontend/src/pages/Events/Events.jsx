@@ -18,6 +18,8 @@ import DatePicker, {DateObject} from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import SearchBar from '../../components/SearchBar/SearchBar.jsx';
+import {useNavigate} from 'react-router-dom';
+import EventForm from '../../components/EventForm/EventForm.jsx';
 
 function Events() {
     //<editor-fold desc="State">
@@ -30,13 +32,11 @@ function Events() {
         possibleTimes: [],
     }
     const [param, setParam] = useState('');
-    const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const [eventId, setEventId] = useState(2);
     const [updated, setUpdated] = useState(0);
-    const [formError, setFormError] = useState(null);
     //</editor-fold>
 
-    const nameRef = useRef(null);
+    const navigate = useNavigate();
 
     //<editor-fold desc="Effects">
     //</editor-fold>
@@ -50,34 +50,6 @@ function Events() {
         } else {
             setEventId(newValue);
         }
-    }
-
-    async function handleEventSubmit(e) {
-        e.preventDefault();
-        const cleanData = cleanupData(eventFormState);
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const response = await axios.post(API + '/events', cleanData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
-                console.log(response);
-                setFormError(null);
-            } catch (er) {
-                const response = er.response.data;
-                console.error(response);
-                setFormError(response)
-                return response;
-            }
-        } else {
-            console.error('User must be logged in to create new events.');
-            //TODO add on-page error
-        }
-        setEventFormState(initialEventFormState);
-        setUpdated(updated+1);
-        nameRef.current.focus();
     }
 
     async function handleDeleteEventSubmit(e) {
@@ -117,74 +89,7 @@ function Events() {
         <div className="categoryPage">
             <h2>Events</h2>
 
-            {/*<editor-fold desc="Create Event Form">*/}
-            <h2>Create Event</h2>
-            <form onSubmit={handleEventSubmit} className="create-form">
-                <FormField
-                    ref={nameRef}
-                    isRequired={true}
-                    label="Event name"
-                    type="text"
-                    name="name"
-                    id="eventName"
-                    formState={eventFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
-                />
-                <FormField
-                    label="Location"
-                    type="text"
-                    name="location"
-                    id="eventLocation"
-                    formState={eventFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
-                />
-                <FormField
-                    label="Game ID"
-                    type="number"
-                    name="gameId"
-                    id="gameId"
-                    formState={eventFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
-                />
-                {/*<SearchBar
-                    handleChange????????
-                How do I make it so this can be used in a form as well?
-                />*/}
-                <FormField
-                    label="Will you also be playing?"
-                    type="checkbox"
-                    name="isHostPlaying"
-                    id="isHostPlaying"
-                    formState={eventFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
-                />
-                <FormField
-                    label="Definitive time"
-                    type="datetime-local"
-                    name="definitiveTime"
-                    id="definitiveTime"
-                    formState={eventFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
-                />
-                <DatePicker
-                    name="possibleTimes"
-                    id="possibleTimes"
-                    sort
-                    plugins={[
-                        <DatePanel />,
-                        <TimePicker />,
-                    ]}
-                    value={eventFormState.possibleTimes}
-                    onChange={(date) => {setEventFormState({...eventFormState, possibleTimes: date})}}
-                />
-                <button type="submit">Submit</button>
-            </form>
-            {/*</editor-fold>*/}
+            <button type="button" onClick={() => navigate('/events/create')}>Create Event</button>
 
             {/*<editor-fold desc="Delete Event Form">*/}
             <form onSubmit={handleDeleteEventSubmit}>

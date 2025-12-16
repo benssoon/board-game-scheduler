@@ -18,10 +18,9 @@ function useFetch(endpoint, config, updated) {
                 const response = await axios.get(url, config);
                 setData(response.data);
             } catch (er) {
-                setError(er);
+                console.error('Error in useFetch:')
                 console.error(er);
-                console.error(er.message);
-                console.error(endpoint);
+                setError(er);
             }
             setLoading(false);
         }

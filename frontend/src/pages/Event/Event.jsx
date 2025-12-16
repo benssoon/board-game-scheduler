@@ -107,7 +107,7 @@ function Event() {
     return (
         event ?
             <>
-                <h2>ID is: {id}</h2>
+                <h2>{event.name}</h2>
                 <InfoBox
                     type="about"
                     parentPage={`/events/${id}`}
@@ -121,9 +121,9 @@ function Event() {
                     <p>Game: <Link to={`/games/${event.game.id}`}>{event.game.title}</Link></p>
                     <p>Host: {event.host}</p>
                     {event.isFull ? <p>Event full!</p> : <p>Not full</p>}
-                    <p>Can take place</p>
-                    <p>Location</p>
-                    <p>Possible Times</p>
+                    {event.isReadyToStart ? <p>Can take place</p> : <p>Waiting for more players...</p>}
+                    <p>Location: {event.location}</p>
+                    <p>Possible Times: {event.possibleTimes}</p>
                     <button type="submit" onClick={joinEvent}>Join</button>
                     <button type="submit" onClick={leaveEvent}>Leave</button>
                     <button type="submit" onClick={deleteEvent}>Delete</button>
