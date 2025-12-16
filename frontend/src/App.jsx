@@ -14,6 +14,7 @@ import CreateEvent from './pages/CreateEvent/CreateEvent.jsx';
 import {useContext} from 'react';
 import {AuthContext} from './context/AuthContext.jsx';
 import NavBar from './components/NavBar/NavBar.jsx';
+import User from './pages/User/User.jsx';
 
 function App() {
     const {isAuth} = useContext(AuthContext);
@@ -23,6 +24,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/users" element={<Users/>}/>
+                <Route path="/users/:username" element={<User/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/profile" element={isAuth ? <Profile/> : <Navigate to={"/login"}/> }/>
                 <Route path="/events" element={<Events/>}/>
