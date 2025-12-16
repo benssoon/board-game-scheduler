@@ -87,11 +87,11 @@ function Event() {
     }
 
     async function handleRemovePlayer() {
-        /*try {
+        try {
             const response = await axios.
         } catch (er) {
 
-        }*/
+        }
     }
 
     return (
