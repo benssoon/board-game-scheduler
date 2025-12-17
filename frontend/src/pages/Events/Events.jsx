@@ -25,15 +25,18 @@ import {AuthContext} from '../../context/AuthContext.jsx';
 function Events() {
     //<editor-fold desc="State">
     const [param, setParam] = useState('');
-    const [eventId, setEventId] = useState(2);
     const [updated, setUpdated] = useState(0);
     //</editor-fold>
 
     const navigate = useNavigate();
     const {user, isAdmin, isUser} = useContext(AuthContext);
 
+    useEffect(() => {
+            console.log(param)
+    }, [param]);
+
     //<editor-fold desc="Handlers">
-    function createEvent(e) {
+    function createEvent() {
         if (isUser) {
             navigate('/events/create')
         } else {
