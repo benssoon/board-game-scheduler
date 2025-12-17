@@ -3,7 +3,7 @@ import {useEffect, useMemo, useState} from 'react';
 import useFetch from '../../helpers/useFetch.js';
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 
-function SearchBar({setParam, filterItem}) {
+function SearchBar({setFilters}) {
 
     const [searchText, setSearchText] = useState('');
     const [selectedGameId, setSelectedGameId] = useState(0);
@@ -22,12 +22,12 @@ function SearchBar({setParam, filterItem}) {
     function handleSubmit(e) {
         e.preventDefault();
         if (selectedGameId > 0) {
-            setParam(`gameId=${selectedGameId}`);
-            filterItem(prev => [
+            setFilters(prev => [
                 ...prev,
                 {
                     id: selectedGameId,
                     name: searchText,
+                    param: `gameId=${selectedGameId}`
                 },
             ]);
         } else {
@@ -53,7 +53,7 @@ function SearchBar({setParam, filterItem}) {
                     value={searchText}
                     onChange={handleTextChange}
                 />
-                {filterItem && <button type="submit" className="searchButton">O</button>}
+                <button type="submit" className="searchButton">O</button>
             </form>
 
             <SearchDropdown

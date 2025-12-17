@@ -3,15 +3,27 @@ import './FiltersBox.css';
 import SearchBar from '../SearchBar/SearchBar.jsx';
 import Pill from '../Pill/Pill.jsx';
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 function FiltersBox({setParam}) {
     const [filters, setFilters] = useState([]);
+
+    useEffect(() => {
+        let p = '';
+        for (const filtersKey in filters) {
+            if (p && filters[filtersKey].param) {
+                p=p+'&'
+            }
+            p = p + filters[filtersKey].param;
+        }
+        if (p) {
+            setParam(p);
+        }
+    }, [filters]);
     return (
         <div className="filtersBox">
             <SearchBar
-                setParam={setParam}
-                filterItem={setFilters}
+                setFilters={setFilters}
             />
             <ul className="pills">
                 {filters.map((item) => {
@@ -19,7 +31,6 @@ function FiltersBox({setParam}) {
                     <Pill
                         item={item}
                         setFilters={setFilters}
-                        setParam={setParam}
                     />
                 </li>
             })}
