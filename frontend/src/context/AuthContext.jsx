@@ -46,7 +46,6 @@ function AuthContextProvider({children}) {
             setAuth({
                 isAuth: true,
                 isAdmin: u.roles.some((role) => {
-                    console.log(role.role === 'ROLE_ADMIN')
                     return role.role === 'ROLE_ADMIN'
                 }),
                 isUser: u.roles.some((role) => {

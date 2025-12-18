@@ -12,7 +12,7 @@ import {DateObject} from 'react-multi-date-picker';
 import {AuthContext} from '../../context/AuthContext.jsx';
 
 
-function EventForm({type}) {
+function EventForm({type}) { // type is either create or edit
     const {id} = useParams();
     const [formError, setFormError] = useState(null);
     const [submitError, setSubmitError] = useState(null);
@@ -65,7 +65,7 @@ function EventForm({type}) {
         } catch (er) {
             console.error(er)
             const response = er.response.data;
-            if (er.status === 400) {
+            if (er.status === 400) { // Get the response from backend in state to put on the page
                 setFormError(response);
             } else {
                 setSubmitError(response);
