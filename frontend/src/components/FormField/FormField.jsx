@@ -15,6 +15,11 @@ function FormField({start, isRequired, label, type, id, name, formState, handleC
     }, [formState]);
 
     useEffect(() => {
+        if (errors){
+            console.log(errors)
+            console.log(name)
+            console.log(name in errors)
+        }
         if (errors && name in errors) {
             if (type === "checkbox") {
                 setError(

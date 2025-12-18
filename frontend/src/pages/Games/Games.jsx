@@ -8,6 +8,7 @@ import {API} from '../../globalConstants.js';
 import {cleanupData} from '../../helpers/processingAndFormatting.js';
 import FormField from '../../components/FormField/FormField.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import {useNavigate} from 'react-router-dom';
 
 function Games() {
     //<editor-fold desc="State">
@@ -27,8 +28,9 @@ function Games() {
     const [updated, setUpdated] = useState(0);
     //</editor-fold>
 
-    const {isAdmin} = useContext(AuthContext);
+    const {isAdmin, isUser} = useContext(AuthContext);
     const titleRef = useRef(null);
+    const navigate = useNavigate();
 
     //<editor-fold desc="Effects">
     useEffect(() => {
@@ -40,13 +42,11 @@ function Games() {
     //</editor-fold>
 
     //<editor-fold desc="Handlers">
-    function handleDeleteChange(e) {
-        const newValue = e.target.value;
-
-        if (newValue <= 1) {
-            setGameId(2);
+    function createGame() {
+        if (isAdmin || isUser) {
+            navigate('/games/create')
         } else {
-            setGameId(newValue);
+            console.error('Only users with the role USER or ADMIN can create a game.');
         }
     }
 
@@ -105,77 +105,7 @@ function Games() {
         <div className="categoryPage">
             <h2>Games</h2>
 
-            {/*<editor-fold desc="Create Game Form">*/}
-            {/*Make this a component!*/}
-            <h2>Create Game</h2>
-            <form onSubmit={handleGameSubmit} className="create-form">
-                <FormField
-                    ref={titleRef}
-                    label="Game title"
-                    type="text"
-                    name="title"
-                    id="gameTitle"
-                    formState={gameFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                />
-                <FormField
-                    label="Description"
-                    type="text"
-                    name="description"
-                    id="gameDescription"
-                    formState={gameFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                />
-                <FormField
-                    label="Minimum players"
-                    type="number"
-                    name="minPlayers"
-                    id="minPlayers"
-                    formState={gameFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                />
-                <FormField
-                    label="Maximum players"
-                    type="number"
-                    name="maxPlayers"
-                    id="maxPlayers"
-                    formState={gameFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                />
-                <FormField
-                    label="Minimum age"
-                    type="number"
-                    name="minAge"
-                    id="minAge"
-                    formState={gameFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                />
-                <FormField
-                    label="Maximum Age"
-                    type="number"
-                    name="maxAge"
-                    id="maxAge"
-                    formState={gameFormState}
-                    errors={formError}
-                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                />
-                <button type="submit">Submit</button>
-            </form>
-            {errorArray &&
-                <ul>
-                    {
-                        errorArray.map((err) => {
-                            return <li key={err}>{err}</li>
-                        })
-                    }
-                </ul>
-            }
-            {/*</editor-fold>*/}
+            <button type="button" onClick={createGame}>Create Game</button>
 
             <button type="button" onClick={deleteGames}>Delete all</button>
 

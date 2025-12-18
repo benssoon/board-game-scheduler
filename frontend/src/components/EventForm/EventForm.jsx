@@ -31,7 +31,7 @@ function EventForm({type}) { // type is either create or edit
     }
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const navigate = useNavigate();
-    const {user} = useContext(AuthContext);
+    const {user, isAdmin, isUser} = useContext(AuthContext);
 
     useEffect(() => {
         if (event) {
@@ -52,40 +52,44 @@ function EventForm({type}) { // type is either create or edit
 
     async function handleCreateEventSubmit(e) {
         e.preventDefault();
-        const cleanData = cleanupData(eventFormState);
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.post(API + '/events', cleanData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+        if (isUser) { // Only users with the role USER may create events
+            const cleanData = cleanupData(eventFormState);
+            const token = localStorage.getItem('token');
+            try {
+                const response = await axios.post(API + '/events', cleanData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                console.log(response);
+                setFormError(null);
+                setSubmitError(null);
+            } catch (er) {
+                console.error(er)
+                const response = er.response.data;
+                if (er.status === 400) { // Get the response from backend in state to put on the page
+                    setFormError(response);
+                } else {
+                    setSubmitError(response);
                 }
-            });
-            console.log(response);
-            setFormError(null);
-            setSubmitError(null);
-        } catch (er) {
-            console.error(er)
-            const response = er.response.data;
-            if (er.status === 400) { // Get the response from backend in state to put on the page
-                setFormError(response);
-            } else {
-                setSubmitError(response);
+                return response;
             }
-            return response;
-        }
-        setEventFormState(initialEventFormState);
-        setUpdated(updated+1);
-        nameRef.current.focus();
-        if (id) {
-            navigate(`/events/${id}`);
+            setEventFormState(initialEventFormState);
+            setUpdated(updated + 1);
+            nameRef.current.focus();
+            if (id) {
+                navigate(`/events/${id}`);
+            } else {
+                navigate('/events');
+            }
         } else {
-            navigate('/events');
+            console.log('Only users with the role USER may create events.')
         }
     }
 
     async function handleUpdateEventSubmit(e) {
         e.preventDefault();
-        if (user.username === event?.host.username) {
+        if (user.username === event?.host.username) { // Only the host may update an event.
             const cleanData = cleanupData(eventFormState);
             const token = localStorage.getItem('token');
             try {
@@ -100,7 +104,7 @@ function EventForm({type}) { // type is either create or edit
             } catch (er) {
                 console.error(er)
                 const response = er.response.data;
-                if (er.status === 400) {
+                if (er.status === 400) { // Get the response from backend in state to put on the page
                     setFormError(response);
                 } else {
                     setSubmitError(response);
@@ -115,7 +119,7 @@ function EventForm({type}) { // type is either create or edit
                 navigate('/events');
             }
         } else {
-            console.log(`User ${event.host.username} must be logged in to edit this event.`)
+            console.log(`The host, user ${event.host.username}, must be logged in to edit this event.`)
         }
     }
 
@@ -176,8 +180,8 @@ function EventForm({type}) { // type is either create or edit
                         name="gameId"
                         id="gameId"
                         formState={eventFormState}
-                        handleChange={setEventFormState}
                         errors={formError}
+                        handleChange={setEventFormState}
                     />
                     {/* Only ask host if they are playing when creating a new event */}
                     {!id && <FormField
@@ -209,6 +213,7 @@ function EventForm({type}) { // type is either create or edit
                     />
                     <button type="submit">{id ? 'Save' : 'Submit'}</button>
                     <button type="button" onClick={() => navigate(id ? `/events/${id}` : '/events')}>Cancel</button>
+                    {/* Display an error on the page if there is any other error than expected. TODO remove unnecessary? */}
                     {submitError && <span className={'field-error'}>
                         {submitError}
                     </span>}
