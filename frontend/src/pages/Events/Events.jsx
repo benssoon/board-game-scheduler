@@ -31,10 +31,6 @@ function Events() {
     const navigate = useNavigate();
     const {user, isAdmin, isUser} = useContext(AuthContext);
 
-    useEffect(() => {
-            console.log(param)
-    }, [param]);
-
     //<editor-fold desc="Handlers">
     function createEvent() {
         if (isUser) {
@@ -43,6 +39,7 @@ function Events() {
             console.error('Only a user can create an event.')
         }
     }
+
     async function deleteEvents(e) {
         e.preventDefault();
         if (isAdmin) {

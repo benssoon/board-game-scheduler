@@ -30,7 +30,7 @@ function GameForm({type}) { // type is either create or edit
     }
     const [gameFormState, setGameFormState] = useState(initialGameFormState);
     const navigate = useNavigate();
-    const {user} = useContext(AuthContext);
+    const {user, isAdmin} = useContext(AuthContext);
 
     useEffect(() => {
         if (game) {
@@ -80,70 +80,93 @@ function GameForm({type}) { // type is either create or edit
         }
     }
 
+    async function deleteGame() {
+        if (isAdmin) {
+            const token = localStorage.getItem('token')
+            try {
+                const response = await axios.delete(`${API}/games/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                console.log(response);
+            } catch (er) {
+                console.error(er.message);
+                console.error(er.response)
+                console.error(`${API}/events/${id}`);
+            }
+        } else {
+            console.log(`User must be logged in as ADMIN to delete a game.`)
+        }
+        setUpdated(updated+1);
+        navigate("/games");
+    }
+
     return (
         <InfoBox
             type={type}
             parentType={'game'}
         >
             <form onSubmit={handleCreateGameSubmit} className="create-form">
-                    <FormField
-                        start={titleRef}
-                        isRequired
-                        label="Game title"
-                        type="text"
-                        name="title"
-                        id="gameTitle"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Description"
-                        type="text"
-                        name="description"
-                        id="gameDescription"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Minimum players"
-                        type="number"
-                        name="minPlayers"
-                        id="minPlayers"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Maximum players"
-                        type="number"
-                        name="maxPlayers"
-                        id="maxPlayers"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Minimum age"
-                        type="number"
-                        name="minAge"
-                        id="minAge"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Maximum Age"
-                        type="number"
-                        name="maxAge"
-                        id="maxAge"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <button type="submit">Submit</button>
-                </form>
+                <FormField
+                    start={titleRef}
+                    isRequired
+                    label="Game title"
+                    type="text"
+                    name="title"
+                    id="gameTitle"
+                    formState={gameFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
+                />
+                <FormField
+                    label="Description"
+                    type="text"
+                    name="description"
+                    id="gameDescription"
+                    formState={gameFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
+                />
+                <FormField
+                    label="Minimum players"
+                    type="number"
+                    name="minPlayers"
+                    id="minPlayers"
+                    formState={gameFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
+                />
+                <FormField
+                    label="Maximum players"
+                    type="number"
+                    name="maxPlayers"
+                    id="maxPlayers"
+                    formState={gameFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
+                />
+                <FormField
+                    label="Minimum age"
+                    type="number"
+                    name="minAge"
+                    id="minAge"
+                    formState={gameFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
+                />
+                <FormField
+                    label="Maximum Age"
+                    type="number"
+                    name="maxAge"
+                    id="maxAge"
+                    formState={gameFormState}
+                    errors={formError}
+                    handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
+                />
+                <button type="submit">Submit</button>
+            </form>
+            {type === 'edit' && <button type="button" onClick={deleteGame}>Delete</button>}
         </InfoBox>
     );
 }

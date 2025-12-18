@@ -160,7 +160,7 @@ function Event() {
                     <button type="submit">Change Game</button>
                 </form>
                 {/*</editor-fold>*/}
-                {/*<editor-fold desc="Change Game Form">*/}
+                {/*<editor-fold desc="Remove Player Form">*/}
                 <form onSubmit={(e) => handleAddRemovePlayer(e, addingUsername, 'add')}>
                     <label htmlFor="addUser">Username:</label>
                     <input
