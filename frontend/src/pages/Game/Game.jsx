@@ -17,6 +17,7 @@ function Game() {
         maxPlayers: 0,
         minAge: 0,
         maxAge: 99,
+        complexity: '',
     }
     const [gameFormState, setGameFormState] = useState(initialGameFormState);
     const [formError, setFormError] = useState(null);
@@ -68,12 +69,15 @@ function Game() {
                 <InfoBox
                     type="details"
                 >
-
+                    <p>Minimum Players: {game.minPlayers}</p>
+                    <p>Maximum Players: {game.maxPlayers}</p>
+                    <p>Minimum Age: {game.minAge}</p>
+                    <p>Maximum Age: {game.maxAge}</p>
+                    <p>Complexity: {game.complexity}</p>
                 </InfoBox>
 
 
                 {/*<editor-fold desc="Create Game Form">*/}
-                {/*Make this a component!*/}
                 <GameForm
                     type={'create'}
                 />
