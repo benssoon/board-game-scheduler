@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import DatePicker from 'react-multi-date-picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
+import SearchBar from '../SearchBar/SearchBar.jsx';
 
 function FormField({start, isRequired, label, type, id, name, formState, handleChange, errors}) {
     const [error, setError] = useState('');
@@ -59,17 +60,30 @@ function FormField({start, isRequired, label, type, id, name, formState, handleC
 
                     :
 
-                    <input
-                        ref={start}
-                        type={type}
-                        name={name}
-                        id={id}
-                        {...(type === 'checkbox' ?
-                                {checked: formState[name]}
-                                : {value: formState[name]}
-                        )}
-                        onChange={handleChange}
-                    />
+                    type === 'filter' ?
+
+                        <SearchBar
+                            formMember
+                            start={start}
+                            name={name}
+                            id={id}
+                            formState={formState}
+                            handleChange={handleChange}
+                        />
+
+                        :
+
+                        <input
+                            ref={start}
+                            type={type}
+                            name={name}
+                            id={id}
+                            {...(type === 'checkbox' ?
+                                    {checked: formState[name]}
+                                    : {value: formState[name]}
+                            )}
+                            onChange={handleChange}
+                        />
                 }
                 {errors && error}
             </span>
