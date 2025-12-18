@@ -16,6 +16,7 @@ import {AuthContext} from './context/AuthContext.jsx';
 import NavBar from './components/NavBar/NavBar.jsx';
 import User from './pages/User/User.jsx';
 import EditGame from './components/EditGame/EditGame.jsx';
+import CreateGame from './pages/CreateGame/CreateGame.jsx';
 
 function App() {
     const {isAuth} = useContext(AuthContext);
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/events/:id" element={<Event/>}/>
                 <Route path="/events/:id/edit" element={<EditEvent/>}/>
                 <Route path="/games" element={<Games/>}/>
+                <Route path="/games/create" element={<CreateGame/>}/>
                 <Route path="/games/:id" element={<Game/>}/>
                 <Route path="/games/:id/edit" element={<EditGame/>}/>
             </Routes>

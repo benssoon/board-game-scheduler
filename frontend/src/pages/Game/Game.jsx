@@ -25,35 +25,7 @@ function Game() {
     const [updated, setUpdated] = useState(0);
     const {id} = useParams();
     const {data: game, loading, error} = useFetch(`/games/${id}`, {}, updated)
-    const {isAuth, isAdmin, isUser, user} = useContext(AuthContext);
-    const titleRef = useRef(null);
-
-    async function handleGameSubmit(e) {
-        e.preventDefault();
-        const cleanData = cleanupData(gameFormState);
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const response = await axios.post(API + '/games', cleanData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                console.log(response);
-            } catch (er) {
-                const response = er.response.data
-                setFormError(response);
-                console.error(response);
-                return response;
-            }
-        } else {
-            console.error('User must be logged in to create new events.');
-            //TODO add on-page error
-        }
-        setGameFormState(initialGameFormState);
-        //TODO add updated state to reload DisplayGrid
-        titleRef.current.focus();
-    }
+    const {isAdmin, isUser} = useContext(AuthContext);
 
     return (
         game ?
@@ -75,82 +47,6 @@ function Game() {
                     <p>Maximum Age: {game.maxAge}</p>
                     <p>Complexity: {game.complexity}</p>
                 </InfoBox>
-
-
-                {/*<editor-fold desc="Create Game Form">*/}
-                <GameForm
-                    type={'create'}
-                />
-                <h2>Create Game</h2>
-                <form onSubmit={handleGameSubmit} className="create-form">
-                    <FormField
-                        ref={titleRef}
-                        label="Game title"
-                        type="text"
-                        name="title"
-                        id="gameTitle"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Description"
-                        type="text"
-                        name="description"
-                        id="gameDescription"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Minimum players"
-                        type="number"
-                        name="minPlayers"
-                        id="minPlayers"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Maximum players"
-                        type="number"
-                        name="maxPlayers"
-                        id="maxPlayers"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Minimum age"
-                        type="number"
-                        name="minAge"
-                        id="minAge"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <FormField
-                        label="Maximum Age"
-                        type="number"
-                        name="maxAge"
-                        id="maxAge"
-                        formState={gameFormState}
-                        errors={formError}
-                        handleChange={(e) => handleFormChange(e, gameFormState, setGameFormState)}
-                    />
-                    <button type="submit">Submit</button>
-                </form>
-                {errorArray &&
-                    <ul>
-                        {
-                            errorArray.map((err) => {
-                                return <li key={err}>{err}</li>
-                            })
-                        }
-                    </ul>
-                }
-                {/*</editor-fold>*/}
-
             </>
             :
             loading ?
