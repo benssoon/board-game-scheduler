@@ -15,6 +15,7 @@ import {useContext} from 'react';
 import {AuthContext} from './context/AuthContext.jsx';
 import NavBar from './components/NavBar/NavBar.jsx';
 import User from './pages/User/User.jsx';
+import EditGame from './components/EditGame/EditGame.jsx';
 
 function App() {
     const {isAuth} = useContext(AuthContext);
@@ -30,9 +31,10 @@ function App() {
                 <Route path="/events" element={<Events/>}/>
                 <Route path="/events/create" element={<CreateEvent/>}/>
                 <Route path="/events/:id" element={<Event/>}/>
-                <Route path="/events/:id/edit" element={<EditEvent/>}/> {/*TODO secure by checking that only users can access*/}
+                <Route path="/events/:id/edit" element={<EditEvent/>}/>
                 <Route path="/games" element={<Games/>}/>
                 <Route path="/games/:id" element={<Game/>}/>
+                <Route path="/games/:id/edit" element={<EditGame/>}/>
             </Routes>
         </>
     )

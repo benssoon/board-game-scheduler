@@ -1,90 +1,94 @@
-import './Game.css';
-import {useParams} from 'react-router-dom';
+import './GameForm.css';
 import useFetch from '../../helpers/useFetch.js';
-import {cleanupData} from '../../helpers/processingAndFormatting.js';
-import {useContext, useRef, useState} from 'react';
-import {handleFormChange} from '../../helpers/handlers.js';
+import {useContext, useEffect, useRef, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import InfoBox from '../InfoBox/InfoBox.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import InfoBox from '../../components/InfoBox/InfoBox.jsx';
-import FormField from '../../components/FormField/FormField.jsx';
-import GameForm from '../../components/GameForm/GameForm.jsx';
+import {cleanupData} from '../../helpers/processingAndFormatting.js';
+import axios from 'axios';
+import {API} from '../../globalConstants.js';
+import {handleFormChange} from '../../helpers/handlers.js';
+import FormField from '../FormField/FormField.jsx';
 
-function Game() {
+function GameForm({type}) { // type is either create or edit
+    const {id} = useParams();
+    const [formError, setFormError] = useState(null);
+    const [submitError, setSubmitError] = useState(null);
+    const [updated, setUpdated] = useState(0);
+    const titleRef = useRef(null);
+    const endpoint = id ? `/games/${id}` : null;
+    const {data: game} = useFetch(endpoint, {});
     const initialGameFormState = {
         title: '',
         description: '',
         minPlayers: 0,
-        maxPlayers: 0,
+        maxPlayers: 99,
+        complexity: '',
         minAge: 0,
         maxAge: 99,
-        complexity: '',
+        activeEvents: [],
     }
     const [gameFormState, setGameFormState] = useState(initialGameFormState);
-    const [formError, setFormError] = useState(null);
-    const [errorArray, setErrorArray] = useState([])
-    const [updated, setUpdated] = useState(0);
-    const {id} = useParams();
-    const {data: game, loading, error} = useFetch(`/games/${id}`, {}, updated)
-    const {isAuth, isAdmin, isUser, user} = useContext(AuthContext);
-    const titleRef = useRef(null);
+    const navigate = useNavigate();
+    const {user} = useContext(AuthContext);
 
-    async function handleGameSubmit(e) {
+    useEffect(() => {
+        if (game) {
+            setGameFormState({
+                title: game.title,
+                description: game.description,
+                minPlayers: game.minPlayers,
+                maxPlayers: game.maxPlayers,
+                complexity: game.complexity,
+                minAge: game.minAge,
+                maxAge: game.maxAge,
+                activeEvents: game.activeEvents,
+            });
+        }
+    }, [game]);
+
+    async function handleCreateGameSubmit(e) {
         e.preventDefault();
         const cleanData = cleanupData(gameFormState);
         const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const response = await axios.post(API + '/games', cleanData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                console.log(response);
-            } catch (er) {
-                const response = er.response.data
+        try {
+            const response = await axios.post(API + '/events', cleanData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            console.log(response);
+            setFormError(null);
+            setSubmitError(null);
+        } catch (er) {
+            console.error(er)
+            const response = er.response.data;
+            if (er.status === 400) { // Get the response from backend in state to put on the page
                 setFormError(response);
-                console.error(response);
-                return response;
+            } else {
+                setSubmitError(response);
             }
-        } else {
-            console.error('User must be logged in to create new events.');
-            //TODO add on-page error
+            return response;
         }
         setGameFormState(initialGameFormState);
-        //TODO add updated state to reload DisplayGrid
+        setUpdated(updated+1);
         titleRef.current.focus();
+        if (id) {
+            navigate(`/games/${id}`);
+        } else {
+            navigate('/games');
+        }
     }
 
     return (
-        game ?
-            <>
-                <h2>{game.title}</h2>
-                <InfoBox
-                    type="about"
-                    parentPage={`/games/${id}`}
-                    isEditable={isAdmin || isUser}
-                >
-                    <p>{game.description}</p>
-                </InfoBox>
-                <InfoBox
-                    type="details"
-                >
-                    <p>Minimum Players: {game.minPlayers}</p>
-                    <p>Maximum Players: {game.maxPlayers}</p>
-                    <p>Minimum Age: {game.minAge}</p>
-                    <p>Maximum Age: {game.maxAge}</p>
-                    <p>Complexity: {game.complexity}</p>
-                </InfoBox>
-
-
-                {/*<editor-fold desc="Create Game Form">*/}
-                <GameForm
-                    type={'create'}
-                />
-                <h2>Create Game</h2>
-                <form onSubmit={handleGameSubmit} className="create-form">
+        <InfoBox
+            type={type}
+            parentType={'game'}
+        >
+            <form onSubmit={handleCreateGameSubmit} className="create-form">
                     <FormField
-                        ref={titleRef}
+                        start={titleRef}
+                        isRequired
                         label="Game title"
                         type="text"
                         name="title"
@@ -140,24 +144,8 @@ function Game() {
                     />
                     <button type="submit">Submit</button>
                 </form>
-                {errorArray &&
-                    <ul>
-                        {
-                            errorArray.map((err) => {
-                                return <li key={err}>{err}</li>
-                            })
-                        }
-                    </ul>
-                }
-                {/*</editor-fold>*/}
-
-            </>
-            :
-            loading ?
-                <p>Loading...</p>
-                :
-                error && <p>Error!</p>
+        </InfoBox>
     );
 }
 
-export default Game;
+export default GameForm;

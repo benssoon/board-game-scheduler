@@ -13,7 +13,6 @@ function Event() {
     const [addingUsername, setAddingUsername] = useState('');
 
     const {id} = useParams();
-    const navigate = useNavigate();
     const {data: event, loading, error} = useFetch(`/events/${id}`, {}, updated)
     const {isAuth, isAdmin, user} = useContext(AuthContext);
     const isHost = event?.host.username === user.username;

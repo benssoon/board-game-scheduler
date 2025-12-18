@@ -33,8 +33,8 @@ public class GameMapper {
         outputDto.complexity = game.getComplexity();
         outputDto.minAge = game.getMinAge();
         outputDto.maxAge = game.getMaxAge();
-        List<String> activeEvents = new ArrayList<>();
-        game.getActiveEvents().forEach((event) -> activeEvents.add(event.getName()));
+        List<Long> activeEvents = new ArrayList<>();
+        game.getActiveEvents().forEach((event) -> activeEvents.add(event.getId()));
         outputDto.activeEvents = activeEvents;
 
         return outputDto;
