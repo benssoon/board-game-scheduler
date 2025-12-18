@@ -10,6 +10,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
 import {DateObject} from 'react-multi-date-picker';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import SearchBar from '../SearchBar/SearchBar.jsx';
 
 
 function EventForm({type}) {
@@ -169,19 +170,15 @@ function EventForm({type}) {
                         handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                     />
                     <FormField
-                        isRequired={true}
-                        label="Game ID"
-                        type="number"
+                        isRequired
+                        label="Game"
+                        type="filter"
                         name="gameId"
                         id="gameId"
                         formState={eventFormState}
+                        handleChange={setEventFormState}
                         errors={formError}
-                        handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                     />
-                    {/*<SearchBar
-                    handleChange????????
-                How do I make it so this can be used in a form as well?
-                />*/}
                     {/* Only ask host if they are playing when creating a new event */}
                     {!id && <FormField
                         label="Will you also be playing?"

@@ -1,17 +1,19 @@
 import './SearchBar.css';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import useFetch from '../../helpers/useFetch.js';
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 
-function SearchBar({setFilters}) {
+function SearchBar({setFilters, formMember, start, name, id, formState, handleChange: setFormState}) {
 
     const [searchText, setSearchText] = useState('');
     const [selectedGameId, setSelectedGameId] = useState(0);
+    const [selected, toggleSelected] = useState(false);
+    const [focused, toggleFocused] = useState(false);
 
     const {data: games} = useFetch('/games');
 
     const matchingGames = useMemo(() => {
-        if (!searchText) return [];
+        if (!searchText || selected) return [];
         const lowered = searchText.toLowerCase();
         return games.filter((game) => {
             return game.title.toLowerCase().includes(lowered)
@@ -36,28 +38,65 @@ function SearchBar({setFilters}) {
     }
 
     function handleTextChange(e) {
+        toggleSelected(false);
         setSearchText(e.target.value);
-        setSelectedGameId(0);
+        if (formMember) {
+            setFormState({
+                ...formState,
+                [name]: 0
+            });
+        } else {
+            setSelectedGameId(0);
+        }
     }
 
-    function handleSelect(game) {
-        setSelectedGameId(game.id);
-        setSearchText(game.title);
+    function handleSelect(item) {
+        toggleFocused(true)
+        if (formMember) {
+            setFormState({
+                ...formState,
+                [name]: item.id,
+            });
+        } else {
+            setSelectedGameId(item.id);
+        }
+        setSearchText(item.title);
+        toggleSelected(true);
     }
+
+    const field = (
+        <input
+            className="searchBar"
+            ref={start}
+            type="text"
+            name={name}
+            id={id}
+            value={searchText}
+            onChange={handleTextChange}
+        />
+    );
 
     return (
-        <div className="searchBarContainer">
-            <form onSubmit={handleSubmit}>
-                <input
-                    className="searchBar"
-                    value={searchText}
-                    onChange={handleTextChange}
-                />
-                <button type="submit" className="searchButton">O</button>
-            </form>
+        <div
+            className="searchBarContainer"
+            onFocusCapture={() => toggleFocused(true)}
+            onBlurCapture={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                    toggleFocused(false)
+                }
+            }}
+        >
+            {formMember ?
+                field
+                :
+                <form onSubmit={handleSubmit}>
+                    {field}
+                    <button type="submit" className="searchButton">O</button>
+                </form>
+            }
 
             <SearchDropdown
-                visible={matchingGames.length > 0}
+                visible={matchingGames.length > 0 && focused}
                 items={matchingGames}
                 onSelect={handleSelect}
             />

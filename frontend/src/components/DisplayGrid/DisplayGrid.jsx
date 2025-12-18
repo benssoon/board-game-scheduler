@@ -8,9 +8,6 @@ function DisplayGrid({type, preview, updated, param}) {
     const endpoint = `/${type}s` + (param && `?${param}`)
     const { data: collection, loading, error } = useFetch(endpoint, {}, updated);
 
-    useEffect(() => {
-        console.log(param)
-    }, [param]);
     return (
         <div className={classname}>
             {loading || !collection ?

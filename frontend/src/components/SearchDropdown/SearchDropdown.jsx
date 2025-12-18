@@ -8,7 +8,10 @@ function SearchDropdown({visible, items, onSelect}) {
                 return <li
                     key={item.id}
                     className={"dropdownItem"}
-                    onClick={() => onSelect(item)}
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        onSelect(item);
+                    }}
                 >
                     {item.title}
                 </li>
