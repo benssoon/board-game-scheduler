@@ -4,7 +4,7 @@ import {useContext, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import axios from 'axios';
 import {handleFormChange} from '../../helpers/handlers.js';
-import {Navigate} from 'react-router-dom';
+import {Navigate, useLocation, useNavigate} from 'react-router-dom';
 
 function Login() {
     const URL = API + '/authenticate'
@@ -12,15 +12,18 @@ function Login() {
         username: '',
         password: '',
     });
-    const {login, logout, isAuth} = useContext(AuthContext);
+    const {login, isAuth} = useContext(AuthContext);
+    const location = useLocation();
+    const navigate = useNavigate();
 
     async function authenticate(e) {
         e.preventDefault();
-        console.log(data);
         try {
             const response = await axios.post(URL, data);
-            console.log(response);
             login(response.data.jwt);
+            if (location.state) {
+                navigate(location.state.from.pathname)
+            }
         }
         catch (er) {
             console.error(er);

@@ -1,5 +1,5 @@
 import './Event.css';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useLocation, useParams} from 'react-router-dom';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import useFetch from '../../helpers/useFetch.js';
 import axios from 'axios';
@@ -15,8 +15,9 @@ function Event() {
 
     const {id} = useParams();
     const {data: event, loading, error} = useFetch(`/events/${id}`, {}, updated)
-    const {isAuth, isAdmin, isUser, user} = useContext(AuthContext);
+    const {isAuth, isAdmin, isUser, user, logout} = useContext(AuthContext);
     const isHost = event?.host.username === user?.username;
+    const location = useLocation();
 
     async function changeParticipation(action) {
         if (isAuth && isUser) {
@@ -36,11 +37,26 @@ function Event() {
             }
         } else {
             if (!isAuth) {
-                setAuthError(<p>Must be logged in to leave or join an event. <Link to={'/login'}>Click here</Link> to go to the
-                        login page.</p>);
                 console.log('Must be logged in');
+                setAuthError(
+                    <p>
+                        Must be logged in to leave or join an event.
+                        <Link
+                            to={'/login'}
+                            state={{from: location}} // Sends the user back to this page after they have logged in.
+                        >Click here</Link> to go to the login page.
+                    </p>
+                );
             } else {
-
+                setAuthError(
+                    <p>
+                        Only users with role USER can participate in events.
+                        <Link
+                            to={logout} // TODO Should log user out and reroute to the login page.
+                            state={{from: location}} // Sends the user back to this page after they have logged in.
+                        >Click here</Link> to log out and go to the login page, to log in as a user with role USER.
+                    </p>
+                )
             }
         }
     }
