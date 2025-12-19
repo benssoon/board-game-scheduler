@@ -21,12 +21,14 @@ function AuthContextProvider({children}) {
         const token = localStorage.getItem('token');
         if (token) {
             const decoded = jwtDecode(token);
-            if (Date.now()/1000 < decoded.exp ? true : false) {
+            if (Date.now() / 1000 < decoded.exp) {
                 fetchUserData(decoded.sub, token);
             } else {
+                console.log('Token expired.');
                 logout();
             }
         } else {
+            console.log('No token present.');
             setAuth({
                 ...auth,
                 status: 'done',
