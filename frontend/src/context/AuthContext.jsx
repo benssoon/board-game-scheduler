@@ -18,15 +18,19 @@ function AuthContextProvider({children}) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log('mounting authcontext') // TODO keep this until the errors with expired tokens are resolved
         const token = localStorage.getItem('token');
         if (token) {
             const decoded = jwtDecode(token);
-            if (Date.now()/1000 < decoded.exp ? true : false) {
+            console.log(decoded)
+            if (Date.now() / 1000 < decoded.exp) {
                 fetchUserData(decoded.sub, token);
             } else {
+                console.log('Token expired.');
                 logout();
             }
         } else {
+            console.log('No token present.');
             setAuth({
                 ...auth,
                 status: 'done',
@@ -86,6 +90,7 @@ function AuthContextProvider({children}) {
     }
 
     function logout() {
+        console.log(auth);
         localStorage.removeItem('token');
         console.log(auth.user.username + ' is logged out.');
         setAuth({

@@ -14,6 +14,8 @@ function GameForm({type}) { // type is either create or edit
     const {id} = useParams();
     const [formError, setFormError] = useState(null);
     const [submitError, setSubmitError] = useState(null);
+    const [deleteError, setDeleteError] = useState(null);
+    const [confirmDelete, toggleConfirmDelete] = useState(false);
     const titleRef = useRef(null);
     const endpoint = id ? `/games/${id}` : null;
     const {data: game} = useFetch(endpoint, {});
@@ -29,16 +31,16 @@ function GameForm({type}) { // type is either create or edit
     }
     const [gameFormState, setGameFormState] = useState(initialGameFormState);
     const navigate = useNavigate();
-    const {user, isAdmin, isUser} = useContext(AuthContext);
+    const {isAdmin, isUser} = useContext(AuthContext);
 
     useEffect(() => {
         if (game) {
             setGameFormState({
                 title: game.title,
-                description: game.description,
+                description: game.description || '',
                 minPlayers: game.minPlayers,
                 maxPlayers: game.maxPlayers,
-                complexity: game.complexity,
+                complexity: game.complexity || '',
                 minAge: game.minAge,
                 maxAge: game.maxAge,
                 activeEvents: game.activeEvents,
@@ -46,13 +48,19 @@ function GameForm({type}) { // type is either create or edit
         }
     }, [game]);
 
+    useEffect(() => {
+        if (confirmDelete) {
+            deleteGame()
+        }
+    }, [confirmDelete]);
+
     async function handleSubmit(e) {
         e.preventDefault();
         if (isAdmin || (isUser && type === 'create')) { // Both users and admins can create games
             const cleanData = cleanupData(gameFormState);
             const token = localStorage.getItem('token');
             try {
-                const response = await axios[(type === 'create' && 'post') || (type === 'edit' && 'put')](API + '/games' + (type === 'edit' && `/${id}`), cleanData, {
+                const response = await axios[(type === 'create' && 'post') || (type === 'edit' && 'put')](API + '/games' + (type === 'edit' ? `/${id}` : ''), cleanData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
@@ -61,9 +69,9 @@ function GameForm({type}) { // type is either create or edit
                 setFormError(null);
                 setSubmitError(null);
             } catch (er) {
-                console.error(er)
+                console.error(er);
                 const response = er.response.data;
-                console.log(response)
+                console.error(response);
                 if (er.status === 400) { // Get the response from backend in state to put on the page
                     setFormError(response);
                 } else {
@@ -83,23 +91,27 @@ function GameForm({type}) { // type is either create or edit
 
     async function deleteGame() {
         if (isAdmin) {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('token');
             try {
-                const response = await axios.delete(`${API}/games/${id}`, {
+                const response = await axios.delete(`${API}/games/${id}${confirmDelete ? '/forceDelete' : ''}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
                 });
                 console.log(response);
+                navigate("/games");
             } catch (er) {
-                console.error(er.message);
-                console.error(er.response)
-                console.error(`${API}/events/${id}`);
+                console.error(er);
+                const response = er.response.data;
+                console.error(response);
+                if (er.status === 400) { // Handle bad request
+                    console.error(game.activeEvents);
+                    setDeleteError(response);
+                }
             }
         } else {
-            console.log(`User must be logged in as ADMIN to delete a game.`)
+            console.log(`User must be logged in as ADMIN to delete a game.`);
         }
-        navigate("/games");
     }
 
     return (
@@ -172,6 +184,10 @@ function GameForm({type}) { // type is either create or edit
                 </span>}
             </form>
             {type === 'edit' && <button type="button" onClick={deleteGame}>Delete</button>}
+            {deleteError && <span className={'field-error'}>
+                {deleteError}
+                <button type={'button'} onClick={() => toggleConfirmDelete(true)}>Force Delete</button>
+            </span>}
         </InfoBox>
     );
 }

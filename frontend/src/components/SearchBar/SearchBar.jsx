@@ -73,6 +73,7 @@ function SearchBar({setFilters, formMember, start, name, id, formState, handleCh
             id={id}
             value={searchText}
             onChange={handleTextChange}
+            autoComplete="off"
         />
     );
 

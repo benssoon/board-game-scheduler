@@ -50,13 +50,13 @@ function EventForm({type}) { // type is either create or edit
         }
     }, [event]);
 
-    async function handleCreateEventSubmit(e) {
+    async function handleEventSubmit(e) {
         e.preventDefault();
-        if (isUser) { // Only users with the role USER may create events
+        if ((type === 'create' && isUser) || (type === 'edit' && user.username === event?.host.username)) { // Only users with the role USER may create events. Only the event's host may edit the event.
             const cleanData = cleanupData(eventFormState);
             const token = localStorage.getItem('token');
             try {
-                const response = await axios.post(API + '/events', cleanData, {
+                const response = await axios[(type === 'create' && 'post') || (type === 'edit' && 'patch')](`${API}/events${type === 'edit' ? `/${id}` : ''}`, cleanData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
@@ -74,52 +74,18 @@ function EventForm({type}) { // type is either create or edit
                 }
                 return response;
             }
-            setEventFormState(initialEventFormState);
-            setUpdated(updated + 1);
-            nameRef.current.focus();
             if (id) {
                 navigate(`/events/${id}`);
             } else {
                 navigate('/events');
             }
         } else {
-            console.log('Only users with the role USER may create events.')
-        }
-    }
-
-    async function handleUpdateEventSubmit(e) {
-        e.preventDefault();
-        if (user.username === event?.host.username) { // Only the host may update an event.
-            const cleanData = cleanupData(eventFormState);
-            const token = localStorage.getItem('token');
-            try {
-                const response = await axios.patch(API + `/events/${id}`, cleanData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
-                console.log(response);
-                setFormError(null);
-                setSubmitError(null);
-            } catch (er) {
-                console.error(er)
-                const response = er.response.data;
-                if (er.status === 400) { // Get the response from backend in state to put on the page
-                    setFormError(response);
-                } else {
-                    setSubmitError(response);
-                }
-                return response;
+            if (type === 'create') {
+                console.log('Only users with the role USER may create events.')
             }
-            setUpdated(updated + 1);
-            nameRef.current.focus();
-            if (id) {
-                navigate(`/events/${id}`);
-            } else {
-                navigate('/events');
+            if (type === 'edit') {
+                console.log(`Only the host, user ${event.host.username}, may edit this event.`)
             }
-        } else {
-            console.log(`The host, user ${event.host.username}, must be logged in to edit this event.`)
         }
     }
 
@@ -151,7 +117,7 @@ function EventForm({type}) { // type is either create or edit
                 type={type}
                 parentType={'event'}
             >
-                <form onSubmit={id ? handleUpdateEventSubmit : handleCreateEventSubmit} className="create-form">
+                <form onSubmit={handleEventSubmit} className="create-form">
                     <FormField
                         start={nameRef}
                         isRequired={true}
@@ -184,7 +150,7 @@ function EventForm({type}) { // type is either create or edit
                         handleChange={setEventFormState}
                     />
                     {/* Only ask host if they are playing when creating a new event */}
-                    {!id && <FormField
+                    {type === 'create' && <FormField
                         label="Will you also be playing?"
                         type="checkbox"
                         name="isHostPlaying"
@@ -211,8 +177,8 @@ function EventForm({type}) { // type is either create or edit
                         errors={formError}
                         handleChange={(e) => handleFormChange(e, eventFormState, setEventFormState)}
                     />
-                    <button type="submit">{id ? 'Save' : 'Submit'}</button>
-                    <button type="button" onClick={() => navigate(id ? `/events/${id}` : '/events')}>Cancel</button>
+                    <button type="submit">{type === 'edit' ? 'Save' : 'Submit'}</button>
+                    <button type="button" onClick={() => navigate(type === 'edit' ? `/events/${id}` : '/events')}>Cancel</button>
                     {/* Display an error on the page if there is any other error than expected. TODO remove unnecessary? */}
                     {submitError && <span className={'field-error'}>
                         {submitError}

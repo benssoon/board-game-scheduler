@@ -1,5 +1,5 @@
 import './Event.css';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {Link, useLocation, useParams} from 'react-router-dom';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import useFetch from '../../helpers/useFetch.js';
 import axios from 'axios';
@@ -11,17 +11,20 @@ function Event() {
     const [updated, setUpdated] = useState(0);
     const [gameId, setGameId] = useState(0);
     const [addingUsername, setAddingUsername] = useState('');
+    const [authError, setAuthError] = useState(''); // Used to display errors related to being logged in or not.
 
     const {id} = useParams();
     const {data: event, loading, error} = useFetch(`/events/${id}`, {}, updated)
-    const {isAuth, isAdmin, user} = useContext(AuthContext);
-    const isHost = event?.host.username === user.username;
+    const {isAuth, isAdmin, isUser, user, logout} = useContext(AuthContext);
+    const isHost = event?.host.username === user?.username;
+    const location = useLocation();
 
-    async function joinEvent() {
-        if (isAuth) {
+    async function changeParticipation(action) {
+        if (isAuth && isUser) {
+            setAuthError('');
             const token = localStorage.getItem('token');
             try {
-                const response = await axios.post(`${API}/events/${id}/join`, {}, {
+                const response = await axios.post(`${API}/events/${id}/${action}`, {}, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -33,27 +36,28 @@ function Event() {
                 console.error(er.response.data)
             }
         } else {
-            console.log('must be logged in');
-        }
-    }
-
-    async function leaveEvent() {
-        if (isAuth) {
-            const token = localStorage.getItem('token');
-            try {
-                const response = await axios.post(`${API}/events/${id}/leave`, {}, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                console.log(response);
-                setUpdated(updated+1);
-            } catch (er) {
-                console.error(er);
-                console.error(er.response.data)
+            if (!isAuth) {
+                console.log('Must be logged in');
+                setAuthError(
+                    <p>
+                        Must be logged in to leave or join an event.
+                        <Link
+                            to={'/login'}
+                            state={{from: location}} // Sends the user back to this page after they have logged in.
+                        >Click here</Link> to go to the login page.
+                    </p>
+                );
+            } else {
+                setAuthError(
+                    <p>
+                        Only users with role USER can participate in events.
+                        <Link
+                            to={logout} // TODO Should log user out and reroute to the login page.
+                            state={{from: location}} // Sends the user back to this page after they have logged in.
+                        >Click here</Link> to log out and go to the login page, to log in as a user with role USER.
+                    </p>
+                )
             }
-        } else {
-            console.log('must be logged in');
         }
     }
 
@@ -117,7 +121,7 @@ function Event() {
                 <InfoBox
                     type="about"
                     parentPage={`/events/${id}`}
-                    isEditable={user.username === event.host.username}
+                    isEditable={user?.username === event?.host.username}
                 >
                     <p>{event.description}</p>
                 </InfoBox>
@@ -131,8 +135,9 @@ function Event() {
                     {event.isReadyToStart ? <p>Can take place</p> : <p>Waiting for more players...</p>}
                     <p>Location: {event.location}</p>
                     <p>Possible Times: {event.possibleTimes}</p>
-                    <button type="submit" onClick={joinEvent}>Join</button>
-                    <button type="submit" onClick={leaveEvent}>Leave</button>
+                    <button type="submit" onClick={() => changeParticipation('join')}>Join</button>
+                    <button type="submit" onClick={() => changeParticipation('leave')}>Leave</button>
+                    {authError}
                 </InfoBox>
                 <InfoBox
                     type="participants"
