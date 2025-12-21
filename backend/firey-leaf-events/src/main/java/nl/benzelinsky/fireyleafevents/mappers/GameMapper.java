@@ -2,6 +2,8 @@ package nl.benzelinsky.fireyleafevents.mappers;
 
 import nl.benzelinsky.fireyleafevents.dtos.GameInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.GameOutputDto;
+import nl.benzelinsky.fireyleafevents.dtos.TinyEventOutputDto;
+import nl.benzelinsky.fireyleafevents.models.Event;
 import nl.benzelinsky.fireyleafevents.models.Game;
 
 import java.util.ArrayList;
@@ -33,8 +35,8 @@ public class GameMapper {
         outputDto.complexity = game.getComplexity();
         outputDto.minAge = game.getMinAge();
         outputDto.maxAge = game.getMaxAge();
-        List<Long> activeEvents = new ArrayList<>();
-        game.getActiveEvents().forEach((event) -> activeEvents.add(event.getId()));
+        List<TinyEventOutputDto> activeEvents = new ArrayList<>();
+        game.getActiveEvents().forEach((event) -> activeEvents.add(EventMapper.toTinyDto(event)));
         outputDto.activeEvents = activeEvents;
 
         return outputDto;

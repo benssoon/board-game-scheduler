@@ -2,6 +2,7 @@ package nl.benzelinsky.fireyleafevents.mappers;
 
 import nl.benzelinsky.fireyleafevents.dtos.EventInputDto;
 import nl.benzelinsky.fireyleafevents.dtos.EventOutputDto;
+import nl.benzelinsky.fireyleafevents.dtos.TinyEventOutputDto;
 import nl.benzelinsky.fireyleafevents.models.Event;
 
 import java.util.ArrayList;
@@ -39,6 +40,15 @@ public class EventMapper {
         outputDto.players = players;
         outputDto.location = event.getLocation();
         outputDto.host = UserMapper.toTinyDto(event.getHost());
+
+        return outputDto;
+    }
+
+    public static TinyEventOutputDto toTinyDto(Event event) {
+        TinyEventOutputDto outputDto = new TinyEventOutputDto();
+
+        outputDto.id = event.getId();
+        outputDto.name = event.getName();
 
         return outputDto;
     }

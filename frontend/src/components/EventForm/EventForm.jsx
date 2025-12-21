@@ -56,7 +56,7 @@ function EventForm({type}) { // type is either create or edit
             const cleanData = cleanupData(eventFormState);
             const token = localStorage.getItem('token');
             try {
-                const response = await axios[(type === 'create' && 'post') || (type === 'edit' && 'patch')](`${API}/events${type === 'edit' && `/${id}`}`, cleanData, {
+                const response = await axios[(type === 'create' && 'post') || (type === 'edit' && 'patch')](`${API}/events${type === 'edit' ? `/${id}` : ''}`, cleanData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
