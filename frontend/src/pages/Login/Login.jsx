@@ -4,7 +4,7 @@ import {useContext, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import axios from 'axios';
 import {handleFormChange} from '../../helpers/handlers.js';
-import {Navigate, useLocation, useNavigate} from 'react-router-dom';
+import {Link, Navigate, useLocation, useNavigate} from 'react-router-dom';
 
 function Login() {
     const URL = API + '/authenticate'
@@ -58,6 +58,7 @@ function Login() {
                 />
                 <button type="submit">Login</button>
             </form>
+            <Link to={"/register"}>Register</Link>
         </>
     );
 }

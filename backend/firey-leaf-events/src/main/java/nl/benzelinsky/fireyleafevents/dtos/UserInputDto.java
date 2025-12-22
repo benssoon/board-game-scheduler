@@ -6,12 +6,14 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import nl.benzelinsky.fireyleafevents.models.Role;
 
 import java.util.Set;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserInputDto {
     @NotBlank
     @NonNull

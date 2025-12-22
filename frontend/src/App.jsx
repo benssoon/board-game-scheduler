@@ -17,6 +17,7 @@ import NavBar from './components/NavBar/NavBar.jsx';
 import User from './pages/User/User.jsx';
 import EditGame from './components/EditGame/EditGame.jsx';
 import CreateGame from './pages/CreateGame/CreateGame.jsx';
+import Register from './pages/Register/Register.jsx';
 
 function App() {
     const {isAuth} = useContext(AuthContext);
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/users/:username" element={<User/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/profile" element={isAuth ? <Profile/> : <Navigate to={"/login"}/> }/>
+                <Route path="/register" element={<Register/>}/>
                 <Route path="/events" element={<Events/>}/>
                 <Route path="/events/create" element={<CreateEvent/>}/>
                 <Route path="/events/:id" element={<Event/>}/>
