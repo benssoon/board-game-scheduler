@@ -10,21 +10,8 @@ import FormField from '../../components/FormField/FormField.jsx';
 import GameForm from '../../components/GameForm/GameForm.jsx';
 
 function Game() {
-    const initialGameFormState = {
-        title: '',
-        description: '',
-        minPlayers: 0,
-        maxPlayers: 0,
-        minAge: 0,
-        maxAge: 99,
-        complexity: '',
-    }
-    const [gameFormState, setGameFormState] = useState(initialGameFormState);
-    const [formError, setFormError] = useState(null);
-    const [errorArray, setErrorArray] = useState([])
-    const [updated, setUpdated] = useState(0);
     const {id} = useParams();
-    const {data: game, loading, error} = useFetch(`/games/${id}`, {}, updated)
+    const {data: game, loading, error} = useFetch(`/games/${id}`, {})
     const {isAdmin, isUser} = useContext(AuthContext);
 
     return (

@@ -8,7 +8,7 @@ function Card({type, data, className}) {
     return (
         <article className={className}>
             <div className="placeholder"></div>
-            <Link to={type==='user' ? '/profile' : `/${type}s/${data.id}`}>
+            <Link to={type==='user' ? `/users/${data.username}` : `/${type}s/${data.id}`}>
                 <ul>
                     {data.title && <li>Title: {data.title}</li>}
                     {data.username && <li>Username: {data.username}</li>}
