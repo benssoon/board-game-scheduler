@@ -18,12 +18,10 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final EventRepository eventRepository;
 
     public UserService(UserRepository repository, PasswordEncoder passwordEncoder, EventRepository eventRepository) {
         this.userRepository = repository;
         this.passwordEncoder = passwordEncoder;
-        this.eventRepository = eventRepository;
     }
 
     // Create user
@@ -57,11 +55,15 @@ public class UserService {
     }
 
     // Get user by username
-    public ShortUserOutputDto getUser(String username) {
-        return UserMapper.toShortDto(
-                this.userRepository.findById(username)
+    public Object getUser(String username, boolean isSelf) {
+        User user = this.userRepository.findById(username)
                         .orElseThrow(() ->
-                                new UsernameNotFoundException(username)));
+                                new UsernameNotFoundException(username));
+        if (isSelf) {
+            return UserMapper.toShortDto(user);
+        } else {
+            return UserMapper.toTinyDto(user);
+        }
     }
 
     public UserOutputDto getUserWithPassword(String username) {

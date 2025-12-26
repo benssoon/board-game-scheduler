@@ -8,10 +8,17 @@ import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 function User() {
     const {username} = useParams();
     const {user: currentUser} = useContext(AuthContext);
-    if (currentUser.username === username) {
+    const shouldRedirect = currentUser?.username === username
+    const token = localStorage.getItem('token');
+    const {data: user, loading, error} = useFetch(shouldRedirect ? null : `/users/${username}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (shouldRedirect) {
         return <Navigate to={"/profile"} replace/>
     }
-    const {data: user, loading, error} = useFetch(`/users/${username}`, {});
 
     return (
         user ?

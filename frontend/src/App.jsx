@@ -1,7 +1,7 @@
 import './App.css'
 import Home from './pages/Home/Home.jsx';
 import Events from './pages/Events/Events.jsx';
-import {Navigate, NavLink, Route, Routes, useParams} from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import Profile from './pages/Profile/Profile.jsx';
 import Games from './pages/Games/Games.jsx';
 import Users from './pages/Users/Users.jsx';
@@ -44,4 +44,4 @@ function App() {
     )
 }
 
-export default App
+export default App;
