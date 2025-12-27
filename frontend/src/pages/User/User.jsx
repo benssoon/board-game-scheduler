@@ -1,7 +1,7 @@
 import './User.css';
 import {useContext, useEffect} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import {Navigate, useParams} from 'react-router-dom';
+import {Link, Navigate, useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 
@@ -40,7 +40,9 @@ function User() {
                 >
                     <ul>
                         {user.hostedEvents.map((event) => {
-                            return <li key={event}>{event}</li>
+                            return <li key={event.id}>
+                                <Link to={`/events/${event.id}`}>{event.name}</Link>
+                            </li>
                         })}
                     </ul>
                 </InfoBox>
@@ -49,7 +51,9 @@ function User() {
                 >
                     <ul>
                         {user.joinedEvents.map((event) => {
-                            return <li key={event}>{event}</li>
+                            return <li key={event.id}>
+                                <Link to={`/events/${event.id}`}>{event.name}</Link>
+                            </li>
                         })}
                     </ul>
                 </InfoBox>
