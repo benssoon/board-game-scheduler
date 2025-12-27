@@ -4,6 +4,7 @@ import {useState} from 'react';
 import {handleFormChange} from '../../helpers/handlers.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
+import {useNavigate} from 'react-router-dom';
 
 function Register() {
     const initialUserFormState = {
@@ -27,6 +28,8 @@ function Register() {
     const [formError, setFormError] = useState(null);
     const [submitError, setSubmitError] = useState(null);
 
+    const navigate = useNavigate();
+
     async function handleSubmit(e) {
         e.preventDefault();
         setSubmitError(null);
@@ -46,6 +49,7 @@ function Register() {
                 }
             }
         }
+        navigate('/login');
     }
 
     return (
@@ -98,6 +102,7 @@ function Register() {
                 />
                 {/*Phone*/}
                 <FormField
+                    isRequired
                     label={'Phone Number'}
                     type={'tel'}
                     id={'telephoneNumber'}
