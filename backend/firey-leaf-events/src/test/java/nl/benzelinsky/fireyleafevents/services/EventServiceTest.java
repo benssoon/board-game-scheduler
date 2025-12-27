@@ -624,6 +624,19 @@ class EventServiceTest {
     }
 
     @Test
+    @DisplayName("Should add non-host to event")
+    public void testAddNonHostPlayer() {
+        event1.setGame(game1);
+        event1.setHost(player2);
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(player1));
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+
+        EventOutputDto eventOutputDto = eventService.addPlayer("waterman", 1L);
+
+        assertFalse(eventOutputDto.isHostPlaying);
+    }
+
+    @Test
     @DisplayName("Should throw RecordNotFoundException")
     public void testAddPlayerThrowsRecordNotFoundException() {
         //arrange

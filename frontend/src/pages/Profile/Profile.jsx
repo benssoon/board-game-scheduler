@@ -1,20 +1,77 @@
 import './Profile.css';
 import {jwtDecode} from 'jwt-decode';
-import {useContext} from 'react';
+import {useContext, useEffect} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import InfoBox from '../../components/InfoBox/InfoBox.jsx';
+import {Link} from 'react-router-dom';
+import useFetch from '../../helpers/useFetch.js';
+import {API} from '../../globalConstants.js';
 
 function Profile() {
     const token = localStorage.getItem('token');
-    const username = jwtDecode(token).sub
-    const {logout} = useContext(AuthContext)
+    const username = jwtDecode(token).sub;
+    const {logout} = useContext(AuthContext);
+    const {data: user, loading, error} = useFetch(`/users/${username}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
     return (
-        <>
-            <h2>Hello {username}!</h2>
-            <h2>Logout</h2>
+        user ?
+            <>
+                <h2>Hello {username}!</h2>
 
-            <button type="button" onClick={logout}>Logout</button>
-        </>
+                <InfoBox
+                    type={'details'}
+                >
+                    <p>Username: {username}</p>
+                    <p>Name: {user.name}</p>
+                    <p>Email: {user.emailAddress}</p>
+                    <p>Phone: {user.telephoneNumber}</p>
+                    <p>Age: {user.age}</p>
+                    <p>Area: {user.area}</p>
+                </InfoBox>
+                <InfoBox
+                    type={'address'}
+                >
+                    <p>Street: </p>
+                    <p>House number: </p>
+                    <p>City: </p>
+                    <p>Postal Code: </p>
+                    <p>State/Province: </p>
+                    <p>Country: </p>
+                </InfoBox>
+                <InfoBox
+                    type={'hosting'}
+                >
+                    <ul>
+                        {user.hostedEvents.map((event) => {
+                            return <li key={event.id}>
+                                <Link to={`/events/${event.id}`}>{event.name}</Link>
+                            </li>
+                        })}
+                    </ul>
+                </InfoBox>
+                <InfoBox
+                    type={'joined'}
+                >
+                    <ul>
+                        {user.joinedEvents.map((event) => {
+                            return <li key={event.id}>
+                                <Link to={`/events/${event.id}`}>{event.name}</Link>
+                            </li>
+                        })}
+                    </ul>
+                </InfoBox>
+                <h2>Logout</h2>
+
+                <button type="button" onClick={logout}>Logout</button>
+            </>
+            :
+            loading ? <p>Loading...</p>
+                :
+                error && <p>Error! {error.response.data.status} {error.response.data.error}</p>
     );
 }
 

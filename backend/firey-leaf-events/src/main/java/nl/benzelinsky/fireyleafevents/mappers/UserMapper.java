@@ -5,7 +5,9 @@ import nl.benzelinsky.fireyleafevents.models.Role;
 import nl.benzelinsky.fireyleafevents.models.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserMapper {
 
@@ -18,6 +20,9 @@ public class UserMapper {
         user.setName(inputDto.name);
         user.setEmailAddress(inputDto.emailAddress);
         user.setTelephoneNumber(inputDto.telephoneNumber);
+        user.setAge(inputDto.age);
+        user.setArea(inputDto.area);
+        user.setAddress(inputDto.address);
 
         return user;
     }
