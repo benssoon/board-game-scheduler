@@ -21,25 +21,12 @@ function Games() {
         maxAge: 99,
     }
     const [param, setParam] = useState('');
-    const [gameFormState, setGameFormState] = useState(initialGameFormState);
-    const [gameId, setGameId] = useState(2);
-    const [errorArray, setErrorArray] = useState([]);
-    const [formError, setFormError] = useState(null);
     const [updated, setUpdated] = useState(0);
     //</editor-fold>
 
     const {isAdmin, isUser} = useContext(AuthContext);
     const titleRef = useRef(null);
     const navigate = useNavigate();
-
-    //<editor-fold desc="Effects">
-    useEffect(() => {
-        if (formError) {
-            console.log('formError:')
-            console.log(formError);
-        }
-    }, [formError])
-    //</editor-fold>
 
     //<editor-fold desc="Handlers">
     function createGame() {
@@ -50,33 +37,6 @@ function Games() {
         }
     }
 
-    async function handleGameSubmit(e) {
-        e.preventDefault();
-        const cleanData = cleanupData(gameFormState);
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const response = await axios.post(API + '/games', cleanData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                console.log(response);
-            } catch (er) {
-                const response = er.response.data
-                setFormError(response);
-                console.error(response);
-                return response;
-            }
-            setUpdated(updated + 1);
-        } else {
-            console.error('User must be logged in to create new events.');
-            //TODO add on-page error
-        }
-        setGameFormState(initialGameFormState);
-        //TODO add updated state to reload DisplayGrid
-        titleRef.current.focus();
-    }
     //</editor-fold>
 
     //<editor-fold desc="Functions">

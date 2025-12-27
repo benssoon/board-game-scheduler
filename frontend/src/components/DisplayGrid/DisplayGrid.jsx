@@ -1,7 +1,6 @@
 import './DisplayGrid.css';
 import Card from '../Card/Card.jsx';
 import useFetch from '../../helpers/useFetch.js';
-import {useEffect} from 'react';
 
 function DisplayGrid({type, preview, updated, param}) {
     const classname = preview ? "displayPreview" : "displayGrid";

@@ -169,13 +169,13 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Should return the correct user")
-    void testGetUser() {
+    @DisplayName("Should return the correct user (self)")
+    void testGetUserSelf() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
 
         //act
-        ShortUserOutputDto dto = userService.getUser(username);
+        ShortUserOutputDto dto = (ShortUserOutputDto) userService.getUser(username, true);
 
         //assert
         assertEquals(user1.getUsername(), dto.username);
@@ -196,6 +196,8 @@ class UserServiceTest {
         });
     }
 
+    //TODO test for non-self user as well.
+
     @Test
     @DisplayName("Should throw UsernameNotFoundException")
     public void testGetUserThrowsUsernameNotFoundException() {
@@ -203,7 +205,7 @@ class UserServiceTest {
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
         //act
-        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.getUser(username));
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.getUser(username, true));
 
         //assert
         assertEquals(usernameNotFoundMessage, exception.getMessage());

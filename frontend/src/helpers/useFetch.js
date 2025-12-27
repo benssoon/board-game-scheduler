@@ -1,6 +1,8 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {API} from '../globalConstants.js';
+import {AuthContext} from '../context/AuthContext.jsx';
+import {useNavigate} from 'react-router-dom';
 
 function useFetch(endpoint, config, updated) {
     const [data, setData] = useState(null);
@@ -18,7 +20,6 @@ function useFetch(endpoint, config, updated) {
                 const response = await axios.get(url, config);
                 setData(response.data);
             } catch (er) {
-                console.error('Error in useFetch:')
                 console.error(er);
                 setError(er);
             }

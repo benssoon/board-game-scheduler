@@ -24,8 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        /*UserOutputDto userOutputDto = this.userService.getUser(username); // later weg*/
-        UserOutputDto userOutputDto = this.userService.getUserWithPassword(username); // later wachtwoord uit mapper
+        UserOutputDto userOutputDto = this.userService.getUserWithPassword(username);
 
         String password = userOutputDto.password;
 

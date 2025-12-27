@@ -18,8 +18,8 @@ public class UserOutputDto {
     public int age;
     public String area;
     public String address;
-    public List<String> hostedEvents;
-    public List<String> joinedEvents;
+    public List<TinyEventOutputDto> hostedEvents;
+    public List<TinyEventOutputDto> joinedEvents;
     @JsonSerialize // TODO Is this necessary? What does it do exactly?
     public Set<Role> roles;
 }

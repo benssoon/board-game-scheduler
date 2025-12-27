@@ -1,6 +1,5 @@
 package nl.benzelinsky.fireyleafevents.filter;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -46,13 +46,12 @@ public class UserController {
 
     // Get User by username
     @GetMapping("/{username}")
-    public ResponseEntity<ShortUserOutputDto> getUser(@PathVariable("username") String username, @AuthenticationPrincipal UserDetails userDetails) {
-        if (username.equals(userDetails.getUsername())) {
-            return ResponseEntity.ok(this.userService.getUser(username));
-        }
-        else {
-            throw new BadRequestException("You are only authorized to view your own user profile.");
-        }
+    public ResponseEntity<?> getUser( // Use generic to allow either ShortUserOutputDto or TinyUserOutputDto
+            @PathVariable("username") String username,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        boolean isSelf = userDetails != null && username.equals(userDetails.getUsername());
+        return ResponseEntity.ok(this.userService.getUser(username, isSelf));
     }
 
     // Update User by username

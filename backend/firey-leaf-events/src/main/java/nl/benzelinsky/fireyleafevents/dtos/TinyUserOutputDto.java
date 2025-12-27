@@ -6,6 +6,6 @@ public class TinyUserOutputDto {
     public String username;
     public String name;
     public String area;
-    public List<String> hostedEvents;
-    public List<String> joinedEvents;
+    public List<TinyEventOutputDto> hostedEvents;
+    public List<TinyEventOutputDto> joinedEvents;
 }

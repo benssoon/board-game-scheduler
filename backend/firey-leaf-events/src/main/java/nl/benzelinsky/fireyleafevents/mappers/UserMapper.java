@@ -1,9 +1,6 @@
 package nl.benzelinsky.fireyleafevents.mappers;
 
-import nl.benzelinsky.fireyleafevents.dtos.ShortUserOutputDto;
-import nl.benzelinsky.fireyleafevents.dtos.TinyUserOutputDto;
-import nl.benzelinsky.fireyleafevents.dtos.UserInputDto;
-import nl.benzelinsky.fireyleafevents.dtos.UserOutputDto;
+import nl.benzelinsky.fireyleafevents.dtos.*;
 import nl.benzelinsky.fireyleafevents.models.Role;
 import nl.benzelinsky.fireyleafevents.models.User;
 
@@ -31,11 +28,11 @@ public class UserMapper {
         outputDto.name = user.getName();
         outputDto.area = user.getArea();
         // Only send back the name of the event to prevent recursion. TODO add @JsonSerialize in the output DTO instead?
-        List<String> hostedEvents = new ArrayList<>();
-        user.getHostedEvents().forEach((event) -> hostedEvents.add(event.getName()));
+        List<TinyEventOutputDto> hostedEvents = new ArrayList<>();
+        user.getHostedEvents().forEach((event) -> hostedEvents.add(EventMapper.toTinyDto(event)));
         outputDto.hostedEvents = hostedEvents;
-        List<String> joinedEvents = new ArrayList<>();
-        user.getJoinedEvents().forEach((event) -> joinedEvents.add(event.getName()));
+        List<TinyEventOutputDto> joinedEvents = new ArrayList<>();
+        user.getJoinedEvents().forEach((event) -> joinedEvents.add(EventMapper.toTinyDto(event)));
         outputDto.joinedEvents = joinedEvents;
 
         return outputDto;
@@ -51,11 +48,11 @@ public class UserMapper {
         outputDto.area = user.getArea();
         outputDto.address = user.getAddress();
         // Only send back the name of the event to prevent recursion. TODO add @JsonSerialize in the output DTO instead.
-        List<String> hostedEvents = new ArrayList<>();
-        user.getHostedEvents().forEach((event) -> hostedEvents.add(event.getName()));
+        List<TinyEventOutputDto> hostedEvents = new ArrayList<>();
+        user.getHostedEvents().forEach((event) -> hostedEvents.add(EventMapper.toTinyDto(event)));
         outputDto.hostedEvents = hostedEvents;
-        List<String> joinedEvents = new ArrayList<>();
-        user.getJoinedEvents().forEach((event) -> joinedEvents.add(event.getName()));
+        List<TinyEventOutputDto> joinedEvents = new ArrayList<>();
+        user.getJoinedEvents().forEach((event) -> joinedEvents.add(EventMapper.toTinyDto(event)));
         outputDto.joinedEvents = joinedEvents;
         outputDto.roles = user.getRoles();
 

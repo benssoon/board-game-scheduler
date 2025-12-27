@@ -6,6 +6,7 @@ import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import SearchBar from '../SearchBar/SearchBar.jsx';
 
 function FormField({start, isRequired, label, type, id, name, formState, handleChange, errors}) {
+    // type is the <input/> type attribute value, 'date-picker' or 'filter'
     const [error, setError] = useState('');
 
     useEffect(() => {
