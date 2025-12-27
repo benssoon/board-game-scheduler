@@ -68,7 +68,8 @@ public class Event {
         if (this.players.size() == this.game.getMaxPlayers()) {
             this.setFull(true);
         }
-        if (this.players.size() == this.game.getMinPlayers()) {
+        // Event can begin as long as there are at least as many players as the minimum required by the game.
+        if (this.players.size() >= this.game.getMinPlayers()) {
             this.setReadyToStart(true);
         }
     }
