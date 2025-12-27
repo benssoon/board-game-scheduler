@@ -4,7 +4,7 @@ import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import useFetch from '../../helpers/useFetch.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 
 function Event() {
@@ -18,6 +18,10 @@ function Event() {
     const {isAuth, isAdmin, isUser, user, logout} = useContext(AuthContext);
     const isHost = event?.host.username === user?.username;
     const location = useLocation();
+
+    useEffect(() => {
+        console.log(event)
+    }, [event]);
 
     async function changeParticipation(action) {
         if (isAuth && isUser) {
