@@ -200,6 +200,7 @@ public class EventService {
         }
         event.addPlayer(player);
         player.joinEvent(event);
+        this.userRepository.save(player);
         this.eventRepository.save(event);
         return EventMapper.toOutputDto(event);
     }

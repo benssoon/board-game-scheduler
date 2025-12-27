@@ -49,9 +49,11 @@ function AuthContextProvider({children}) {
             const u = result.data
             setAuth({
                 isAuth: true,
+                /* Check if 'ROLE_ADMIN' is in roles. */
                 isAdmin: u.roles.some((role) => {
                     return role.role === 'ROLE_ADMIN'
                 }),
+                /* Check if 'ROLE_USER' is in roles. */
                 isUser: u.roles.some((role) => {
                     return role.role === 'ROLE_USER'
                 }),

@@ -36,6 +36,7 @@ function Register() {
         setFormError(null);
         console.log(userFormState)
         try {
+            console.log(userFormState)
             const response = await axios.post(`${API}/users`, userFormState)
             console.log(response)
         } catch (er) {
@@ -43,9 +44,11 @@ function Register() {
             const response = er.response.data;
             if (er.status === 400) { // get response from backend
                 if (typeof response === 'object') {
-                    setFormError(response)
+                    setFormError(response);
+                    return response;
                 } else {
-                    setSubmitError(response)
+                    setSubmitError(response);
+                    return response;
                 }
             }
         }

@@ -3,41 +3,46 @@ import {jwtDecode} from 'jwt-decode';
 import {useContext, useEffect} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
+import {Link} from 'react-router-dom';
+import useFetch from '../../helpers/useFetch.js';
+import {API} from '../../globalConstants.js';
 
 function Profile() {
     const token = localStorage.getItem('token');
     const username = jwtDecode(token).sub;
-    const {user, logout} = useContext(AuthContext);
-
-    useEffect(() => {
-        console.log(user)
-    }, [user]);
+    const {logout} = useContext(AuthContext);
+    const {data: user, loading, error} = useFetch(`/users/${username}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
     return (
-        <>
-            <h2>Hello {username}!</h2>
+        user ?
+            <>
+                <h2>Hello {username}!</h2>
 
-            <InfoBox
-                type={'details'}
-            >
-                <p>Username: {username}</p>
-                <p>Name: {user.name}</p>
-                <p>Email: {user.emailAddress}</p>
-                <p>Phone: {user.telephoneNumber}</p>
-                <p>Age: {user.age}</p>
-                <p>Area: {user.area}</p>
-            </InfoBox>
-            <InfoBox
-                type={'address'}
-            >
-                <p>Street: </p>
-                <p>House number: </p>
-                <p>City: </p>
-                <p>Postal Code: </p>
-                <p>State/Province: </p>
-                <p>Country: </p>
-            </InfoBox>
-            <InfoBox
+                <InfoBox
+                    type={'details'}
+                >
+                    <p>Username: {username}</p>
+                    <p>Name: {user.name}</p>
+                    <p>Email: {user.emailAddress}</p>
+                    <p>Phone: {user.telephoneNumber}</p>
+                    <p>Age: {user.age}</p>
+                    <p>Area: {user.area}</p>
+                </InfoBox>
+                <InfoBox
+                    type={'address'}
+                >
+                    <p>Street: </p>
+                    <p>House number: </p>
+                    <p>City: </p>
+                    <p>Postal Code: </p>
+                    <p>State/Province: </p>
+                    <p>Country: </p>
+                </InfoBox>
+                <InfoBox
                     type={'hosting'}
                 >
                     <ul>
@@ -59,10 +64,14 @@ function Profile() {
                         })}
                     </ul>
                 </InfoBox>
-            <h2>Logout</h2>
+                <h2>Logout</h2>
 
-            <button type="button" onClick={logout}>Logout</button>
-        </>
+                <button type="button" onClick={logout}>Logout</button>
+            </>
+            :
+            loading ? <p>Loading...</p>
+                :
+                error && <p>Error! {error.response.data.status} {error.response.data.error}</p>
     );
 }
 
