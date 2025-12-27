@@ -92,7 +92,7 @@ function AuthContextProvider({children}) {
     function logout() {
         console.log(auth);
         localStorage.removeItem('token');
-        console.log(auth.user.username + ' is logged out.');
+        //console.log(auth.user.username + ' is logged out.');
         setAuth({
             ...auth,
             isAuth: false,

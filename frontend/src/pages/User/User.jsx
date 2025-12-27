@@ -1,5 +1,5 @@
 import './User.css';
-import {useContext} from 'react';
+import {useContext, useEffect} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import {Navigate, useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
@@ -16,6 +16,10 @@ function User() {
         }
     });
 
+    useEffect(() => {
+        console.log(user)
+    }, [user]);
+
     if (shouldRedirect) {
         return <Navigate to={"/profile"} replace/>
     }
@@ -27,19 +31,27 @@ function User() {
                 <InfoBox
                     type="details"
                 >
-                    <p>{user.username}</p>
-                    <p>{user.password}</p>
-                    <p>{user.name}</p>
-                    <p>{user.emailAddress}</p>
-                    <p>{user.telephoneNumber}</p>
-                    <p>{user.age}</p>
-                    <p>{user.area}</p>
-                    <p>{user.street}</p>
-                    <p>{user.house}</p>
-                    <p>{user.city}</p>
-                    <p>{user.postalCode}</p>
-                    <p>{user.state}</p>
-                    <p>{user.country}</p>
+                    <p>Username: {user.username}</p>
+                    <p>Name: {user.name}</p>
+                    <p>Area: {user.area}</p>
+                </InfoBox>
+                <InfoBox
+                    type={'hosting'}
+                >
+                    <ul>
+                        {user.hostedEvents.map((event) => {
+                            return <li key={event}>{event}</li>
+                        })}
+                    </ul>
+                </InfoBox>
+                <InfoBox
+                    type={'joined'}
+                >
+                    <ul>
+                        {user.joinedEvents.map((event) => {
+                            return <li key={event}>{event}</li>
+                        })}
+                    </ul>
                 </InfoBox>
             </>
             :

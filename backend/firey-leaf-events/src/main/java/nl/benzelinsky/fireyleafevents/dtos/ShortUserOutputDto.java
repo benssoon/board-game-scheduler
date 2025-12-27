@@ -15,8 +15,8 @@ public class ShortUserOutputDto {
     public int age;
     public String area;
     public String address;
-    public List<String> hostedEvents;
-    public List<String> joinedEvents;
+    public List<TinyEventOutputDto> hostedEvents;
+    public List<TinyEventOutputDto> joinedEvents;
     @JsonSerialize
     public Set<Role> roles;
 }

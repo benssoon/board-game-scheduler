@@ -1,7 +1,5 @@
 import './InfoBox.css';
 import {useNavigate} from 'react-router-dom';
-import {useContext} from 'react';
-import {AuthContext} from '../../context/AuthContext.jsx';
 
 function InfoBox({type, children, parentPage, parentType, isEditable}) {
     const navigate = useNavigate();
