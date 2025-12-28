@@ -1,13 +1,9 @@
 import './Game.css';
 import {useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
-import {cleanupData} from '../../helpers/processingAndFormatting.js';
-import {useContext, useRef, useState} from 'react';
-import {handleFormChange} from '../../helpers/handlers.js';
+import {useContext} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
-import FormField from '../../components/FormField/FormField.jsx';
-import GameForm from '../../components/GameForm/GameForm.jsx';
 
 function Game() {
     const {id} = useParams();

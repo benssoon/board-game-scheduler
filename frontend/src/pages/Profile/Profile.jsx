@@ -24,6 +24,8 @@ function Profile() {
 
                 <InfoBox
                     type={'details'}
+                    parentPage={'/profile'}
+                    isEditable
                 >
                     <p>Username: {username}</p>
                     <p>Name: {user.name}</p>
@@ -31,6 +33,7 @@ function Profile() {
                     <p>Phone: {user.telephoneNumber}</p>
                     <p>Age: {user.age}</p>
                     <p>Area: {user.area}</p>
+                    <p>Address: {user.address}</p>
                 </InfoBox>
                 <InfoBox
                     type={'address'}

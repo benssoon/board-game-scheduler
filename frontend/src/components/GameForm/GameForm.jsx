@@ -60,7 +60,7 @@ function GameForm({type}) { // type is either create or edit
             const cleanData = cleanupData(gameFormState);
             const token = localStorage.getItem('token');
             try {
-                const response = await axios[(type === 'create' && 'post') || (type === 'edit' && 'put')](API + '/games' + (type === 'edit' ? `/${id}` : ''), cleanData, {
+                const response = await axios[(type === 'create' && 'post') || (type === 'edit' && 'put')](`${API}/games` + (type === 'edit' ? `/${id}` : ''), cleanData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }

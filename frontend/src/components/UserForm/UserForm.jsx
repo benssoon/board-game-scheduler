@@ -1,16 +1,19 @@
-import './Register.css';
-import FormField from '../../components/FormField/FormField.jsx';
-import {useState} from 'react';
-import {handleFormChange} from '../../helpers/handlers.js';
-import axios from 'axios';
-import {API} from '../../globalConstants.js';
+import './UserForm.css';
+import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import UserForm from '../../components/UserForm/UserForm.jsx';
+import axios from 'axios';
+import useFetch from '../../helpers/useFetch.js';
+import {jwtDecode} from 'jwt-decode';
+import {API} from '../../globalConstants.js';
+import {handleFormChange} from '../../helpers/handlers.js';
+import FormField from '../FormField/FormField.jsx';
 
-function Register() {
-    /*const initialUserFormState = {
+function UserForm({type}) {
+    const initialUserFormState = {
         username: '',
+        currentPassword: '',
         password: '',
+        repeatPassword: '',
         name: '',
         emailAddress: '',
         telephoneNumber: '',
@@ -25,44 +28,83 @@ function Register() {
         address: 'test address',
         roles: ['USER'],
     }
+    const matchingPasswordError = <span className={'field-error'}>Passwords must match</span>;
+    const dontUsePasswords = true;
     const [userFormState, setUserFormState] = useState(initialUserFormState);
     const [formError, setFormError] = useState(null);
     const [submitError, setSubmitError] = useState(null);
-
+    const [passwordsMatch, togglePasswordsMatch] = useState(true);
+    const [passwordIsNew, togglePasswordIsNew] = useState(true);
+    const token = localStorage.getItem('token');
+    const username = token && jwtDecode(token).sub;
+    const endpoint = type === 'edit' ? `/users/${username}` : null;
+    const {data: user} = useFetch(endpoint, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            setUserFormState({
+                ...userFormState,
+                username: user.username,
+                name: user.name,
+                emailAddress: user.emailAddress,
+                telephoneNumber: user.telephoneNumber,
+                age: user.age,
+                area: user.area,
+                address: user.address,
+            });
+        }
+    }, [user]);
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setSubmitError(null);
-        setFormError(null);
-        console.log(userFormState)
-        try {
-            console.log(userFormState)
-            const response = await axios.post(`${API}/users`, userFormState)
-            console.log(response)
-        } catch (er) {
-            console.log(er);
-            const response = er.response.data;
-            if (er.status === 400) { // get response from backend
-                if (typeof response === 'object') {
-                    setFormError(response);
-                    return response;
-                } else {
-                    setSubmitError(response);
-                    return response;
+        if (userFormState.password === userFormState.repeatPassword && userFormState.password !== userFormState.currentPassword || dontUsePasswords) {
+            togglePasswordsMatch(true);
+            setSubmitError(null);
+            setFormError(null);
+            try {
+                console.log(userFormState);
+                const response = await axios[type === 'create' && 'post' || type === 'edit' && 'put'](
+                    `${API}/users` + (type === 'edit' ? `/${username}` : ''),
+                    userFormState,
+                    type === 'edit' && {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                    }
+                );
+                console.log(response);
+            } catch (er) {
+                console.log(er);
+                const response = er.response.data;
+                if (er.status === 400) { // get response from backend
+                    if (typeof response === 'object') {
+                        setFormError(response);
+                        return response;
+                    } else {
+                        setSubmitError(response);
+                        return response;
+                    }
                 }
             }
+            navigate('/login');
+        } else {
+            if (userFormState.password !== userFormState.repeatPassword) {
+                togglePasswordsMatch(false);
+            }
+            if (userFormState.password === userFormState.currentPassword) {
+                togglePasswordIsNew(false);
+            }
         }
-        navigate('/login');
-    }*/
-
+    }
     return (
         <>
-            <UserForm
-                type={'create'}
-            />
-            {/*<form onSubmit={handleSubmit}>
-                Username
+            <form onSubmit={handleSubmit}>
+                {/*Username*/}
                 <FormField
                     isRequired
                     label={'Username'}
@@ -73,7 +115,19 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Password
+                {/*Current Password TODO Currently does nothing. Needs backend logic to be usable.*/}
+                {type === 'edit' && <FormField
+                    isRequired
+                    label={'Current Password'}
+                    type={'password'}
+                    id={'currentPassword'}
+                    name={'currentPassword'}
+                    formState={userFormState}
+                    handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
+                    errors={formError}
+                />}
+                {type === 'edit' && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
+                {/*Password*/}
                 <FormField
                     isRequired
                     label={'Password'}
@@ -84,7 +138,21 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Name
+                {type === 'edit' && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
+                {/*Repeat Password*/}
+                <FormField
+                    isRequired
+                    label={'Repeat Password'}
+                    type={'password'}
+                    id={'repeatPassword'}
+                    name={'repeatPassword'}
+                    formState={userFormState}
+                    handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
+                    errors={formError}
+                />
+                {userFormState.password !== userFormState.repeatPassword && matchingPasswordError}
+                {type === 'edit' && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
+                {/*Name*/}
                 <FormField
                     isRequired
                     label={'Name'}
@@ -95,7 +163,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Email
+                {/*Email*/}
                 <FormField
                     isRequired
                     label={'Email Address'}
@@ -106,7 +174,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Phone
+                {/*Phone*/}
                 <FormField
                     isRequired
                     label={'Phone Number'}
@@ -117,7 +185,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Age
+                {/*Age*/}
                 <FormField
                     label={'Age'}
                     type={'number'}
@@ -127,7 +195,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Area
+                {/*Area*/}
                 <FormField
                     label={'Area'}
                     type={'text'}
@@ -137,7 +205,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Street Name
+                {/*Street Name*/}
                 <FormField
                     label={'Street Name'}
                     type={'text'}
@@ -147,7 +215,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                House Number
+                {/*House Number*/}
                 <FormField
                     label={'House Number'}
                     type={'number'}
@@ -157,7 +225,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                City
+                {/*City*/}
                 <FormField
                     label={'City'}
                     type={'text'}
@@ -167,7 +235,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Postal Code
+                {/*Postal Code*/}
                 <FormField
                     label={'Postal Code'}
                     type={'text'}
@@ -177,7 +245,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                State
+                {/*State*/}
                 <FormField
                     label={'State/Province'}
                     type={'text'}
@@ -187,7 +255,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                Country
+                {/*Country*/}
                 <FormField
                     label={'Country'}
                     type={'text'}
@@ -198,12 +266,20 @@ function Register() {
                     errors={formError}
                 />
                 <button type={'submit'}>Submit</button>
-                {submitError && <span className={'field-error'}>
+                {
+                    submitError && <span className={'field-error'}>
                     {submitError}
-                </span>}
-            </form>*/}
+                    </span>
+                    ||
+                    !passwordsMatch && matchingPasswordError
+                    ||
+                    !passwordIsNew && <span className={'field-error'}>
+                    New password must be different than current password.
+                    </span>
+                }
+            </form>
         </>
     );
 }
 
-export default Register;
+export default UserForm;

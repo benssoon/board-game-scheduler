@@ -14,7 +14,9 @@ public class PatchUserInputDto {
     public String password;
     public String name;
     public String emailAddress;
-    @Size(min = 10, max = 16)
+    @Size(max = 16)
     @Pattern(regexp = "^\\+?[0-9]{5,15}$")
     public String telephoneNumber;
+    public String area;
+    public String address;
 }

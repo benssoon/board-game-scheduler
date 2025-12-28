@@ -74,11 +74,7 @@ function AuthContextProvider({children}) {
         }
         catch (er) {
             console.error(er);
-            setAuth({
-                isAuth: false,
-                user: null,
-                status: 'done',
-            });
+            logout();
         }
 
     }
@@ -94,7 +90,7 @@ function AuthContextProvider({children}) {
     function logout() {
         console.log(auth);
         localStorage.removeItem('token');
-        //console.log(auth.user.username + ' is logged out.');
+        console.log(auth.user.username + ' is logged out.');
         setAuth({
             ...auth,
             isAuth: false,
