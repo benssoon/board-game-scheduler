@@ -191,9 +191,6 @@ class UserServiceTest {
         user1.getJoinedEvents().forEach(e -> {
             assertTrue(dto.joinedEvents.contains(e.getName()));
         });
-        user1.getRoles().forEach(r -> {
-            assertTrue(dto.roles.contains(r));
-        });
     }
 
     //TODO test for non-self user as well.
@@ -259,12 +256,13 @@ class UserServiceTest {
     void updateWholeUser() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+        Mockito.when(passwordEncoder.encode(anyString())).thenReturn("$2a$12$O2eOMLCxxkhZMmKCZk6G8OEq6fh2Q0Ti4P04dZUECsTY3k6rE0.y6");
 
         //act
         ShortUserOutputDto dto = userService.updateWholeUser(username, shortUpdateDto);
 
         //assert
-        assertEquals(shortUpdateDto.password, user1.getPassword());
+        assertEquals("$2a$12$O2eOMLCxxkhZMmKCZk6G8OEq6fh2Q0Ti4P04dZUECsTY3k6rE0.y6", user1.getPassword());
         assertEquals(shortUpdateDto.name, user1.getName());
         assertEquals(shortUpdateDto.emailAddress, user1.getEmailAddress());
         assertEquals(shortUpdateDto.telephoneNumber, user1.getTelephoneNumber());

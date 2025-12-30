@@ -20,6 +20,5 @@ public class UserOutputDto {
     public String address;
     public List<TinyEventOutputDto> hostedEvents;
     public List<TinyEventOutputDto> joinedEvents;
-    @JsonSerialize // TODO Is this necessary? What does it do exactly?
     public Set<Role> roles;
 }
