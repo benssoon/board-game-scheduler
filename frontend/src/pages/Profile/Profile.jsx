@@ -12,6 +12,7 @@ import {API} from '../../globalConstants.js';
 
 function Profile() {
     const [updated, setUpdated] = useState(0);
+    const [roles, setRoles] = useState()
 
     const token = localStorage.getItem('token');
     const username = jwtDecode(token).sub;
@@ -22,6 +23,10 @@ function Profile() {
         },
     }, updated);
     const navigate = useNavigate();
+
+    function getUserRoles() {
+
+    }
 
     return (
         user ?
@@ -34,6 +39,7 @@ function Profile() {
                     isEditable
                 >
                     <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password</button>
+                    <button type={'button'} onClick={getUserRoles}>Get Roles</button>
                     <p>Username: {username}</p>
                     <Detail url={`${API}/users/${username}`} name={'name'} label={'Name'} value={user.name} update={setUpdated}/>
                     <Detail url={`${API}/users/${username}`} name={'emailAddress'} label={'Email'} value={user.emailAddress} update={setUpdated}/>

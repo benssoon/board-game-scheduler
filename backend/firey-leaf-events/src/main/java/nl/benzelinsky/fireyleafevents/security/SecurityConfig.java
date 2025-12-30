@@ -53,6 +53,7 @@ public class SecurityConfig {
                                 // Users
                                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET,"/users/*/roles").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
                                 // Events
                                 .requestMatchers(HttpMethod.POST, "/events").hasRole("USER") // Create event must be a user
