@@ -31,7 +31,7 @@ function EventForm({type}) { // type is either create or edit
     }
     const [eventFormState, setEventFormState] = useState(initialEventFormState);
     const navigate = useNavigate();
-    const {user, isAdmin, isUser} = useContext(AuthContext);
+    const {user, isUser} = useContext(AuthContext);
 
     useEffect(() => {
         if (event) {

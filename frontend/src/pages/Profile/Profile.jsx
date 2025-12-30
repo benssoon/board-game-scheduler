@@ -1,13 +1,18 @@
 import './Profile.css';
 import {jwtDecode} from 'jwt-decode';
-import {useContext, useEffect} from 'react';
+import {useContext, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
+import FormField from '../../components/FormField/FormField.jsx';
+import {handleFormChange} from '../../helpers/handlers.js';
+import Detail from '../../components/Detail/Detail.jsx';
 import {API} from '../../globalConstants.js';
 
 function Profile() {
+    const [updated, setUpdated] = useState(0);
+
     const token = localStorage.getItem('token');
     const username = jwtDecode(token).sub;
     const {logout} = useContext(AuthContext);
@@ -15,7 +20,8 @@ function Profile() {
         headers: {
             Authorization: `Bearer ${token}`,
         },
-    });
+    }, updated);
+    const navigate = useNavigate();
 
     return (
         user ?
@@ -24,13 +30,17 @@ function Profile() {
 
                 <InfoBox
                     type={'details'}
+                    parentPage={'/profile'}
+                    isEditable
                 >
+                    <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password</button>
                     <p>Username: {username}</p>
-                    <p>Name: {user.name}</p>
-                    <p>Email: {user.emailAddress}</p>
-                    <p>Phone: {user.telephoneNumber}</p>
-                    <p>Age: {user.age}</p>
-                    <p>Area: {user.area}</p>
+                    <Detail url={`${API}/users/${username}`} name={'name'} label={'Name'} value={user.name} update={setUpdated}/>
+                    <Detail url={`${API}/users/${username}`} name={'emailAddress'} label={'Email'} value={user.emailAddress} update={setUpdated}/>
+                    <Detail url={`${API}/users/${username}`} name={'telephoneNumber'} label={'Phone'} value={user.telephoneNumber} update={setUpdated}/>
+                    <Detail url={`${API}/users/${username}`} name={'age'} label={'Age'} value={user.age} update={setUpdated}/>
+                    <Detail url={`${API}/users/${username}`} name={'area'} label={'Area'} value={user.area} update={setUpdated}/>
+                    <Detail url={`${API}/users/${username}`} name={'address'} label={'Address'} value={user.address} update={setUpdated}/>
                 </InfoBox>
                 <InfoBox
                     type={'address'}

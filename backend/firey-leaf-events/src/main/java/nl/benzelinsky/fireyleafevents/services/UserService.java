@@ -80,10 +80,13 @@ public class UserService {
                         new UsernameNotFoundException(username));
 
         // Doing this with a mapper wouldn't work, because then the record would get a different id.
-        toUpdate.setPassword(dtoIn.password);
+        toUpdate.setPassword(passwordEncoder.encode(dtoIn.password));
         toUpdate.setName(dtoIn.name);
         toUpdate.setEmailAddress(dtoIn.emailAddress);
         toUpdate.setTelephoneNumber(dtoIn.telephoneNumber);
+        toUpdate.setAge(dtoIn.age);
+        toUpdate.setArea(dtoIn.area);
+        toUpdate.setAddress(dtoIn.address);
 
         this.userRepository.save(toUpdate);
         return UserMapper.toShortDto(toUpdate);
@@ -107,7 +110,14 @@ public class UserService {
         if (dtoIn.telephoneNumber != null) {
             toUpdate.setTelephoneNumber(dtoIn.telephoneNumber);
         }
+        if (dtoIn.area != null) {
+            toUpdate.setArea(dtoIn.area);
+        }
+        if (dtoIn.address != null) {
+            toUpdate.setAddress(dtoIn.address);
+        }
 
+        this.userRepository.save(toUpdate);
         return UserMapper.toShortDto(toUpdate);
     }
 

@@ -5,9 +5,10 @@ import {handleFormChange} from '../../helpers/handlers.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import {useNavigate} from 'react-router-dom';
+import UserForm from '../../components/UserForm/UserForm.jsx';
 
 function Register() {
-    const initialUserFormState = {
+    /*const initialUserFormState = {
         username: '',
         password: '',
         name: '',
@@ -53,13 +54,15 @@ function Register() {
             }
         }
         navigate('/login');
-    }
+    }*/
 
     return (
         <>
-            <h2>Hi</h2>
-            <form onSubmit={handleSubmit}>
-                {/*Username*/}
+            <UserForm
+                type={'create'}
+            />
+            {/*<form onSubmit={handleSubmit}>
+                Username
                 <FormField
                     isRequired
                     label={'Username'}
@@ -70,7 +73,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Password*/}
+                Password
                 <FormField
                     isRequired
                     label={'Password'}
@@ -81,7 +84,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Name*/}
+                Name
                 <FormField
                     isRequired
                     label={'Name'}
@@ -92,7 +95,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Email*/}
+                Email
                 <FormField
                     isRequired
                     label={'Email Address'}
@@ -103,7 +106,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Phone*/}
+                Phone
                 <FormField
                     isRequired
                     label={'Phone Number'}
@@ -114,7 +117,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Age*/}
+                Age
                 <FormField
                     label={'Age'}
                     type={'number'}
@@ -124,7 +127,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Area*/}
+                Area
                 <FormField
                     label={'Area'}
                     type={'text'}
@@ -134,7 +137,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Street Name*/}
+                Street Name
                 <FormField
                     label={'Street Name'}
                     type={'text'}
@@ -144,7 +147,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*House Number*/}
+                House Number
                 <FormField
                     label={'House Number'}
                     type={'number'}
@@ -154,7 +157,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*City*/}
+                City
                 <FormField
                     label={'City'}
                     type={'text'}
@@ -164,7 +167,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Postal Code*/}
+                Postal Code
                 <FormField
                     label={'Postal Code'}
                     type={'text'}
@@ -174,7 +177,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*State*/}
+                State
                 <FormField
                     label={'State/Province'}
                     type={'text'}
@@ -184,7 +187,7 @@ function Register() {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />
-                {/*Country*/}
+                Country
                 <FormField
                     label={'Country'}
                     type={'text'}
@@ -198,7 +201,7 @@ function Register() {
                 {submitError && <span className={'field-error'}>
                     {submitError}
                 </span>}
-            </form>
+            </form>*/}
         </>
     );
 }

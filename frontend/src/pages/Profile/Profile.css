@@ -1,0 +1,9 @@
+.userDetail {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+}
+
+.userDetail p {
+    margin: 0;
+}

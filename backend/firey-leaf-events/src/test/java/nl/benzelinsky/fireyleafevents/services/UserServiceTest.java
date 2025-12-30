@@ -78,7 +78,7 @@ class UserServiceTest {
         user3 = new User("saskia", "4321", "Saskia", "sas@sas.kia");
         dtoIn = new UserInputDto(username, password, apiKey, name, email, phone, age, area, address, rolesArray);
         shortUpdateDto = new UserInputDto(username, "abcd", "Moishe", "moishe@oy.vey");
-        patchDtoFull = new PatchUserInputDto("abcd", "Moishe", "moishe@oy.vey", "123456789");
+        patchDtoFull = new PatchUserInputDto("abcd", "Moishe", "moishe@oy.vey", "123456789", "Stetl", "some address");
         patchDtoEmpty = new PatchUserInputDto();
         usernameUnavailableMessage = "Username \"" + username + "\" is already taken.";
         userExistsEmailMessage = "A User already exists with email address \"" + email + "\".";
