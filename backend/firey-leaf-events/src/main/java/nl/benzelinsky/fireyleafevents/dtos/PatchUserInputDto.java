@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class PatchUserInputDto {
     public String password;
     public String name;

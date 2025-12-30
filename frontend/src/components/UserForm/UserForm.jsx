@@ -8,7 +8,7 @@ import {API} from '../../globalConstants.js';
 import {handleFormChange} from '../../helpers/handlers.js';
 import FormField from '../FormField/FormField.jsx';
 
-function UserForm({type}) {
+function UserForm({type, fields}) {
     const initialUserFormState = {
         username: '',
         currentPassword: '',
@@ -105,7 +105,7 @@ function UserForm({type}) {
         <>
             <form onSubmit={handleSubmit}>
                 {/*Username*/}
-                <FormField
+                {(!fields || fields?.includes('username')) && <FormField
                     isRequired
                     label={'Username'}
                     type={'text'}
@@ -114,9 +114,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*Current Password TODO Currently does nothing. Needs backend logic to be usable.*/}
-                {type === 'edit' && <FormField
+                {type === 'edit' && (!fields || fields?.includes('password')) && <FormField
                     isRequired
                     label={'Current Password'}
                     type={'password'}
@@ -126,9 +126,9 @@ function UserForm({type}) {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />}
-                {type === 'edit' && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
+                {type === 'edit' && (!fields || fields?.includes('password')) && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
                 {/*Password*/}
-                <FormField
+                {(!fields || fields?.includes('password')) && <FormField
                     isRequired
                     label={'Password'}
                     type={'password'}
@@ -137,10 +137,10 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
-                {type === 'edit' && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
+                />}
+                {type === 'edit' && (!fields || fields?.includes('password')) && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
                 {/*Repeat Password*/}
-                <FormField
+                {(!fields || fields?.includes('password')) && <FormField
                     isRequired
                     label={'Repeat Password'}
                     type={'password'}
@@ -149,11 +149,11 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
-                {userFormState.password !== userFormState.repeatPassword && matchingPasswordError}
-                {type === 'edit' && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
+                />}
+                {(!fields || fields?.includes('password')) && userFormState.password !== userFormState.repeatPassword && matchingPasswordError}
+                {type === 'edit' && (!fields || fields?.includes('password')) && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
                 {/*Name*/}
-                <FormField
+                {(!fields || fields?.includes('name')) && <FormField
                     isRequired
                     label={'Name'}
                     type={'text'}
@@ -162,9 +162,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*Email*/}
-                <FormField
+                {(!fields || fields?.includes('email')) && <FormField
                     isRequired
                     label={'Email Address'}
                     type={'email'}
@@ -173,9 +173,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*Phone*/}
-                <FormField
+                {(!fields || fields?.includes('phone')) && <FormField
                     isRequired
                     label={'Phone Number'}
                     type={'tel'}
@@ -184,9 +184,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*Age*/}
-                <FormField
+                {(!fields || fields?.includes('age')) && <FormField
                     label={'Age'}
                     type={'number'}
                     id={'age'}
@@ -194,9 +194,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*Area*/}
-                <FormField
+                {(!fields || fields?.includes('area')) && <FormField
                     label={'Area'}
                     type={'text'}
                     id={'area'}
@@ -204,9 +204,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*Street Name*/}
-                <FormField
+                {(!fields || fields?.includes('street')) && <FormField
                     label={'Street Name'}
                     type={'text'}
                     id={'street'}
@@ -214,9 +214,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*House Number*/}
-                <FormField
+                {(!fields || fields?.includes('house')) && <FormField
                     label={'House Number'}
                     type={'number'}
                     id={'house'}
@@ -224,9 +224,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*City*/}
-                <FormField
+                {(!fields || fields?.includes('city')) && <FormField
                     label={'City'}
                     type={'text'}
                     id={'city'}
@@ -234,9 +234,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*Postal Code*/}
-                <FormField
+                {(!fields || fields?.includes('postalCode')) && <FormField
                     label={'Postal Code'}
                     type={'text'}
                     id={'postalCode'}
@@ -244,9 +244,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*State*/}
-                <FormField
+                {(!fields || fields?.includes('state')) && <FormField
                     label={'State/Province'}
                     type={'text'}
                     id={'state'}
@@ -254,9 +254,9 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 {/*Country*/}
-                <FormField
+                {(!fields || fields?.includes('country')) && <FormField
                     label={'Country'}
                     type={'text'}
                     id={'country'}
@@ -264,16 +264,16 @@ function UserForm({type}) {
                     formState={userFormState}
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
-                />
+                />}
                 <button type={'submit'}>Submit</button>
                 {
                     submitError && <span className={'field-error'}>
                     {submitError}
                     </span>
                     ||
-                    !passwordsMatch && matchingPasswordError
+                    (!fields || fields?.includes('password')) && !passwordsMatch && matchingPasswordError
                     ||
-                    !passwordIsNew && <span className={'field-error'}>
+                    (!fields || fields?.includes('password')) && !passwordIsNew && <span className={'field-error'}>
                     New password must be different than current password.
                     </span>
                 }
