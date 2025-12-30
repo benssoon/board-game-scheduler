@@ -5,7 +5,7 @@ import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import SearchBar from '../SearchBar/SearchBar.jsx';
 
-function FormField({start, isRequired, label, type, id, name, formState, handleChange, errors}) {
+function FormField({start, isRequired, label, type, id, name, formState, handleChange, errors, isHorizontal}) {
     // type is the <input/> type attribute value, 'date-picker' or 'filter'
     const [error, setError] = useState('');
 
@@ -43,7 +43,7 @@ function FormField({start, isRequired, label, type, id, name, formState, handleC
 
     return (
         <>
-            <span className={`form-field${type === 'checkbox' || type === 'datetime-local' ? ` ${type}` : ''}`}>
+            <span className={`form-field${type === 'checkbox' || type === 'datetime-local' ? ` ${type}` : isHorizontal ? '-horizontal' : ''}`}>
                 <label htmlFor={id}>{label}{isRequired && <em>*</em>}</label>
                 {type === 'date-picker' ?
 
@@ -65,7 +65,7 @@ function FormField({start, isRequired, label, type, id, name, formState, handleC
                     />
 
                     :
-
+                    /* The filter type will use a SearchBar component instead of <input/> */
                     type === 'filter' ?
 
                         <SearchBar

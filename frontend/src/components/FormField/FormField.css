@@ -7,6 +7,11 @@
     flex-direction: column;
 }
 
+.form-field-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
 .form-field em {
     color: darkred;
     font-weight: bold;
