@@ -73,12 +73,6 @@ public class UserMapper {
         outputDto.age = user.getAge();
         outputDto.area = user.getArea();
         outputDto.address = user.getAddress();
-        List<TinyEventOutputDto> hostedEvents = new ArrayList<>();
-        user.getHostedEvents().forEach((event) -> hostedEvents.add(EventMapper.toTinyDto(event)));
-        outputDto.hostedEvents = hostedEvents;
-        List<TinyEventOutputDto> joinedEvents = new ArrayList<>();
-        user.getJoinedEvents().forEach((event) -> joinedEvents.add(EventMapper.toTinyDto(event)));
-        outputDto.joinedEvents = joinedEvents;
         outputDto.roles = user.getRoles();
 
         return outputDto;
