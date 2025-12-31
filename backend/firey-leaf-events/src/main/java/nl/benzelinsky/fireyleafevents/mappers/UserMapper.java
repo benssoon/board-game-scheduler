@@ -58,6 +58,7 @@ public class UserMapper {
         List<TinyEventOutputDto> joinedEvents = new ArrayList<>();
         user.getJoinedEvents().forEach((event) -> joinedEvents.add(EventMapper.toTinyDto(event)));
         outputDto.joinedEvents = joinedEvents;
+        outputDto.roles = user.getRoles();
 
         return outputDto;
     }

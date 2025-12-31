@@ -87,24 +87,22 @@ public class UserController {
 
     @PostMapping(value = "/{username}/roles")
     public ResponseEntity<Object> addUserRole(@PathVariable("username") String username, @RequestParam String roleName) {
-        try {
-            this.userService.addRole(username, roleName);
-            return ResponseEntity.noContent().build();
-        }
-        catch (Exception ex) {
-            throw new BadRequestException("You are not authorized to add roles.");
-        }
+        this.userService.addRole(username, roleName);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{username}/roles/{role}")
-    public ResponseEntity<Object> deleteUserRole(@PathVariable("username") String username, @PathVariable("role") String role) {
-        this.userService.removeRole(username, role);
+    public ResponseEntity<Object> deleteUserRole(@PathVariable("username") String username,
+                                                 @PathVariable("role") String role,
+                                                 @AuthenticationPrincipal UserDetails userDetails) {
+        this.userService.removeRole(username, role, userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 
     // Delete User by username
     @DeleteMapping("/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable("username") String username) {
+    public ResponseEntity<String> deleteUser(@PathVariable("username") String username,
+                                             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(this.userService.deleteUser(username));
     }
 }

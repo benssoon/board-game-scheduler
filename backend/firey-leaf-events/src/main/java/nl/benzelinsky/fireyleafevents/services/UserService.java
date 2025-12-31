@@ -8,6 +8,8 @@ import nl.benzelinsky.fireyleafevents.models.User;
 import nl.benzelinsky.fireyleafevents.repositories.EventRepository;
 import nl.benzelinsky.fireyleafevents.repositories.UserRepository;
 import nl.benzelinsky.fireyleafevents.utils.RandomStringGenerator;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +81,10 @@ public class UserService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
 
+        if (!dtoIn.username.equals(username)) {
+            throw new MayNotChangeUsernameException();
+        }
+
         // Doing this with a mapper wouldn't work, because then the record would get a different id.
         toUpdate.setPassword(passwordEncoder.encode(dtoIn.password));
         toUpdate.setName(dtoIn.name);
@@ -143,13 +149,16 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public void removeRole(String username, String role) {
+    public void removeRole(String username, String role, String currentUser) {
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
         Role roleToRemove = user.getRoles().stream().filter((a) -> a.getRole().equalsIgnoreCase("ROLE_"+role)).findAny()
                         .orElseThrow(() ->
-                                new RoleNotFoundException(role));
+                                new RoleNotFoundException(username, role));
+        if (currentUser.equals(username) && user.getRoles().contains(roleToRemove) && roleToRemove.getRole().equals("ROLE_ADMIN")) { // Current user cannot remove their own admin role.
+            throw new AdminCannotRemoveOwnAdminRoleException();
+        }
         user.removeRole(roleToRemove);
         this.userRepository.save(user);
     }

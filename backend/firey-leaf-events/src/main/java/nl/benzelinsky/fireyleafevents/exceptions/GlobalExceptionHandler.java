@@ -96,4 +96,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleAlreadyHostingException(AlreadyHostingException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    //Not allowed to change username
+    @ExceptionHandler(MayNotChangeUsernameException.class)
+    public ResponseEntity<String> handleMayNotChangeUsernameException(MayNotChangeUsernameException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    //Role not found
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<String> handleRoleNotFoundException(RoleNotFoundException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    //Current user cannot remove their own admin role
+    @ExceptionHandler(AdminCannotRemoveOwnAdminRoleException.class)
+    public ResponseEntity<String> handleAdminCannotRemoveOwnAdminRoleException(AdminCannotRemoveOwnAdminRoleException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }

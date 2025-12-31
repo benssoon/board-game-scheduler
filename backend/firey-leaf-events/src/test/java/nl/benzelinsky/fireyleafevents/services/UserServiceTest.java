@@ -416,7 +416,7 @@ class UserServiceTest {
         user1.addRole(new Role(username, "ROLE_" + rolesArray[0]) );
 
         //act
-        userService.removeRole(username, rolesArray[0]);
+        userService.removeRole(username, rolesArray[0], "none");
 
         //assert
         user1.getRoles().forEach(role -> assertNotEquals("ROLE_" + rolesArray[0], role.getRole()));
@@ -429,7 +429,7 @@ class UserServiceTest {
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
         //act
-        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.removeRole(username, rolesArray[0]));
+        UsernameNotFoundException exception = assertThrowsExactly(UsernameNotFoundException.class, () -> userService.removeRole(username, rolesArray[0], "none"));
 
         //assert
         assertEquals(usernameNotFoundMessage, exception.getMessage());
@@ -442,7 +442,7 @@ class UserServiceTest {
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
 
         //act
-        RoleNotFoundException exception = assertThrowsExactly(RoleNotFoundException.class, () -> userService.removeRole(username, rolesArray[0]));
+        RoleNotFoundException exception = assertThrowsExactly(RoleNotFoundException.class, () -> userService.removeRole(username, rolesArray[0], "none"));
 
         //assert
         assertEquals(roleNotFoundMessage, exception.getMessage());

@@ -17,4 +17,5 @@ public class ShortUserOutputDto {
     public String address;
     public List<TinyEventOutputDto> hostedEvents;
     public List<TinyEventOutputDto> joinedEvents;
+    public Set<Role> roles;
 }
