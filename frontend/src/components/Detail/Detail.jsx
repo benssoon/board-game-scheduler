@@ -6,6 +6,7 @@ import axios from 'axios';
 import {API} from '../../globalConstants.js';
 
 function Detail({url, name, label, value, update}) {
+    // If no url is given, then the detail is not editable.
     const [editing, toggleEditing] = useState(false);
     const [formState, setFormState] = useState({[name]: value})
 
@@ -49,7 +50,7 @@ function Detail({url, name, label, value, update}) {
             :
             <div className={'userDetail'}>
                 <p>{label}: {value}</p>
-                <button type={'button'} onClick={() => toggleEditing(true)}>Edit</button>
+                {url && <button type={'button'} onClick={() => toggleEditing(true)}>Edit</button>}
             </div>
     );
 }

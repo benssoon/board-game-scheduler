@@ -83,6 +83,7 @@ function AuthContextProvider({children}) {
         localStorage.setItem('token', token);
         const username = jwtDecode(token).sub;
         fetchUserData(username, token);
+        console.log(auth.isAdmin)
         console.log(username + ' is logged in!');
         navigate("/profile");
     }
