@@ -1,22 +1,14 @@
 import './Roles.css';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import {useContext, useEffect, useState} from 'react';
-import {jwtDecode} from 'jwt-decode';
+import {useContext, useState} from 'react';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
 
 function Roles({username}) {
     const [roles, setRoles] = useState(null);
-    const [updated, setUpdated] = useState(0);
 
     const token = localStorage.getItem('token');
     const {isAdmin} = useContext(AuthContext);
-
-    useEffect(() => {
-        if (updated) {
-            getUserRoles();
-        }
-    }, [updated]);
 
     async function getUserRoles() {
         try {
@@ -41,14 +33,10 @@ function Roles({username}) {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            //setRoles \/
-            console.log(roles.map((mappedRole) => {
-                if (mappedRole !== role) {
-                    return mappedRole;
-                }
+            setRoles(roles.filter((mappedRole) => {
+                return mappedRole.role.split("_")[1] !== role;
             }));
             console.log(response);
-            setUpdated(prev => prev + 1);
         } catch (er) {
             const response = er.response;
             console.log(response);
