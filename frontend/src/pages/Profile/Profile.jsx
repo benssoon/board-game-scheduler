@@ -7,37 +7,20 @@ import {Link, useNavigate} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
 import Detail from '../../components/Detail/Detail.jsx';
 import {API} from '../../globalConstants.js';
-import axios from 'axios';
 import Roles from '../../components/Roles/Roles.jsx';
 
 function Profile() {
     const [updated, setUpdated] = useState(0);
-    const [roles, setRoles] = useState(null);
 
     const token = localStorage.getItem('token');
     const username = jwtDecode(token).sub;
-    const {logout, isAdmin} = useContext(AuthContext);
+    const {logout} = useContext(AuthContext);
     const {data: user, loading, error} = useFetch(`/users/${username}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     }, updated);
     const navigate = useNavigate();
-
-    async function getUserRoles() {
-        try {
-            const response = await axios.get(`${API}/users/${username}/roles`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setRoles(response.data);
-            console.log(response);
-        } catch (er) {
-            const response = er.response;
-            console.log(response);
-        }
-    }
 
     return (
         user ?
@@ -50,7 +33,7 @@ function Profile() {
                     isEditable
                 >
                     <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password</button>
-                    <Roles/>
+                    <Roles username={username}/>
                     <Detail name={'username'} label={'Username'} value={username} update={setUpdated}/>
                     <Detail url={`${API}/users/${username}`} name={'name'} label={'Name'} value={user.name} update={setUpdated}/>
                     <Detail url={`${API}/users/${username}`} name={'emailAddress'} label={'Email'} value={user.emailAddress} update={setUpdated}/>
