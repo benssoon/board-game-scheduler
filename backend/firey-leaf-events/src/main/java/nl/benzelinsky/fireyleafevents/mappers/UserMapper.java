@@ -52,7 +52,6 @@ public class UserMapper {
         outputDto.age = user.getAge();
         outputDto.area = user.getArea();
         outputDto.address = user.getAddress();
-        // Only send back the name of the event to prevent recursion. TODO add @JsonSerialize in the output DTO instead.
         List<TinyEventOutputDto> hostedEvents = new ArrayList<>();
         user.getHostedEvents().forEach((event) -> hostedEvents.add(EventMapper.toTinyDto(event)));
         outputDto.hostedEvents = hostedEvents;
@@ -75,7 +74,6 @@ public class UserMapper {
         outputDto.age = user.getAge();
         outputDto.area = user.getArea();
         outputDto.address = user.getAddress();
-        // TODO Add relations, with @JsonSerialize in DTO.
         outputDto.roles = user.getRoles();
 
         return outputDto;

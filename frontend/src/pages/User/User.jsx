@@ -1,9 +1,13 @@
 import './User.css';
-import {useContext, useEffect} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import {Link, Navigate, useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
+import axios from 'axios';
+import {API} from '../../globalConstants.js';
+import Roles from '../../components/Roles/Roles.jsx';
+import Detail from '../../components/Detail/Detail.jsx';
 
 function User() {
     const {username} = useParams();
@@ -31,9 +35,10 @@ function User() {
                 <InfoBox
                     type="details"
                 >
-                    <p>Username: {user.username}</p>
-                    <p>Name: {user.name}</p>
-                    <p>Area: {user.area}</p>
+                    <Roles/>
+                    <Detail name={'username'} label={'Username'} value={username}/>
+                    <Detail name={'name'} label={'Name'} value={user.name}/>
+                    <Detail name={'area'} label={'Area'} value={user.area}/>
                 </InfoBox>
                 <InfoBox
                     type={'hosting'}

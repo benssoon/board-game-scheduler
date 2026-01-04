@@ -53,7 +53,10 @@ public class SecurityConfig {
                                 // Users
                                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET,"/users/*/roles").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST,"/users/*/roles").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                                // TODO How can a user remove themselves?
                                 // Events
                                 .requestMatchers(HttpMethod.POST, "/events").hasRole("USER") // Create event must be a user
                                 .requestMatchers(HttpMethod.POST, "/events/*/join").hasRole("USER") // Join/leave event, must be  user
