@@ -9,6 +9,8 @@
     --color-tertiary: black;
     --color-accent: #bc6262;
     --color-white: white;
+    --color-error-background: red;
+    --color-success-background: green;
 
     --rounding-gentle: 6px;
     --rounding-pill: 50px;

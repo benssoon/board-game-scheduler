@@ -35,7 +35,7 @@ function User() {
                 <InfoBox
                     type="details"
                 >
-                    <Roles/>
+                    <Roles username={username}/>
                     <Detail name={'username'} label={'Username'} value={username}/>
                     <Detail name={'name'} label={'Name'} value={user.name}/>
                     <Detail name={'area'} label={'Area'} value={user.area}/>

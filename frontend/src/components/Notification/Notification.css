@@ -1,0 +1,18 @@
+.notification {
+    position: absolute;
+    top: 4rem;
+    right: 2rem;
+    width: 20rem;
+    opacity: 0.5;
+    padding: 0.5rem;
+}
+
+.notification-error {
+    background-color: var(--color-error-background);
+    color: var(--color-white);
+}
+
+.notification-success {
+    background-color: var(--color-success-background);
+    color: var(--color-white);
+}
