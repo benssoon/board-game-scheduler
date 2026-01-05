@@ -1,6 +1,5 @@
 package nl.benzelinsky.fireyleafevents.exceptions;
 
-import org.aspectj.weaver.ast.Not;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -112,6 +111,11 @@ public class GlobalExceptionHandler {
     //Current user cannot remove their own admin role
     @ExceptionHandler(AdminCannotRemoveOwnAdminRoleException.class)
     public ResponseEntity<String> handleAdminCannotRemoveOwnAdminRoleException(AdminCannotRemoveOwnAdminRoleException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CannotRemoveUserRoleFromActiveUserException.class)
+    public ResponseEntity<String> handleCannotRemoveUserRoleFromActiveUserException(CannotRemoveUserRoleFromActiveUserException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

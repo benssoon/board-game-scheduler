@@ -159,6 +159,9 @@ public class UserService {
         if (currentUser.equals(username) && user.getRoles().contains(roleToRemove) && roleToRemove.getRole().equals("ROLE_ADMIN")) { // Current user cannot remove their own admin role.
             throw new AdminCannotRemoveOwnAdminRoleException();
         }
+        if (roleToRemove.getRole().equals("ROLE_USER") && !(user.getHostedEvents().isEmpty() && user.getJoinedEvents().isEmpty())) { // Cannot remove user role if the user is still participating in or hosting events.
+            throw new CannotRemoveUserRoleFromActiveUserException();
+        }
         user.removeRole(roleToRemove);
         this.userRepository.save(user);
     }
