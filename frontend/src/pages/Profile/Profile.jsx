@@ -28,12 +28,17 @@ function Profile() {
                 <h2>Hello {username}!</h2>
 
                 <InfoBox
+                    type={'roles'}
+                    parentPage={'/profile'}
+                >
+                    <Roles username={username}/>
+                </InfoBox>
+                <InfoBox
                     type={'details'}
                     parentPage={'/profile'}
                     isEditable
                 >
                     <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password</button>
-                    <Roles username={username}/>
                     <Detail name={'username'} label={'Username'} value={username} update={setUpdated}/>
                     <Detail url={`${API}/users/${username}`} name={'name'} label={'Name'} value={user.name} update={setUpdated}/>
                     <Detail url={`${API}/users/${username}`} name={'emailAddress'} label={'Email'} value={user.emailAddress} update={setUpdated}/>

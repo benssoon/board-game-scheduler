@@ -33,9 +33,13 @@ function User() {
             <>
                 <h2>This is {username}'s page.</h2>
                 <InfoBox
-                    type="details"
+                    type={'roles'}
                 >
                     <Roles username={username}/>
+                </InfoBox>
+                <InfoBox
+                    type="details"
+                >
                     <Detail name={'username'} label={'Username'} value={username}/>
                     <Detail name={'name'} label={'Name'} value={user.name}/>
                     <Detail name={'area'} label={'Area'} value={user.area}/>

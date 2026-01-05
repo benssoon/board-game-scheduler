@@ -114,8 +114,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
+    //Can't remove USER if user is currently in events.
     @ExceptionHandler(CannotRemoveUserRoleFromActiveUserException.class)
     public ResponseEntity<String> handleCannotRemoveUserRoleFromActiveUserException(CannotRemoveUserRoleFromActiveUserException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    //User already has role
+    @ExceptionHandler(AlreadyHasRoleException.class)
+    public ResponseEntity<String> handleAlreadyHasRoleException(AlreadyHasRoleException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

@@ -9,7 +9,7 @@ function Notification({children, setParent, isError}) {
         setTimeout(() => {
             setActive(false);
             setParent(null);
-        }, 8000);
+        }, 5000);
 
     }, []);
 
