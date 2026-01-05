@@ -28,7 +28,7 @@ function Profile() {
                 <h2>Hello {username}!</h2>
 
                 <InfoBox
-                    type={'details'}
+                    type={'roles'}
                     parentPage={'/profile'}
                 >
                     <Roles username={username}/>

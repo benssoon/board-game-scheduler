@@ -83,7 +83,6 @@ function Roles({username}) {
         <>
             {isAdmin &&
                 <div>
-                    <button type={'button'} onClick={getUserRoles}>Get Roles</button>
                     {roles && <ul>{
                         roles.map((role) => {
                             const roleName = role.role.split("_")[1]; // get the role name without "ROLE_"
