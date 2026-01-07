@@ -53,7 +53,7 @@ public class GameService {
         List<GameOutputDto> allGames = new ArrayList<>();
         if (title != null) {
             // Find and sort all games based on how close the title is to the given search term.
-            FuzzySearch.extractSorted(title, this.gameRepository.findAll(), Game::getTitle)
+            FuzzySearch.extractSorted(title, this.gameRepository.findAll(), Game::getTitle, 68)
                     .stream()
                     //.filter(result -> result.getScore() >= 60) // Optional, for returning only results with a score higher than 60
                     .map(BoundExtractedResult::getReferent)

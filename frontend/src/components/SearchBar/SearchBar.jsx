@@ -1,9 +1,9 @@
 import './SearchBar.css';
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useMemo, useState} from 'react';
 import useFetch from '../../helpers/useFetch.js';
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 
-function SearchBar({setFilters, formMember, start, name, id, formState, handleChange: setFormState}) {
+function SearchBar({setFilters, formMember, start, name, id, formState, handleChange: setFormState, searchingFor}) {
 
     const [searchText, setSearchText] = useState('');
     const [selectedGameId, setSelectedGameId] = useState(0);
@@ -12,6 +12,7 @@ function SearchBar({setFilters, formMember, start, name, id, formState, handleCh
 
     const {data: games} = useFetch('/games');
 
+    // Show the list of games with (partially) matching title to searchText
     const matchingGames = useMemo(() => {
         if (!searchText || selected) return [];
         const lowered = searchText.toLowerCase();
@@ -29,7 +30,8 @@ function SearchBar({setFilters, formMember, start, name, id, formState, handleCh
                 {
                     id: selectedGameId,
                     name: searchText,
-                    param: `gameId=${selectedGameId}`
+                    param:
+                        searchingFor === 'games' ? `title=${searchText}` : `gameId=${selectedGameId}`,
                 },
             ]);
         } else {
