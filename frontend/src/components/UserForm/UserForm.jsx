@@ -28,13 +28,16 @@ function UserForm({type, fields}) {
         address: 'test address',
         roles: ['USER'],
     }
+    const requiredFields = ['username', 'password', 'repeatPassword', 'name', 'emailAddress', 'telephoneNumber']
     const matchingPasswordError = <span className={'field-error'}>Passwords must match</span>;
-    const dontUsePasswords = true;
     const [userFormState, setUserFormState] = useState(initialUserFormState);
     const [formError, setFormError] = useState(null);
     const [submitError, setSubmitError] = useState(null);
     const [passwordsMatch, togglePasswordsMatch] = useState(true);
     const [passwordIsNew, togglePasswordIsNew] = useState(true);
+    const [emptyRequiredFields, setEmptyRequiredFields] = useState([]);
+    const [submittedWithError, toggleSubmittedWithError] = useState(false);
+
     const token = localStorage.getItem('token');
     const username = token && jwtDecode(token).sub;
     const endpoint = type === 'edit' ? `/users/${username}` : null;
@@ -60,10 +63,60 @@ function UserForm({type, fields}) {
         }
     }, [user]);
 
+    useEffect(() => {
+        if (userFormState.password === userFormState.repeatPassword) {
+            togglePasswordsMatch(true);
+        } else {
+            togglePasswordsMatch(false);
+        }
+        if (userFormState.currentPassword) {
+            if (userFormState.password !== userFormState.currentPassword) {
+                togglePasswordIsNew(true);
+            } else {
+                togglePasswordIsNew(false);
+            }
+        }
+    }, [userFormState.password, userFormState.repeatPassword]);
+
+    useEffect(() => {
+        if (userFormState.emailAddress) {
+            if (!userFormState.emailAddress.includes('@')) {
+                setFormError(prev => ({
+                    ...prev,
+                    emailAddress: 'must include @'
+                }))
+            }
+        }
+    }, [userFormState.emailAddress]);
+
+    useEffect(() => {
+        setEmptyRequiredFields(
+            requiredFields.filter((fieldName) => !userFormState[fieldName])
+        );
+    }, [userFormState]);
+
+    useEffect(() => {
+        if (submittedWithError || formError && Object.keys(formError).length > 0) { // Update errors dynamically only after the user has clicked Submit.
+            setFormError(
+                emptyRequiredFields.reduce((acc, fieldName) => {
+                    acc[fieldName] = 'is required.';
+                    return acc;
+                }, {})
+            );
+        }
+    }, [emptyRequiredFields, submittedWithError]);
+
     async function handleSubmit(e) {
         e.preventDefault();
-        if (userFormState.password === userFormState.repeatPassword && userFormState.password !== userFormState.currentPassword || dontUsePasswords) {
-            togglePasswordsMatch(true);
+        if (emptyRequiredFields.length > 0) { // Update errors
+            /*setFormError(
+                emptyRequiredFields.reduce((acc, fieldName) => {
+                    acc[fieldName] = 'is required.';
+                    return acc;
+                }, {})
+            );*/
+            toggleSubmittedWithError(true);
+        } else if (passwordsMatch && passwordIsNew) {
             setSubmitError(null);
             setFormError(null);
             try {
@@ -92,21 +145,15 @@ function UserForm({type, fields}) {
                 }
             }
             navigate('/login');
-        } else {
-            if (userFormState.password !== userFormState.repeatPassword) {
-                togglePasswordsMatch(false);
-            }
-            if (userFormState.password === userFormState.currentPassword) {
-                togglePasswordIsNew(false);
-            }
         }
     }
+
     return (
         <>
             <form onSubmit={handleSubmit}>
                 {/*Username*/}
                 {(!fields || fields?.includes('username')) && <FormField
-                    isRequired
+                    isRequired={requiredFields.includes('username')}
                     label={'Username'}
                     type={'text'}
                     id={'username'}
@@ -117,7 +164,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*Current Password TODO Currently does nothing. Needs backend logic to be usable.*/}
                 {type === 'edit' && (!fields || fields?.includes('password')) && <FormField
-                    isRequired
+                    isRequired={requiredFields.includes('currentPassword')}
                     label={'Current Password'}
                     type={'password'}
                     id={'currentPassword'}
@@ -129,7 +176,7 @@ function UserForm({type, fields}) {
                 {type === 'edit' && (!fields || fields?.includes('password')) && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
                 {/*Password*/}
                 {(!fields || fields?.includes('password')) && <FormField
-                    isRequired
+                    isRequired={requiredFields.includes('password')}
                     label={'Password'}
                     type={'password'}
                     id={'password'}
@@ -141,7 +188,7 @@ function UserForm({type, fields}) {
                 {type === 'edit' && (!fields || fields?.includes('password')) && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
                 {/*Repeat Password*/}
                 {(!fields || fields?.includes('password')) && <FormField
-                    isRequired
+                    isRequired={requiredFields.includes('repeatPassword')}
                     label={'Repeat Password'}
                     type={'password'}
                     id={'repeatPassword'}
@@ -150,11 +197,13 @@ function UserForm({type, fields}) {
                     handleChange={(e) => handleFormChange(e, userFormState, setUserFormState)}
                     errors={formError}
                 />}
-                {(!fields || fields?.includes('password')) && userFormState.password !== userFormState.repeatPassword && matchingPasswordError}
+                {(!fields || fields?.includes('password'))
+                    && !passwordsMatch
+                    && matchingPasswordError}
                 {type === 'edit' && (!fields || fields?.includes('password')) && <span className={'field-error'}>DO NOT TRY UPDATING PASSWORD! DOES NOT WORK PROPERLY ON BACKEND YET.</span>}
                 {/*Name*/}
                 {(!fields || fields?.includes('name')) && <FormField
-                    isRequired
+                    isRequired={requiredFields.includes('name')}
                     label={'Name'}
                     type={'text'}
                     id={'name'}
@@ -165,7 +214,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*Email*/}
                 {(!fields || fields?.includes('email')) && <FormField
-                    isRequired
+                    isRequired={requiredFields.includes('emailAddress')}
                     label={'Email Address'}
                     type={'email'}
                     id={'emailAddress'}
@@ -176,7 +225,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*Phone*/}
                 {(!fields || fields?.includes('phone')) && <FormField
-                    isRequired
+                    isRequired={requiredFields.includes('telephoneNumber')}
                     label={'Phone Number'}
                     type={'tel'}
                     id={'telephoneNumber'}
@@ -187,6 +236,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*Age*/}
                 {(!fields || fields?.includes('age')) && <FormField
+                    isRequired={requiredFields.includes('age')}
                     label={'Age'}
                     type={'number'}
                     id={'age'}
@@ -197,6 +247,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*Area*/}
                 {(!fields || fields?.includes('area')) && <FormField
+                    isRequired={requiredFields.includes('area')}
                     label={'Area'}
                     type={'text'}
                     id={'area'}
@@ -207,6 +258,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*Street Name*/}
                 {(!fields || fields?.includes('street')) && <FormField
+                    isRequired={requiredFields.includes('street')}
                     label={'Street Name'}
                     type={'text'}
                     id={'street'}
@@ -217,6 +269,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*House Number*/}
                 {(!fields || fields?.includes('house')) && <FormField
+                    isRequired={requiredFields.includes('house')}
                     label={'House Number'}
                     type={'number'}
                     id={'house'}
@@ -227,6 +280,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*City*/}
                 {(!fields || fields?.includes('city')) && <FormField
+                    isRequired={requiredFields.includes('city')}
                     label={'City'}
                     type={'text'}
                     id={'city'}
@@ -237,6 +291,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*Postal Code*/}
                 {(!fields || fields?.includes('postalCode')) && <FormField
+                    isRequired={requiredFields.includes('postalCode')}
                     label={'Postal Code'}
                     type={'text'}
                     id={'postalCode'}
@@ -247,6 +302,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*State*/}
                 {(!fields || fields?.includes('state')) && <FormField
+                    isRequired={requiredFields.includes('state')}
                     label={'State/Province'}
                     type={'text'}
                     id={'state'}
@@ -257,6 +313,7 @@ function UserForm({type, fields}) {
                 />}
                 {/*Country*/}
                 {(!fields || fields?.includes('country')) && <FormField
+                    isRequired={requiredFields.includes('country')}
                     label={'Country'}
                     type={'text'}
                     id={'country'}
@@ -268,13 +325,13 @@ function UserForm({type, fields}) {
                 <button type={'submit'}>Submit</button>
                 {
                     submitError && <span className={'field-error'}>
-                    {submitError}
+                        {submitError}
                     </span>
                     ||
                     (!fields || fields?.includes('password')) && !passwordsMatch && matchingPasswordError
                     ||
                     (!fields || fields?.includes('password')) && !passwordIsNew && <span className={'field-error'}>
-                    New password must be different than current password.
+                        New password must be different than current password.
                     </span>
                 }
             </form>
