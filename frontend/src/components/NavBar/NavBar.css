@@ -1,0 +1,19 @@
+.navBar {
+    display: flex;
+    justify-content: space-between;
+    background-color: orange;
+    align-items: center;
+}
+
+.navBar .links {
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    gap: 1rem;
+    list-style: none;
+}
+
+.navBar .links * {
+    text-decoration: none;
+}

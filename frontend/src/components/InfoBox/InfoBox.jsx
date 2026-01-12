@@ -5,13 +5,15 @@ function InfoBox({type, children, parentPage, parentType, isEditable}) {
     const navigate = useNavigate();
 
     return (
-        <>
-            <h2>{type.charAt(0).toUpperCase() + type.slice(1)} {parentType}</h2>
-            <section>
+        <div className={'info-box'}>
+            <div className={'info-header'}>
+                <h3>{type.charAt(0).toUpperCase() + type.slice(1)} {parentType}</h3>
                 {isEditable && <button type="button" onClick={() => navigate(`${parentPage}/edit`)}>Edit</button>}
+            </div>
+            <section>
                 {children}
             </section>
-        </>
+        </div>
     );
 }
 

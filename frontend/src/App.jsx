@@ -26,14 +26,15 @@ function App() {
     return (
         <>
             <NavBar/>
-            <Routes>
+            <div className={'page-container'}>
+                <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/users" element={<Users/>}/>
-                <Route path="/users/:username" element={isAuth ? <User/> : <Navigate to={'/login'}/> }/>
+                <Route path="/users/:username" element={isAuth ? <User/> : <Navigate to={'/login'}/>}/>
                 <Route path="/login" element={<Login/>}/>
-                <Route path="/profile" element={isAuth ? <Profile/> : <Navigate to={"/login"}/> }/>
-                <Route path="/profile/edit" element={<EditProfile/>} />
-                <Route path="/profile/change-password" element={<ChangePassword/>} />
+                <Route path="/profile" element={isAuth ? <Profile/> : <Navigate to={"/login"}/>}/>
+                <Route path="/profile/edit" element={<EditProfile/>}/>
+                <Route path="/profile/change-password" element={<ChangePassword/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/events" element={<Events/>}/>
                 <Route path="/events/create" element={<CreateEvent/>}/>
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/games/:id" element={<Game/>}/>
                 <Route path="/games/:id/edit" element={<EditGame/>}/>
             </Routes>
+            </div>
         </>
     )
 }

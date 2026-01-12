@@ -1,0 +1,12 @@
+.info-box {
+    border: solid var(--color-primary) 3px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.info-header {
+    display: flex;
+    justify-content: space-between;
+}

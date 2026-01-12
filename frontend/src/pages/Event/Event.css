@@ -1,0 +1,17 @@
+.all-info {
+    display: flex;
+    justify-content: space-between;
+    border: solid blue 4px;
+}
+
+.info-group {
+    flex-grow: 1;
+}
+
+.left {
+    flex-grow: 4;
+}
+
+.right {
+    flex-grow: 0;
+}

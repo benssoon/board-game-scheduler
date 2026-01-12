@@ -1,13 +1,26 @@
-#root {
-    display: flex;
-    flex-direction: column;
-}
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
+/*////////////////////////
+    Table of Contents
+    1. Global Styles
+    2. Typography
+    3. Layout
+        3.1 Reusables
+        3.2 Other
+    4. Areas
+        4.1 Header
+        4.2 Introduction
+        etc.
+    5. Media Queries
+////////////////////////*/
+
+/* ------------------------------- 1. Global Styles -------------------------------- */
 :root {
     --color-primary: orange;
     --color-secondary: #c3c1c1;
     --color-tertiary: black;
-    --color-accent: #bc6262;
+    --color-accent-dark-red: #bc6262;
+    --color-accent-mint-green: #B2FFE0;
     --color-white: white;
     --color-error-background: red;
     --color-success-background: green;
@@ -16,6 +29,42 @@
     --rounding-pill: 50px;
     --card-spacing: 48px;
     --filter-items-spacing: 10px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+button {
+    font-family: inherit;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 48px;
+    background-color: var(--color-accent-dark-red);
+    color: var(--color-accent-mint-green);
+    font-weight: 600;
+}
+
+body {
+    font-family: Quicksand, sans-serif;
+}
+
+/* ------------------------------- 2. Typography ----------------------------------- */
+h1 {
+    font-size: 6em;
+}
+
+h2 {
+    font-size: 4em;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 2em;
+    font-weight: 600;
 }
 
 ul, ol {

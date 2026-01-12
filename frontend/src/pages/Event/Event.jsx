@@ -122,39 +122,46 @@ function Event() {
         event ?
             <>
                 <h2>{event.name}</h2>
-                <InfoBox
-                    type="about"
-                    parentPage={`/events/${id}`}
-                    isEditable={user?.username === event?.host.username}
-                >
-                    <p>{event.description}</p>
-                </InfoBox>
-                <InfoBox
-                    type="details"
-                >
-                    <p>Time: {event.definitiveTime}</p>
-                    <p>Game: <Link to={`/games/${event.game.id}`}>{event.game.title}</Link></p>
-                    <p>Host: <Link to={`/users/${event.host.username}`}>{event.host.username}</Link></p>
-                    {event.isFull ? <p>Event full!</p> : <p>Not full</p>}
-                    {event.isReadyToStart ? <p>Can take place</p> : <p>Waiting for more players...</p>}
-                    <p>Location: {event.location}</p>
-                    <p>Possible Times: {event.possibleTimes}</p>
-                    <button type="submit" onClick={() => changeParticipation('join')}>Join</button>
-                    <button type="submit" onClick={() => changeParticipation('leave')}>Leave</button>
-                    {authError}
-                </InfoBox>
-                <InfoBox
-                    type="participants"
-                >
-                    <ul>
-                        {event?.players.map((player) => {
-                            return <li key={player}>
-                                <Link to={`/users/${player}`}>{player}</Link>
-                                {isHost && <button type="button" onClick={(e) => handleAddRemovePlayer(e, player, 'remove')}>Remove</button>}
-                            </li>
-                        })}
-                    </ul>
-                </InfoBox>
+                <div className={'all-info'}>
+                    <div className={'info-group left'}>
+                        <InfoBox
+                            type="about"
+                            parentPage={`/events/${id}`}
+                            isEditable={user?.username === event?.host.username}
+                        >
+                            <p>{event.description}</p>
+                        </InfoBox>
+                    </div>
+                    <div className={'info-group right'}>
+                        <InfoBox
+                            type="details"
+                        >
+                            <p>Time: {event.definitiveTime}</p>
+                            <p>Game: <Link to={`/games/${event.game.id}`}>{event.game.title}</Link></p>
+                            <p>Host: <Link to={`/users/${event.host.username}`}>{event.host.username}</Link></p>
+                            {event.isFull ? <p>Event full!</p> : <p>Not full</p>}
+                            {event.isReadyToStart ? <p>Can take place</p> : <p>Waiting for more players...</p>}
+                            <p>Location: {event.location}</p>
+                            <p>Possible Times: {event.possibleTimes}</p>
+                            <button type="submit" onClick={() => changeParticipation('join')}>Join</button>
+                            <button type="submit" onClick={() => changeParticipation('leave')}>Leave</button>
+                            {authError}
+                        </InfoBox>
+                        <InfoBox
+                            type="participants"
+                        >
+                            <ul>
+                                {event?.players.map((player) => {
+                                    return <li key={player}>
+                                        <Link to={`/users/${player}`}>{player}</Link>
+                                        {isHost && <button type="button"
+                                                           onClick={(e) => handleAddRemovePlayer(e, player, 'remove')}>Remove</button>}
+                                    </li>
+                                })}
+                            </ul>
+                        </InfoBox>
+                    </div>
+                </div>
 
                 {/*<editor-fold desc="Change Game Form">*/}
                 <form onSubmit={handleSubmitChangeGame}>
