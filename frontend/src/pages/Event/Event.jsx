@@ -6,6 +6,16 @@ import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import Detail from '../../components/Detail/Detail.jsx';
+import calendarIcon from '/src/assets/icons/Symbol=Calendar.svg';
+import gameIcon from '/src/assets/icons/Symbol=Game.svg';
+import hostIcon from '/src/assets/icons/Symbol=User.svg';
+import locationIcon from '/src/assets/icons/Symbol=Location.svg';
+import fullIcon from '/src/assets/icons/Symbol=Full.svg';
+import openIcon from '/src/assets/icons/Symbol=Open.svg';
+import waitingIcon from '/src/assets/icons/Symbol=Waiting for Players.svg';
+import readyIcon from '/src/assets/icons/Symbol=Ready to Play.svg';
+import possibleTimesIcon from '/src/assets/icons/Symbol=Possible Times.svg';
 
 function Event() {
     const [updated, setUpdated] = useState(0);
@@ -136,15 +146,16 @@ function Event() {
                         <InfoBox
                             type="details"
                         >
-                            <p>Time: {event.definitiveTime}</p>
-                            <p>Game: <Link to={`/games/${event.game.id}`}>{event.game.title}</Link></p>
-                            <p>Host: <Link to={`/users/${event.host.username}`}>{event.host.username}</Link></p>
-                            {event.isFull ? <p>Event full!</p> : <p>Not full</p>}
-                            {event.isReadyToStart ? <p>Can take place</p> : <p>Waiting for more players...</p>}
-                            <p>Location: {event.location}</p>
-                            <p>Possible Times: {event.possibleTimes}</p>
-                            <button type="submit" onClick={() => changeParticipation('join')}>Join</button>
-                            <button type="submit" onClick={() => changeParticipation('leave')}>Leave</button>
+                            <Detail logo={calendarIcon} name={'time'} label={"Time"} value={event.definitiveTime}/>
+                            <Detail logo={gameIcon} name={'game'} label={"Game"} value={<Link to={`/games/${event.game.id}`}>{event.game.title}</Link>}/>
+                            <Detail logo={hostIcon} name={'host'} label={"Host"} value={<Link to={`/users/${event.host.username}`}>{event.host.username}</Link>}/>
+                            <Detail logo={event.isFull ? fullIcon : openIcon} name={'isFull'} value={event.isFull ? 'Event full!' : 'Not full'}/>
+                            <Detail logo={event.isReadyToStart ? readyIcon : waitingIcon} name={'isReady'} value={event.isReadyToStart ? 'Can take place' : 'Waiting for more players...'}/>
+                            <Detail logo={locationIcon} name={'location'} label={"Location"} value={event.location}/>
+                            <Detail logo={possibleTimesIcon} name={'possibleTimes'} label={"Possible Times"} value={event.possibleTimes}/>
+
+                            <button className={'small-button'} type="submit" onClick={() => changeParticipation('join')}>Join</button>
+                            <button className={'small-button'} type="submit" onClick={() => changeParticipation('leave')}>Leave</button>
                             {authError}
                         </InfoBox>
                         <InfoBox

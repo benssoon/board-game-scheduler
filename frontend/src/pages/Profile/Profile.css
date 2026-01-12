@@ -1,9 +1,10 @@
-.userDetail {
+.detail {
     display: flex;
-    align-items: baseline;
+    align-items: center;
+    justify-content: flex-start;
     gap: 0.5em;
 }
 
-.userDetail p {
+.detail p {
     margin: 0;
 }
