@@ -1,0 +1,23 @@
+.roles {
+    display: flex;
+    flex-direction: column;
+}
+
+.roles ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.roles li {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 8px;
+}
+
+.new-role-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

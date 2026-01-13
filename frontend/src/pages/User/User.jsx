@@ -8,6 +8,7 @@ import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import Roles from '../../components/Roles/Roles.jsx';
 import Detail from '../../components/Detail/Detail.jsx';
+import Notification from '../../components/Notification/Notification.jsx';
 
 function User() {
     const [errorNotification, setErrorNotification] = useState(null);
@@ -18,6 +19,7 @@ function User() {
     const {user: currentUser, isAdmin} = useContext(AuthContext);
     const shouldRedirect = currentUser?.username === username
     const token = localStorage.getItem('token');
+    console.log(currentUser)
     const {data: user, loading, error} = useFetch(shouldRedirect ? null : `/users/${username}`, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -54,45 +56,55 @@ function User() {
         user ?
             <>
                 <h2>This is {username}'s page.</h2>
-                {isAdmin && <InfoBox
-                    type={'delete'}
-                >
-                    <button type={'button'} onClick={handleDeleteUser}>Delete User</button>
-                </InfoBox>}
-                <InfoBox
-                    type={'roles'}
-                >
-                    <Roles username={username}/>
-                </InfoBox>
-                <InfoBox
-                    type="details"
-                >
-                    <Detail name={'username'} label={'Username'} value={username}/>
-                    <Detail name={'name'} label={'Name'} value={user.name}/>
-                    <Detail name={'area'} label={'Area'} value={user.area}/>
-                </InfoBox>
-                <InfoBox
-                    type={'hosting'}
-                >
-                    <ul>
-                        {user.hostedEvents.map((event) => {
-                            return <li key={event.id}>
-                                <Link to={`/events/${event.id}`}>{event.name}</Link>
-                            </li>
-                        })}
-                    </ul>
-                </InfoBox>
-                <InfoBox
-                    type={'joined'}
-                >
-                    <ul>
-                        {user.joinedEvents.map((event) => {
-                            return <li key={event.id}>
-                                <Link to={`/events/${event.id}`}>{event.name}</Link>
-                            </li>
-                        })}
-                    </ul>
-                </InfoBox>
+                <div className={'info-box-container'}>
+                    <div className={'info-group left'}>
+                        <InfoBox
+                            type="details"
+                        >
+                            <Detail name={'username'} label={'Username'} value={username}/>
+                            <Detail name={'name'} label={'Name'} value={user.name}/>
+                            <Detail name={'area'} label={'Area'} value={user.area}/>
+                        </InfoBox>
+                        <InfoBox
+                            type={'hosting'}
+                        >
+                            <ul>
+                                {user.hostedEvents.map((event) => {
+                                    return <li key={event.id}>
+                                        <Link to={`/events/${event.id}`}>{event.name}</Link>
+                                    </li>
+                                })}
+                            </ul>
+                        </InfoBox>
+                        <InfoBox
+                            type={'joined'}
+                        >
+                            <ul>
+                                {user.joinedEvents.map((event) => {
+                                    return <li key={event.id}>
+                                        <Link to={`/events/${event.id}`}>{event.name}</Link>
+                                    </li>
+                                })}
+                            </ul>
+                        </InfoBox>
+                    </div>
+                    {isAdmin &&
+                        <div className={'info-group right'}>
+                            <InfoBox
+                                type={'actions'}
+                            >
+                                <button type={'button'} onClick={handleDeleteUser}>Delete User</button>
+                                <Roles username={username}/>
+
+                                {/* TODO make context for notifications
+                                {errorNotification && <Notification setParent={setErrorNotification} isError={errorNotification}>{errorNotification}</Notification> }
+                                {successNotification && <Notification setParent={setSuccessNotification}>{successNotification}</Notification> }
+                                */}
+
+                            </InfoBox>
+                        </div>
+                    }
+                </div>
             </>
             :
             loading ?

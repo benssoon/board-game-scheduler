@@ -5,9 +5,38 @@
     flex-direction: column;
     padding: 10px;
     background-color: var(--color-white);
+    gap: 1em;
 }
 
 .info-header {
     display: flex;
     justify-content: space-between;
+}
+
+[class*='-info'] {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-box-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px;
+    gap: var(--card-spacing);
+}
+
+.info-group {
+    flex-grow: 1;
+}
+
+.left {
+    flex-grow: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.right {
+    flex-grow: 0;
 }

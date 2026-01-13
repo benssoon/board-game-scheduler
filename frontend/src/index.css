@@ -24,12 +24,21 @@
     --color-accent-mint-green: #B2FFE0;
     --color-white: #F7E9F9;
     --color-error-background: red;
-    --color-success-background: green;
+    --color-success-background: var(--color-primary);
 
     --rounding-gentle: 6px;
     --rounding-pill: 50px;
+
     --card-spacing: 48px;
+    --card-width: 350px;
+    --card-height: 218px;
+
     --filter-items-spacing: 10px;
+
+    --user-image-width: 160px;
+    --user-image-height: 160px;
+
+    --small-card-scale-factor: .5;
 }
 
 * {
@@ -43,7 +52,7 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: Inter;
+    font-family: Inter, sans-serif;
     border: none;
     border-radius: 50px;
     padding: 8px 32px;
@@ -51,6 +60,12 @@ button {
     color: var(--color-accent-mint-green);
     font-weight: 800;
     letter-spacing: .24em;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--color-accent-mint-green);
+    color: var(--color-accent-dark-red);
 }
 
 .small-button {
@@ -73,6 +88,11 @@ h2 {
 }
 
 h3 {
+    font-size: 3em;
+    font-weight: 600;
+}
+
+h4 {
     font-size: 2em;
     font-weight: 600;
 }

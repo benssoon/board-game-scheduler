@@ -16,6 +16,7 @@ import openIcon from '/src/assets/icons/Symbol=Open.svg';
 import waitingIcon from '/src/assets/icons/Symbol=Waiting for Players.svg';
 import readyIcon from '/src/assets/icons/Symbol=Ready to Play.svg';
 import possibleTimesIcon from '/src/assets/icons/Symbol=Possible Times.svg';
+import Card from '../../components/Card/Card.jsx';
 
 function Event() {
     const [updated, setUpdated] = useState(0);
@@ -132,7 +133,7 @@ function Event() {
         event ?
             <>
                 <h2>{event.name}</h2>
-                <div className={'all-info'}>
+                <div className={'info-box-container'}>
                     <div className={'info-group left'}>
                         <InfoBox
                             type="about"
@@ -156,50 +157,51 @@ function Event() {
 
                             <button className={'small-button'} type="submit" onClick={() => changeParticipation('join')}>Join</button>
                             <button className={'small-button'} type="submit" onClick={() => changeParticipation('leave')}>Leave</button>
+                            {/*<editor-fold desc="Change Game Form">*/}
+                            <form onSubmit={handleSubmitChangeGame}>
+                                <label htmlFor="changeGame">Game ID:</label>
+                                <input
+                                    type="number"
+                                    name="changeGame"
+                                    id="changeGame"
+                                    value={gameId}
+                                    onChange={handleChangeGameId}
+                                />
+                                <button type="submit">Change Game</button>
+                            </form>
+                            {/*</editor-fold>*/}
                             {authError}
                         </InfoBox>
                         <InfoBox
                             type="participants"
                         >
-                            <ul>
+                            <ul className={'participants'}>
                                 {event?.players.map((player) => {
-                                    return <li key={player}>
-                                        <Link to={`/users/${player}`}>{player}</Link>
-                                        {isHost && <button type="button"
-                                                           onClick={(e) => handleAddRemovePlayer(e, player, 'remove')}>Remove</button>}
-                                    </li>
+                                    return(
+                                        <li key={player}>
+                                            <Card type={'user'} data={player} className={'user card card--small'}/>
+                                            {isHost && <button type="button"
+                                                               onClick={(e) => handleAddRemovePlayer(e, player, 'remove')}>Remove</button>}
+                                        </li>
+                                    )
                                 })}
                             </ul>
+                            {/*<editor-fold desc="Add Player Form">*/}
+                            <form onSubmit={(e) => handleAddRemovePlayer(e, addingUsername, 'add')}>
+                                <label htmlFor="addUser">Username:</label>
+                                <input
+                                    type="text"
+                                    name="addUser"
+                                    id="addUser"
+                                    value={addingUsername}
+                                    onChange={handleChangeAddingUsername}
+                                />
+                                <button type="submit">Add player</button>
+                            </form>
+                            {/*</editor-fold>*/}
                         </InfoBox>
                     </div>
                 </div>
-
-                {/*<editor-fold desc="Change Game Form">*/}
-                <form onSubmit={handleSubmitChangeGame}>
-                    <label htmlFor="changeGame">Game ID:</label>
-                    <input
-                        type="number"
-                        name="changeGame"
-                        id="changeGame"
-                        value={gameId}
-                        onChange={handleChangeGameId}
-                    />
-                    <button type="submit">Change Game</button>
-                </form>
-                {/*</editor-fold>*/}
-                {/*<editor-fold desc="Add Player Form">*/}
-                <form onSubmit={(e) => handleAddRemovePlayer(e, addingUsername, 'add')}>
-                    <label htmlFor="addUser">Username:</label>
-                    <input
-                        type="text"
-                        name="addUser"
-                        id="addUser"
-                        value={addingUsername}
-                        onChange={handleChangeAddingUsername}
-                    />
-                    <button type="submit">Add player</button>
-                </form>
-                {/*</editor-fold>*/}
             </>
             :
             loading ?

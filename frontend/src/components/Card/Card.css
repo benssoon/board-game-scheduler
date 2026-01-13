@@ -1,8 +1,11 @@
 .card {
     background-color: var(--color-secondary);
     display: flex;
-    width: 350px;
-    height: 218px;
+    justify-content: center;
+    align-items: center;
+    width: var(--card-width);
+    height: var(--card-height);
+    aspect-ratio: var(--card-width) / var(--card-height);
     padding: 20px 10px;
     border-radius: var(--rounding-gentle);
     gap: 1rem;
@@ -33,9 +36,21 @@
 }
 
 .user .placeholder {
-    width: 160px;
-    height: 160px;
+    aspect-ratio: 1 / 1;
+    flex: 0 0 auto;
+    width: var(--user-image-width);
     border-radius: 50%;
+}
+
+.card--small {
+    width: 200px;
+    padding: 12px 8px;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.card--small .placeholder {
+    width: calc(var(--user-image-width) * var(--small-card-scale-factor));
 }
 
 .game, .user {
