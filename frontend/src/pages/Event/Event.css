@@ -1,0 +1,11 @@
+.participants {
+    display: flex;
+    list-style: none;
+    gap: calc(var(--card-spacing) * .5);
+}
+
+.participants li {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

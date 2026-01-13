@@ -7,7 +7,7 @@
     background: var(--color-tertiary);
     color: var(--color-primary);
     font-weight: bold;
-    border: solid var(--color-accent) 2px;
+    border: solid var(--color-accent-dark-red) 2px;
     border-top: none;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }

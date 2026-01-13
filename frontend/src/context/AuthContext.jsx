@@ -89,9 +89,8 @@ function AuthContextProvider({children}) {
     }
 
     function logout() {
-        console.log(auth);
+        console.log(jwtDecode(localStorage.getItem('token')).sub + ' is logged out.');
         localStorage.removeItem('token');
-        console.log(auth.user.username + ' is logged out.');
         setAuth({
             ...auth,
             isAuth: false,

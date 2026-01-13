@@ -3,15 +3,16 @@ import {parseDate} from '../../helpers/processingAndFormatting.js';
 import {Link} from 'react-router-dom';
 
 function Card({type, data, className}) {
-    //const dateOptions = {year: "numeric", month: "long", day: "numeric",};
-    //const defDate = new Date(data.definitiveTime).toLocaleDateString("en-NL", dateOptions);
+    // type is 'user', 'game' or 'event'
+    console.log(data)
+
     return (
         <article className={className}>
             <div className="placeholder"></div>
-            <Link to={type==='user' ? `/users/${data.username}` : `/${type}s/${data.id}`}>
+            <Link to={type==='user' ? `/users/${data.username || data }` : `/${type}s/${data.id}`}>
                 <ul>
                     {data.title && <li>Title: {data.title}</li>}
-                    {data.username && <li>Username: {data.username}</li>}
+                    {data.username || (type==='user' && data) && <li>Username: {data.username || data}</li>}
                     {data.name && !data.username && <li>Name: {data.name}</li>}
                     {data.game?.id && <li>Game: {data.game.title}</li>}
                     {data.host && <li>Host: {data.host.username}</li>}

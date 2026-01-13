@@ -3,7 +3,7 @@
     top: 4rem;
     right: 2rem;
     width: 20rem;
-    opacity: 0.5;
+    opacity: 0.75;
     padding: 0.5rem;
 }
 
@@ -14,5 +14,5 @@
 
 .notification-success {
     background-color: var(--color-success-background);
-    color: var(--color-white);
+    color: var(--color-tertiary);
 }

@@ -82,14 +82,15 @@ function Roles({username}) {
     return (
         <>
             {isAdmin &&
-                <div>
+                <div className={'roles'}>
+                    <h4>Roles</h4>
                     {roles && <ul>{
                         roles.map((role) => {
                             const roleName = role.role.split("_")[1]; // get the role name without "ROLE_"
-                            return <li key={role.role}>{roleName} <button type={'button'} onClick={() => deleteUserRole(roleName)}>Delete</button> </li>
+                            return <li key={role.role}>{roleName} <button type={'button'} className={'small-button'} onClick={() => deleteUserRole(roleName)}>Delete</button> </li>
                         })
                     }</ul>}
-                    <form onSubmit={addUserRole}>
+                    <form className={'new-role-form'} onSubmit={addUserRole}>
                         <label htmlFor={'newRole'}>New Role:</label>
                         <input
                             type={'text'}

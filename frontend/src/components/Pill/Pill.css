@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-accent);
+    background-color: var(--color-accent-dark-red);
     color: var(--color-white);
     border-radius: var(--rounding-pill);
     padding: 7px;

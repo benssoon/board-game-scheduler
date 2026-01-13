@@ -5,7 +5,7 @@ import {handleFormChange} from '../../helpers/handlers.js';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
 
-function Detail({url, name, label, value, update}) {
+function Detail({url, name, label, value, update, logo}) {
     // If no url is given, then the detail is not editable.
     const [editing, toggleEditing] = useState(false);
     const [formState, setFormState] = useState({[name]: value})
@@ -48,8 +48,9 @@ function Detail({url, name, label, value, update}) {
                 </div>
             </form>
             :
-            <div className={'userDetail'}>
-                <p>{label}: {value}</p>
+            <div className={'detail'}>
+                {logo && <img src={logo} alt={`Icon of a ${name}`}/>}
+                <p>{label && `${label}:`} {value}</p>
                 {url && <button type={'button'} onClick={() => toggleEditing(true)}>Edit</button>}
             </div>
     );
