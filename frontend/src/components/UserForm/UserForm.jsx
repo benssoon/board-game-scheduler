@@ -150,7 +150,7 @@ function UserForm({type, fields}) {
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form className={'create-form'} onSubmit={handleSubmit}>
                 {/*Username*/}
                 {(!fields || fields?.includes('username')) && <FormField
                     isRequired={requiredFields.includes('username')}

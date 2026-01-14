@@ -117,7 +117,7 @@ function EventForm({type}) { // type is either create or edit
                 type={type}
                 parentType={'event'}
             >
-                <form onSubmit={handleEventSubmit} className="create-form">
+                <form className="create-form" onSubmit={handleEventSubmit}>
                     <FormField
                         start={nameRef}
                         isRequired={true}
