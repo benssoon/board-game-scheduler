@@ -147,13 +147,13 @@ function Event() {
                         <InfoBox
                             type="details"
                         >
-                            <Detail logo={calendarIcon} name={'time'} label={"Time"} value={event.definitiveTime}/>
-                            <Detail logo={gameIcon} name={'game'} label={"Game"} value={<Link to={`/games/${event.game.id}`}>{event.game.title}</Link>}/>
-                            <Detail logo={hostIcon} name={'host'} label={"Host"} value={<Link to={`/users/${event.host.username}`}>{event.host.username}</Link>}/>
-                            <Detail logo={event.isFull ? fullIcon : openIcon} name={'isFull'} value={event.isFull ? 'Event full!' : 'Not full'}/>
-                            <Detail logo={event.isReadyToStart ? readyIcon : waitingIcon} name={'isReady'} value={event.isReadyToStart ? 'Can take place' : 'Waiting for more players...'}/>
-                            <Detail logo={locationIcon} name={'location'} label={"Location"} value={event.location}/>
-                            <Detail logo={possibleTimesIcon} name={'possibleTimes'} label={"Possible Times"} value={event.possibleTimes}/>
+                            <Detail icon={calendarIcon} name={'time'} label={"Time"} value={event.definitiveTime}/>
+                            <Detail icon={gameIcon} name={'game'} label={"Game"} value={<Link to={`/games/${event.game.id}`}>{event.game.title}</Link>}/>
+                            <Detail icon={hostIcon} name={'host'} label={"Host"} value={<Link to={`/users/${event.host.username}`}>{event.host.username}</Link>}/>
+                            <Detail icon={event.isFull ? fullIcon : openIcon} name={'isFull'} value={event.isFull ? 'Event full!' : 'Not full'}/>
+                            <Detail icon={event.isReadyToStart ? readyIcon : waitingIcon} name={'isReady'} value={event.isReadyToStart ? 'Can take place' : 'Waiting for more players...'}/>
+                            <Detail icon={locationIcon} name={'location'} label={"Location"} value={event.location}/>
+                            <Detail icon={possibleTimesIcon} name={'possibleTimes'} label={"Possible Times"} value={event.possibleTimes}/>
 
                             <button className={'small-button'} type="submit" onClick={() => changeParticipation('join')}>Join</button>
                             <button className={'small-button'} type="submit" onClick={() => changeParticipation('leave')}>Leave</button>

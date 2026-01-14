@@ -9,6 +9,8 @@ import {API} from '../../globalConstants.js';
 import Roles from '../../components/Roles/Roles.jsx';
 import Detail from '../../components/Detail/Detail.jsx';
 import Notification from '../../components/Notification/Notification.jsx';
+import userIcon from '/src/assets/icons/Symbol=User.svg';
+import areaIcon from '/src/assets/icons/Symbol=Location.svg';
 
 function User() {
     const [errorNotification, setErrorNotification] = useState(null);
@@ -61,9 +63,9 @@ function User() {
                         <InfoBox
                             type="details"
                         >
-                            <Detail name={'username'} label={'Username'} value={username}/>
-                            <Detail name={'name'} label={'Name'} value={user.name}/>
-                            <Detail name={'area'} label={'Area'} value={user.area}/>
+                            <Detail icon={userIcon} name={'username'} label={'Username'} value={username}/>
+                            <Detail icon={userIcon} name={'name'} label={'Name'} value={user.name}/>
+                            <Detail icon={areaIcon} name={'area'} label={'Area'} value={user.area}/>
                         </InfoBox>
                         <InfoBox
                             type={'hosting'}
