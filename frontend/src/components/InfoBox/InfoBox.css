@@ -19,6 +19,10 @@
     gap: 8px;
 }
 
+.info-box li {
+    list-style: none;
+}
+
 .info-box-container {
     display: flex;
     justify-content: space-between;

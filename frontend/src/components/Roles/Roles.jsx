@@ -4,6 +4,7 @@ import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import Notification from '../Notification/Notification.jsx';
+import checkmarkIcon from '/src/assets/icons/Symbol=Ready to Play.svg';
 
 function Roles({username}) {
     const [roles, setRoles] = useState(null);
@@ -83,7 +84,10 @@ function Roles({username}) {
         <>
             {isAdmin &&
                 <div className={'roles'}>
-                    <h4>Roles</h4>
+                    <div className={'roles-title'}>
+                        <img src={checkmarkIcon} alt={'Checkmark icon to indicate Roles.'}/>
+                        <h4>Roles</h4>
+                    </div>
                     {roles && <ul>{
                         roles.map((role) => {
                             const roleName = role.role.split("_")[1]; // get the role name without "ROLE_"

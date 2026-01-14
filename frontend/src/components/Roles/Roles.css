@@ -21,3 +21,8 @@
     align-items: center;
     gap: 8px;
 }
+
+.roles-title {
+    display: flex;
+    gap: 8px;
+}
