@@ -1,10 +1,18 @@
+.info-box-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 12px;
+    gap: var(--card-spacing);
+}
+
 .info-box {
-    border: solid var(--color-primary) 3px;
-    border-radius: 12px;
+    border: solid var(--color-primary) var(--box-border-weight);
+    border-radius: var(--box-border-radius);
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    background-color: var(--color-white);
+    padding: var(--box-padding);
+    background-color: var(--color-purple-white);
     gap: 1em;
 }
 
@@ -23,22 +31,15 @@
     list-style: none;
 }
 
-.info-box-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 12px;
-    gap: var(--card-spacing);
-}
-
 .info-group {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .left {
     flex-grow: 4;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
 }
 
 .right {

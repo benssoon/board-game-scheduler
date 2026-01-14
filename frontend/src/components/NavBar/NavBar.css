@@ -17,3 +17,9 @@
 .navBar .links * {
     text-decoration: none;
 }
+
+.home-icon img,
+.profile-icon img {
+    display: block;
+    max-width: 3rem;
+}

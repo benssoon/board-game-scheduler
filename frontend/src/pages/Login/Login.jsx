@@ -39,7 +39,7 @@ function Login() {
         <>
             <h2>Login</h2>
 
-            <form onSubmit={authenticate}>
+            <form className={'login-form'} onSubmit={authenticate}>
                 <label htmlFor="username">Username</label>
                 <input
                     type="username"

@@ -3,39 +3,6 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     background-color: var(--color-accent-mint-green);
-}
-
-.home-icon img,
-.profile-icon img {
-    display: block;
-    max-width: 3rem;
-}
-
-input {
-    border-radius: var(--rounding-gentle) 0 0 var(--rounding-gentle);
-    border: solid var(--color-tertiary) 2px;
-}
-
-button {
-    border-width: 2px;
-}
-
-.categoryBox {
-    display: flex;
-    flex-direction: column;
-    gap: var(--card-spacing);
-}
-
-.categoryPage {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.create-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 20rem;
-    gap: 1rem;
 }

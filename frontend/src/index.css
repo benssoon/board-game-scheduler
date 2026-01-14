@@ -5,15 +5,12 @@
     Table of Contents
     1. Global Styles
     2. Typography
-    3. Layout
-        3.1 Reusables
-        3.2 Other
-    4. Areas
-        4.1 Header
-        4.2 Introduction
-        etc.
-    5. Media Queries
-////////////////////////*/
+    3. Button
+    4. Form
+    5. Input
+    6. Category Box
+///////////////////////////
+-------------------------*/
 
 /* ------------------------------- 1. Global Styles -------------------------------- */
 :root {
@@ -22,12 +19,18 @@
     --color-tertiary: black;
     --color-accent-dark-red: #bc6262;
     --color-accent-mint-green: #B2FFE0;
-    --color-white: #F7E9F9;
+    --color-purple-white: #F7E9F9;
     --color-error-background: red;
     --color-success-background: var(--color-primary);
 
-    --rounding-gentle: 6px;
+    --rounding-gentle: 8px;
     --rounding-pill: 50px;
+
+    --box-border-weight: 4px;
+    --box-border-radius: 16px;
+    --box-padding: 10px;
+
+    --input-border-weight: 3px;
 
     --card-spacing: 48px;
     --card-width: 350px;
@@ -48,6 +51,37 @@
     font-size: 16px;
 }
 
+/* ------------------------------- 2. Typography ----------------------------------- */
+body {
+    font-family: Quicksand, sans-serif;
+}
+
+h1 {
+    font-size: 6em;
+}
+
+h2 {
+    font-size: 4em;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 3em;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 2em;
+    font-weight: 600;
+}
+
+ul, ol {
+    padding: 0;
+    margin: 0;
+}
+
+
+/* ------------------------------- 3. Button ----------------------------------- */
 button {
     display: inline-flex;
     align-items: center;
@@ -73,31 +107,35 @@ button:hover {
     height: 32px;
 }
 
-body {
-    font-family: Quicksand, sans-serif;
+/* ------------------------------- 4. Form ----------------------------------- */
+.create-form, .login-form {
+    border: solid var(--box-border-weight) var(--color-tertiary);
+    border-radius: var(--box-border-radius);
+    display: flex;
+    flex-direction: column;
+    min-width: 20rem;
+    max-width: 100rem;
+    gap: 1rem;
+    padding: var(--box-padding);
+    background-color: var(--color-purple-white);
 }
 
-/* ------------------------------- 2. Typography ----------------------------------- */
-h1 {
-    font-size: 6em;
+/* ------------------------------- 5. Input ----------------------------------- */
+input {
+    border-radius: var(--rounding-gentle);
+    border: solid var(--color-tertiary) var(--input-border-weight);
 }
 
-h2 {
-    font-size: 4em;
-    font-weight: 700;
+
+/* ------------------------------- 6. Category Box ----------------------------------- */
+.categoryBox {
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-spacing);
 }
 
-h3 {
-    font-size: 3em;
-    font-weight: 600;
-}
-
-h4 {
-    font-size: 2em;
-    font-weight: 600;
-}
-
-ul, ol {
-    padding: 0;
-    margin: 0;
+.categoryPage {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
