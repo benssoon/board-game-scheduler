@@ -1,5 +1,4 @@
 import './Profile.css';
-import {jwtDecode} from 'jwt-decode';
 import {useContext, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
@@ -8,13 +7,14 @@ import useFetch from '../../helpers/useFetch.js';
 import Detail from '../../components/Detail/Detail.jsx';
 import {API} from '../../globalConstants.js';
 import Roles from '../../components/Roles/Roles.jsx';
+import {jwtDecode} from 'jwt-decode';
 
 function Profile() {
     const [updated, setUpdated] = useState(0);
 
     const token = localStorage.getItem('token');
+    const {currentUser, logout} = useContext(AuthContext);
     const username = jwtDecode(token).sub;
-    const {logout} = useContext(AuthContext);
     const {data: user, loading, error} = useFetch(`/users/${username}`, {
         headers: {
             Authorization: `Bearer ${token}`,

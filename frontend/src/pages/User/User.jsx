@@ -21,7 +21,6 @@ function User() {
     const {user: currentUser, isAdmin} = useContext(AuthContext);
     const shouldRedirect = currentUser?.username === username
     const token = localStorage.getItem('token');
-    console.log(currentUser)
     const {data: user, loading, error} = useFetch(shouldRedirect ? null : `/users/${username}`, {
         headers: {
             Authorization: `Bearer ${token}`

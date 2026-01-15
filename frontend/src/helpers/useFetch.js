@@ -1,6 +1,7 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {API} from '../globalConstants.js';
+import {AuthContext} from '../context/AuthContext.jsx';
 
 function useFetch(endpoint, config, updated) {
     const [data, setData] = useState(null);
@@ -8,9 +9,10 @@ function useFetch(endpoint, config, updated) {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        if(!endpoint) return; // Do not fetch data if there is no endpoint passed (i.e. for error/loading cards).
+        if (!endpoint) return; // Do not fetch data if there is no endpoint passed (i.e. for error/loading cards).
         const controller = new AbortController(); //TODO what should I do with this?
         const url = API + endpoint;
+
         async function fetchData() {
             setLoading(true);
             setError(false);
@@ -29,9 +31,9 @@ function useFetch(endpoint, config, updated) {
         return function cleanup() {
             controller.abort();
         }
-    }, [endpoint, updated]);
+}, [endpoint, updated]);
 
-    return {data, loading, error};
+return {data, loading, error};
 }
 
 export default useFetch;

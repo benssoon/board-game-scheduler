@@ -72,7 +72,6 @@ function Roles({username}) {
         } catch (er) {
             const response = er.response;
             console.log(response);
-            console.log(isAdmin)
             if (response.status === 403) {
                 setError("You do not have the correct permissions to do that.");
             } else {
