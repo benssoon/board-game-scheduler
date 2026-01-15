@@ -13,7 +13,7 @@ function Profile() {
     const [updated, setUpdated] = useState(0);
 
     const token = localStorage.getItem('token');
-    const {currentUser, logout} = useContext(AuthContext);
+    const {logout} = useContext(AuthContext);
     const username = jwtDecode(token).sub;
     const {data: user, loading, error} = useFetch(`/users/${username}`, {
         headers: {
@@ -33,8 +33,6 @@ function Profile() {
                             parentPage={'/profile'}
                             isEditable
                         >
-                            <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password
-                            </button>
                             <Detail name={'username'} label={'Username'} value={username} update={setUpdated}/>
                             <Detail url={`${API}/users/${username}`} name={'name'} label={'Name'} value={user.name}
                                     update={setUpdated}/>
@@ -49,10 +47,13 @@ function Profile() {
                             <Detail url={`${API}/users/${username}`} name={'address'} label={'Address'}
                                     value={user.address}
                                     update={setUpdated}/>
+                            <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password
+                            </button>
                         </InfoBox>
                         <InfoBox
                             type={'address'}
                         >
+                            <h4>Placeholder details</h4>
                             <p>Street: </p>
                             <p>House number: </p>
                             <p>City: </p>
@@ -83,15 +84,15 @@ function Profile() {
                             </ul>
                         </InfoBox>
                     </div>
-                    <InfoBox
-                        type={'roles'}
-                        parentPage={'/profile'}
-                    >
-                        <Roles username={username}/>
-                    </InfoBox>
-                    <h2>Logout</h2>
-
-                    <button type="button" onClick={logout}>Logout</button>
+                    <div className={'info-group right'}>
+                        <InfoBox
+                            type={'actions'}
+                            parentPage={'/profile'}
+                        >
+                            <button type="button" onClick={logout}>Logout</button>
+                            <Roles username={username}/>
+                        </InfoBox>
+                    </div>
                 </div>
             </>
             :

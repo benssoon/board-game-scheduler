@@ -137,7 +137,14 @@ input {
 }
 
 .categoryPage {
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+}
+
+.categoryHeader {
+    display: flex;
+    justify-content: space-between;
 }

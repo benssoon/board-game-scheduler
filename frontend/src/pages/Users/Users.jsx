@@ -6,7 +6,7 @@ function Users() {
     const [updated, setUpdated] = useState(0);
     const [param, setParam] = useState('');
     return (
-        <>
+        <div className={'categoryPage'}>
             <h2>Users</h2>
             <section className="categoryBox">
                 <DisplayGrid
@@ -15,7 +15,7 @@ function Users() {
                     param={param}
                 />
             </section>
-        </>
+        </div>
     );
 }
 
