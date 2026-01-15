@@ -158,7 +158,7 @@ function Event() {
                             <button className={'small-button'} type="submit" onClick={() => changeParticipation('join')}>Join</button>
                             <button className={'small-button'} type="submit" onClick={() => changeParticipation('leave')}>Leave</button>
                             {/*<editor-fold desc="Change Game Form">*/}
-                            <form onSubmit={handleSubmitChangeGame}>
+                            <form className={'in-line-form'} onSubmit={handleSubmitChangeGame}>
                                 <label htmlFor="changeGame">Game ID:</label>
                                 <input
                                     type="number"
@@ -187,7 +187,7 @@ function Event() {
                                 })}
                             </ul>
                             {/*<editor-fold desc="Add Player Form">*/}
-                            <form onSubmit={(e) => handleAddRemovePlayer(e, addingUsername, 'add')}>
+                            <form className={'in-line-form'} onSubmit={(e) => handleAddRemovePlayer(e, addingUsername, 'add')}>
                                 <label htmlFor="addUser">Username:</label>
                                 <input
                                     type="text"

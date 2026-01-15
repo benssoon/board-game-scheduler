@@ -50,7 +50,11 @@ function User() {
         } catch (er) {
             const response = er.response;
             console.log(response);
-            setErrorNotification(response.data);
+            if (response.status === 403) {
+                setErrorNotification("You do not have the correct permissions to do that.");
+            } else {
+                setErrorNotification(response.data);
+            }
         }
     }
 
@@ -98,11 +102,9 @@ function User() {
                                 <button type={'button'} onClick={handleDeleteUser}>Delete User</button>
                                 <Roles username={username}/>
 
-                                {/* TODO make context for notifications
+                                {/*TODO make context for notifications*/}
                                 {errorNotification && <Notification setParent={setErrorNotification} isError={errorNotification}>{errorNotification}</Notification> }
                                 {successNotification && <Notification setParent={setSuccessNotification}>{successNotification}</Notification> }
-                                */}
-
                             </InfoBox>
                         </div>
                     }

@@ -23,6 +23,8 @@
     --color-error-background: red;
     --color-success-background: var(--color-primary);
 
+    --navbar-height: 60px;
+
     --rounding-gentle: 8px;
     --rounding-pill: 50px;
 
