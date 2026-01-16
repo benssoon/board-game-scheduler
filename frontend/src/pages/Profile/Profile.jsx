@@ -13,9 +13,10 @@ function Profile() {
     const [updated, setUpdated] = useState(0);
 
     const token = localStorage.getItem('token');
-    const {logout} = useContext(AuthContext);
-    const username = jwtDecode(token).sub;
-    const {data: user, loading, error} = useFetch(`/users/${username}`, {
+    const {logout, user} = useContext(AuthContext);
+    //const username = jwtDecode(token).sub;
+    const username = user?.username;
+    const {data: userData, loading, error} = useFetch(`/users/${username}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -23,7 +24,7 @@ function Profile() {
     const navigate = useNavigate();
 
     return (
-        user ?
+        userData ?
             <>
                 <h2>Hello {username}!</h2>
                 <div className={'info-box-container'}>
@@ -34,18 +35,18 @@ function Profile() {
                             isEditable
                         >
                             <Detail name={'username'} label={'Username'} value={username} update={setUpdated}/>
-                            <Detail url={`${API}/users/${username}`} name={'name'} label={'Name'} value={user.name}
+                            <Detail url={`${API}/users/${username}`} name={'name'} label={'Name'} value={userData.name}
                                     update={setUpdated}/>
                             <Detail url={`${API}/users/${username}`} name={'emailAddress'} label={'Email'}
-                                    value={user.emailAddress} update={setUpdated}/>
+                                    value={userData.emailAddress} update={setUpdated}/>
                             <Detail url={`${API}/users/${username}`} name={'telephoneNumber'} label={'Phone'}
-                                    value={user.telephoneNumber} update={setUpdated}/>
-                            <Detail url={`${API}/users/${username}`} name={'age'} label={'Age'} value={user.age}
+                                    value={userData.telephoneNumber} update={setUpdated}/>
+                            <Detail url={`${API}/users/${username}`} name={'age'} label={'Age'} value={userData.age}
                                     update={setUpdated}/>
-                            <Detail url={`${API}/users/${username}`} name={'area'} label={'Area'} value={user.area}
+                            <Detail url={`${API}/users/${username}`} name={'area'} label={'Area'} value={userData.area}
                                     update={setUpdated}/>
                             <Detail url={`${API}/users/${username}`} name={'address'} label={'Address'}
-                                    value={user.address}
+                                    value={userData.address}
                                     update={setUpdated}/>
                             <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password
                             </button>
@@ -65,7 +66,7 @@ function Profile() {
                             type={'hosting'}
                         >
                             <ul>
-                                {user.hostedEvents.map((event) => {
+                                {userData.hostedEvents.map((event) => {
                                     return <li key={event.id}>
                                         <Link to={`/events/${event.id}`}>{event.name}</Link>
                                     </li>
@@ -76,7 +77,7 @@ function Profile() {
                             type={'joined'}
                         >
                             <ul>
-                                {user.joinedEvents.map((event) => {
+                                {userData.joinedEvents.map((event) => {
                                     return <li key={event.id}>
                                         <Link to={`/events/${event.id}`}>{event.name}</Link>
                                     </li>

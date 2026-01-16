@@ -137,7 +137,7 @@ input {
 }
 
 .categoryPage {
-    padding: 20px;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 10px;

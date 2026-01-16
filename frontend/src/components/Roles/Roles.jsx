@@ -37,6 +37,7 @@ function Roles({username}) {
     }
 
     async function deleteUserRole(role) {
+        console.log(token)
         try {
             const response = await axios.delete(`${API}/users/${username}/roles/${role}`, {
                 headers: {

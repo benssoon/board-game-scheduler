@@ -7,30 +7,23 @@ import './Home.css';
 
 // Functions
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
-import {useState} from 'react';
 
 function Home() {
-
-    const [param, setParam] = useState('');
-
     return (
         <div className="main">
             <h1>Home</h1>
 
             <DisplayGrid
                 type="event"
-                preview={true}
-                param={param}
+                preview
             />
             <DisplayGrid
                 type="game"
-                preview={true}
-                param={param}
+                preview
             />
             <DisplayGrid
                 type="user"
-                preview={true}
-                param={param}
+                preview
             />
 
         </div>
