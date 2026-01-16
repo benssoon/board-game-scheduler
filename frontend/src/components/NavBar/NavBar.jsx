@@ -11,6 +11,13 @@ function NavBar() {
                 <img src={logo} alt="Home"/>
             </NavLink>
             <ul className="links">
+                <li>
+                    <NavLink
+                        className="home-icon"
+                        to="/">
+                        Home
+                    </NavLink>
+                </li>
                 <li><NavLink
                     to="/events">
                     Events

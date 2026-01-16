@@ -6,7 +6,7 @@
     height: var(--navbar-height);
     display: flex;
     justify-content: space-between;
-    background-color: orange;
+    background-color: var(--color-primary);
     align-items: center;
 }
 
@@ -14,9 +14,27 @@
     align-self: center;
     display: flex;
     justify-content: center;
+    align-items: center;
     flex: 1;
     gap: 1rem;
     list-style: none;
+}
+
+.navBar a {
+    border-radius: 4px;
+    font-size: 20px;
+}
+
+.navBar a:visited {
+    color: inherit;
+}
+
+.navBar a:hover {
+    color: var(--color-accent-mint-green);
+}
+
+.navBar a:focus {
+    outline-color: var(--color-accent-mint-green);
 }
 
 .navBar .links * {
@@ -26,5 +44,5 @@
 .home-icon img,
 .profile-icon img {
     display: block;
-    max-width: 3rem;
+    max-height: var(--navbar-height);
 }

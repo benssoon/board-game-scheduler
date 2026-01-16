@@ -5,7 +5,7 @@
 }
 
 .searchButton {
-    border-radius: 0 var(--rounding-gentle) var(--rounding-gentle) 0;
+    border-radius: 0 var(--rounding-gentle-radius) var(--rounding-gentle-radius) 0;
     border: solid var(--color-secondary);
     background-color: var(--color-secondary);
 }

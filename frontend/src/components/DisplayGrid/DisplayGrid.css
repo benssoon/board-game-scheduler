@@ -10,4 +10,5 @@
     gap: var(--card-spacing);
     overflow: scroll;
     overflow-y: hidden;
+    padding: var(--preview-padding-top-bottom);
 }
