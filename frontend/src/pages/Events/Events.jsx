@@ -65,12 +65,12 @@ function Events() {
         <div className="categoryPage">
             <div className={'categoryHeader'}>
                 <h2>Events</h2>
-                <InfoBox
+                {(isAdmin || isUser) && <InfoBox
                     type={'actions'}
                 >
                     {isUser && <button type="button" onClick={createEvent}>Create Event</button>}
                     {isAdmin && <button type="button" onClick={deleteEvents}>Delete all</button>}
-                </InfoBox>
+                </InfoBox>}
             </div>
             {/*<editor-fold desc="Events Grid">*/}
             <section className="categoryBox">

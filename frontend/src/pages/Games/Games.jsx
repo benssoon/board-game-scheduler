@@ -6,6 +6,7 @@ import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import {useNavigate} from 'react-router-dom';
+import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 
 function Games() {
     const [param, setParam] = useState('');
@@ -49,12 +50,15 @@ function Games() {
 
     return (
         <div className="categoryPage">
-            <h2>Games</h2>
-
-            {isUser && <button type="button" onClick={createGame}>Create Game</button>}
-
-            {isAdmin && <button type="button" onClick={deleteGames}>Delete all</button>}
-
+            <div className={'categoryHeader'}>
+                <h2>Games</h2>
+                {(isAdmin || isUser) && <InfoBox
+                    type={'actions'}
+                >
+                    {isUser && <button type="button" onClick={createGame}>Create Game</button>}
+                    {isAdmin && <button type="button" onClick={deleteGames}>Delete all</button>}
+                </InfoBox>}
+            </div>
             {/*<editor-fold desc="Games Grid">*/}
             <section className="categoryBox">
                 <FiltersBox

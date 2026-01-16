@@ -2,14 +2,15 @@
     display: flex;
     position: relative; /* Anchor dropdown */
     width: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 .searchButton {
     border-radius: 0 var(--rounding-gentle-radius) var(--rounding-gentle-radius) 0;
-    border: solid var(--color-secondary);
-    background-color: var(--color-secondary);
 }
 
 .searchBar {
     flex: 1;
+    border-radius: var(--rounding-gentle-radius) 0 0 var(--rounding-gentle-radius);
 }
