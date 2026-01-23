@@ -5,6 +5,7 @@ import {AuthContext} from '../../context/AuthContext.jsx';
 import axios from 'axios';
 import {handleFormChange} from '../../helpers/handlers.js';
 import {Link, Navigate, useLocation, useNavigate} from 'react-router-dom';
+import FormField from '../../components/FormField/FormField.jsx';
 
 function Login() {
     const URL = API + '/authenticate'
@@ -39,22 +40,24 @@ function Login() {
         <>
             <h2>Login</h2>
 
-            <form onSubmit={authenticate}>
-                <label htmlFor="username">Username</label>
-                <input
-                    type="username"
-                    id="username"
-                    name="username"
+            <form className={'login-form'} onSubmit={authenticate}>
+                <FormField
+                    type={'username'}
+                    label={'Username'}
+                    id={'username'}
+                    name={'username'}
                     value={data.username}
-                    onChange={(e) => handleFormChange(e, data, setData)}
+                    formState={data}
+                    handleChange={(e) => handleFormChange(e, data, setData)}
                 />
-                <label htmlFor="password">Password</label>
-                <input
+                <FormField
                     type="password"
+                    label={'Password'}
                     id="password"
                     name="password"
                     value={data.password}
-                    onChange={(e) => handleFormChange(e, data, setData)}
+                    formState={data}
+                    handleChange={(e) => handleFormChange(e, data, setData)}
                 />
                 <button type="submit">Login</button>
             </form>

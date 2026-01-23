@@ -92,7 +92,7 @@ function SearchBar({setFilters, formMember, start, name, id, formState, handleCh
             {formMember ?
                 field
                 :
-                <form onSubmit={handleSubmit}>
+                <form className={'searchForm'} onSubmit={handleSubmit}>
                     {field}
                     <button type="submit" className="searchButton">O</button>
                 </form>

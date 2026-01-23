@@ -4,8 +4,10 @@ import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import Notification from '../Notification/Notification.jsx';
-
+import checkmarkIcon from '/src/assets/icons/Symbol=Ready to Play.svg';
+import Detail from '../Detail/Detail.jsx';
 function Roles({username}) {
+
     const [roles, setRoles] = useState(null);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
@@ -16,6 +18,7 @@ function Roles({username}) {
 
     useEffect(() => {
         getUserRoles();
+        console.log(error)
     }, [success, error]);
 
     async function getUserRoles() {
@@ -34,6 +37,7 @@ function Roles({username}) {
     }
 
     async function deleteUserRole(role) {
+        console.log(token)
         try {
             const response = await axios.delete(`${API}/users/${username}/roles/${role}`, {
                 headers: {
@@ -48,7 +52,11 @@ function Roles({username}) {
         } catch (er) {
             const response = er.response;
             console.log(response);
-            setError(response.data);
+            if (response.status === 403) {
+                setError("You do not have the correct permissions to do that.");
+            } else {
+                setError(response.data);
+            }
         }
     }
 
@@ -65,7 +73,6 @@ function Roles({username}) {
         } catch (er) {
             const response = er.response;
             console.log(response);
-            console.log(isAdmin)
             if (response.status === 403) {
                 setError("You do not have the correct permissions to do that.");
             } else {
@@ -83,14 +90,17 @@ function Roles({username}) {
         <>
             {isAdmin &&
                 <div className={'roles'}>
-                    <h4>Roles</h4>
+                    <div className={'roles-title'}>
+                        <img src={checkmarkIcon} alt={'Checkmark icon to indicate Roles.'}/>
+                        <h4>Roles</h4>
+                    </div>
                     {roles && <ul>{
                         roles.map((role) => {
                             const roleName = role.role.split("_")[1]; // get the role name without "ROLE_"
                             return <li key={role.role}>{roleName} <button type={'button'} className={'small-button'} onClick={() => deleteUserRole(roleName)}>Delete</button> </li>
                         })
                     }</ul>}
-                    <form className={'new-role-form'} onSubmit={addUserRole}>
+                    <form className={'in-line-form'} onSubmit={addUserRole}>
                         <label htmlFor={'newRole'}>New Role:</label>
                         <input
                             type={'text'}

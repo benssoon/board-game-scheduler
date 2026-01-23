@@ -1,7 +1,12 @@
 .navBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--navbar-height);
     display: flex;
     justify-content: space-between;
-    background-color: orange;
+    background-color: var(--color-primary);
     align-items: center;
 }
 
@@ -9,11 +14,35 @@
     align-self: center;
     display: flex;
     justify-content: center;
+    align-items: center;
     flex: 1;
     gap: 1rem;
     list-style: none;
 }
 
+.navBar a {
+    border-radius: 4px;
+    font-size: 20px;
+}
+
+.navBar a:visited {
+    color: inherit;
+}
+
+.navBar a:hover {
+    color: var(--color-accent-mint-green);
+}
+
+.navBar a:focus {
+    outline-color: var(--color-accent-mint-green);
+}
+
 .navBar .links * {
     text-decoration: none;
+}
+
+.home-icon img,
+.profile-icon img {
+    display: block;
+    max-height: var(--navbar-height);
 }

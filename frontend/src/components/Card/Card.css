@@ -7,13 +7,23 @@
     height: var(--card-height);
     aspect-ratio: var(--card-width) / var(--card-height);
     padding: 20px 10px;
-    border-radius: var(--rounding-gentle);
+    border-radius: var(--rounding-gentle-radius);
     gap: 1rem;
+}
+
+.card:hover {
+    box-shadow: 4px 4px var(--rounding-gentle-radius) var(--color-accent-dark-red);
+    position: relative;
+    bottom: 5px;
 }
 
 .card ul {
     list-style-type: none;
-    text-align: left;
+}
+
+.card {
+    color: var(--color-tertiary);
+    text-decoration: none;
 }
 
 .event li ul {
@@ -22,17 +32,18 @@
 
 .card .placeholder {
     background-color: var(--color-primary);
-    border-radius: var(--rounding-gentle);
+    border-radius: var(--rounding-gentle-radius);
 }
 
 /* Placeholder specs */
 .event .placeholder {
-    width: 160px;
+    height: 12rem;
+    width: 10rem;
 }
 
 .game .placeholder {
-    height: 160px;
-    width: 320px;
+    height: 10rem;
+    width: 20rem;
 }
 
 .user .placeholder {
@@ -56,4 +67,11 @@
 .game, .user {
     flex-direction: column;
     align-items: center;
+}
+
+.event ul {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }

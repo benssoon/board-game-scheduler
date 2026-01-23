@@ -21,6 +21,7 @@ import SearchBar from '../../components/SearchBar/SearchBar.jsx';
 import {useNavigate} from 'react-router-dom';
 import EventForm from '../../components/EventForm/EventForm.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 
 function Events() {
     //<editor-fold desc="State">
@@ -62,12 +63,15 @@ function Events() {
 
     return (
         <div className="categoryPage">
-            <h2>Events</h2>
-
-            {isUser && <button type="button" onClick={createEvent}>Create Event</button>}
-
-            {isAdmin && <button type="button" onClick={deleteEvents}>Delete all</button>}
-
+            <div className={'categoryHeader'}>
+                <h2>Events</h2>
+                {(isAdmin || isUser) && <InfoBox
+                    type={'actions'}
+                >
+                    {isUser && <button type="button" onClick={createEvent}>Create Event</button>}
+                    {isAdmin && <button type="button" onClick={deleteEvents}>Delete all</button>}
+                </InfoBox>}
+            </div>
             {/*<editor-fold desc="Events Grid">*/}
             <section className="categoryBox">
                 <FiltersBox

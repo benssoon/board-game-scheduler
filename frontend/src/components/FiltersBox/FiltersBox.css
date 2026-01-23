@@ -2,8 +2,10 @@
     display: flex;
     align-items: center;
     gap: var(--filter-items-spacing);
-    border: solid 2px var(--color-tertiary);
-    padding: 2px;
+    border: solid var(--box-border-weight) var(--color-primary);
+    padding: var(--box-padding);
+    border-radius: var(--box-border-radius);
+    background-color: var(--color-purple-white);
 }
 
 .pills {

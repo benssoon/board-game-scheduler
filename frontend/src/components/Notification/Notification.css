@@ -9,7 +9,7 @@
 
 .notification-error {
     background-color: var(--color-error-background);
-    color: var(--color-white);
+    color: var(--color-purple-white);
 }
 
 .notification-success {

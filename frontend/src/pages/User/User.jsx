@@ -9,6 +9,8 @@ import {API} from '../../globalConstants.js';
 import Roles from '../../components/Roles/Roles.jsx';
 import Detail from '../../components/Detail/Detail.jsx';
 import Notification from '../../components/Notification/Notification.jsx';
+import userIcon from '/src/assets/icons/Symbol=User.svg';
+import areaIcon from '/src/assets/icons/Symbol=Location.svg';
 
 function User() {
     const [errorNotification, setErrorNotification] = useState(null);
@@ -19,7 +21,6 @@ function User() {
     const {user: currentUser, isAdmin} = useContext(AuthContext);
     const shouldRedirect = currentUser?.username === username
     const token = localStorage.getItem('token');
-    console.log(currentUser)
     const {data: user, loading, error} = useFetch(shouldRedirect ? null : `/users/${username}`, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -48,7 +49,11 @@ function User() {
         } catch (er) {
             const response = er.response;
             console.log(response);
-            setErrorNotification(response.data);
+            if (response.status === 403) {
+                setErrorNotification("You do not have the correct permissions to do that.");
+            } else {
+                setErrorNotification(response.data);
+            }
         }
     }
 
@@ -61,9 +66,9 @@ function User() {
                         <InfoBox
                             type="details"
                         >
-                            <Detail name={'username'} label={'Username'} value={username}/>
-                            <Detail name={'name'} label={'Name'} value={user.name}/>
-                            <Detail name={'area'} label={'Area'} value={user.area}/>
+                            <Detail icon={userIcon} name={'username'} label={'Username'} value={username}/>
+                            <Detail icon={userIcon} name={'name'} label={'Name'} value={user.name}/>
+                            <Detail icon={areaIcon} name={'area'} label={'Area'} value={user.area}/>
                         </InfoBox>
                         <InfoBox
                             type={'hosting'}
@@ -96,11 +101,9 @@ function User() {
                                 <button type={'button'} onClick={handleDeleteUser}>Delete User</button>
                                 <Roles username={username}/>
 
-                                {/* TODO make context for notifications
+                                {/*TODO make context for notifications*/}
                                 {errorNotification && <Notification setParent={setErrorNotification} isError={errorNotification}>{errorNotification}</Notification> }
                                 {successNotification && <Notification setParent={setSuccessNotification}>{successNotification}</Notification> }
-                                */}
-
                             </InfoBox>
                         </div>
                     }

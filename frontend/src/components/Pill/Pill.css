@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     background-color: var(--color-accent-dark-red);
-    color: var(--color-white);
+    color: var(--color-purple-white);
     border-radius: var(--rounding-pill);
     padding: 7px;
 }
@@ -11,5 +11,5 @@
 .deletePill {
     background-color: transparent;
     border: none;
-    color: var(--color-white);
+    color: var(--color-purple-white);
 }
