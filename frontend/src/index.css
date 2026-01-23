@@ -35,7 +35,9 @@
     --box-padding: 10px;
 
     --input-border-weight: 3px;
+    --input-height: 24px;
     --button-border-weight: 3px;
+    --button-height: var(--input-height);
 
     --card-spacing: 48px;
     --card-width: 100%;
@@ -106,6 +108,7 @@ button {
     font-weight: 800;
     letter-spacing: .24em;
     cursor: pointer;
+    height: var(--button-height);
 }
 
 button:hover {
@@ -137,6 +140,7 @@ input {
     border-radius: var(--rounding-gentle-radius);
     border: solid var(--color-tertiary) var(--input-border-weight);
     padding: 4px;
+    height: var(--input-height);
 }
 
 input:hover {
