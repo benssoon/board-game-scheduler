@@ -1,15 +1,4 @@
-...
-* Table of Contents
-:PROPERTIES:
-:TOC:      :include all :ignore this
-:END:
-:CONTENTS:
-
-:END:
-...
-
-* Inhoud
-
+#+TOC: headlines 2
 
 * Inleiding
 
