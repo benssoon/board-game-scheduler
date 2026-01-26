@@ -1,11 +1,27 @@
 #+TOC: headlines 2
 
 * Inleiding
-
-* Benodigdheden
-
+  De FiLoGames web-API is gebouwd met de Spring Framework en de frontend applicatie is gebouwd met React. FiLoGames is ontworpen om borspel fans andere lokale fans te vinden en daar evenementen mee te plannen. Zoek makkelijk op bestaande evenementen met een specifiek spel.
+* Benodigdheden (met minimale versienummers)
+- PostgreSQL
+  - Versie 14.2
+- Apache Maven
+  - Versie 3.6.3
+- JDK
+  - Versie 21.0.9
+- PGAdmin
+  - Versie 9.2
+- Postman (Niet verplicht)
+  - Versie 11.72.3
+- De frontend FiLoGames applicatie (kan ook gebruikt worden om de endpoints te triggeren)
 * Projectstructuur
-
+  
 * Installatie
 
 * Tests
+
+
+find games
+local games
+games with friends
+board at home
