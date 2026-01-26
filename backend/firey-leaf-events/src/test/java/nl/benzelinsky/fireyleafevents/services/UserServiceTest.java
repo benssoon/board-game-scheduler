@@ -85,7 +85,7 @@ class UserServiceTest {
         userExistsPhoneMessage = "A User already exists with telephone number \"" + phone + "\".";
         usernameNotFoundMessage = "Cannot find user " + username;
         alreadyHasRoleMessage = "User with username " + username + " already has role ROLE_" + rolesArray[0];
-        roleNotFoundMessage = "Role " + rolesArray[0] + " does not exist.";
+        roleNotFoundMessage = "User " + username + " does not have role " + rolesArray[0] + ".";
         userDeletedMessage = "User " + username + " has been deleted.";
     }
 

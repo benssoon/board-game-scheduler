@@ -152,7 +152,7 @@ public class UserService {
     public void removeRole(String username, String role, String currentUser) {
         User user = this.userRepository.findById(username)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException(username));
+                        new UsernameNotFoundException(username)); // User does not have specified role
         Role roleToRemove = user.getRoles().stream().filter((a) -> a.getRole().equalsIgnoreCase("ROLE_"+role)).findAny()
                         .orElseThrow(() ->
                                 new RoleNotFoundException(username, role));
