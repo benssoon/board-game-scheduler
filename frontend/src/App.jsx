@@ -11,7 +11,7 @@ import Event from './pages/Event/Event.jsx';
 import Game from './pages/Game/Game.jsx';
 import EditEvent from './pages/EditEvent/EditEvent.jsx';
 import CreateEvent from './pages/CreateEvent/CreateEvent.jsx';
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 import {AuthContext} from './context/AuthContext.jsx';
 import NavBar from './components/NavBar/NavBar.jsx';
 import User from './pages/User/User.jsx';

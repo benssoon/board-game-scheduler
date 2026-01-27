@@ -20,7 +20,6 @@ function AuthContextProvider({children}) {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        console.log('mounting authcontext') // TODO keep this until the errors with expired tokens are resolved
         if (token) {
             const decoded = jwtDecode(token);
             console.log(decoded)

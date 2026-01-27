@@ -4,12 +4,10 @@ import './NavBar.css';
 import {NavLink} from 'react-router-dom';
 import {useContext} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import userIcon from '../../assets/icons/Symbol=User.svg';
 import {handleUserImageError} from '../../helpers/handlers.js';
 
 function NavBar() {
     const {isAuth, user} = useContext(AuthContext);
-    console.log(user?.profilePicture)
     return (
         <nav className="navBar">
             <NavLink

@@ -39,7 +39,8 @@
     --input-border-weight: 3px;
     --input-height: 24px;
     --button-border-weight: 3px;
-    --button-height: var(--input-height);
+    --button-height: 32px;
+    --small-button-height: calc(var(--button-height) * .75);
 
     --card-spacing: 48px;
     --card-width: 100%;
@@ -121,7 +122,8 @@ button:hover {
 
 .small-button {
     padding: 8px 20px;
-    height: 32px;
+    height: var(--small-button-height);
+    width: fit-content;
 }
 
 /* ------------------------------- 4. Form ----------------------------------- */

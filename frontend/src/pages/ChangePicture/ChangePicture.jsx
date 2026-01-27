@@ -1,11 +1,14 @@
 import './ChangePicture.css';
-import {useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
+import {useNavigate} from 'react-router-dom';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
 function ChangePicture() {
     const [newImage, setNewImage] = useState(null);
     const fileInputRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => { // To prevent memory leaks.
         if (!newImage) return;
@@ -25,12 +28,12 @@ function ChangePicture() {
         }
     }
 
-    async function uploadImage(e) {
+    async function uploadImage(e) { /*TODO Update NavBar image when profilePicture is updated*/
         e.preventDefault();
         if (!newImage) return;
         const token = localStorage.getItem('token');
         const formData = new FormData();
-        formData.append('file', newImage); // Creates a FormData object, which will give the header Content-Type: multipart/form-data
+        formData.append('profilePicture', newImage); // Creates a FormData object, which will give the header Content-Type: multipart/form-data
         try {
             const result = await axios.post(`${API}/images/upload`, formData, {
                 headers: {
@@ -38,6 +41,7 @@ function ChangePicture() {
                 },
             });
             console.log(result.data);
+            navigate('/profile');
         } catch (err) {
             console.error(err);
         }
@@ -64,6 +68,7 @@ function ChangePicture() {
                 </div>}
             </div>
             <button type={'submit'}>Submit</button>
+            {/*TODO Remove image functionality*/}
         </form>
     );
 }
