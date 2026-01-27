@@ -1,5 +1,5 @@
 import './Profile.css';
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import {Link, useNavigate} from 'react-router-dom';
@@ -7,7 +7,7 @@ import useFetch from '../../helpers/useFetch.js';
 import Detail from '../../components/Detail/Detail.jsx';
 import {API} from '../../globalConstants.js';
 import Roles from '../../components/Roles/Roles.jsx';
-import {jwtDecode} from 'jwt-decode';
+import {handleUserImageError} from '../../helpers/handlers.js';
 
 function Profile() {
     const [updated, setUpdated] = useState(0);
@@ -87,6 +87,7 @@ function Profile() {
                         <img className={'profile-picture info-box'}
                              src={user.profilePicture}
                              alt={'Profile picture'}
+                             onError={handleUserImageError}
                         />
                         <InfoBox
                             type={'actions'}
