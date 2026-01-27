@@ -25,7 +25,9 @@
     --color-error-background: red;
     --color-success-background: var(--color-primary);
 
+    --icon-width: 32px;
     --navbar-height: 60px;
+    --navbar-icon-max-width: calc(var(--navbar-height) * .75);
 
     --rounding-gentle-radius: 8px;
     --rounding-pill: 50px;

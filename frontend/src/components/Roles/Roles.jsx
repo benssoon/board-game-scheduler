@@ -18,7 +18,7 @@ function Roles({username}) {
 
     useEffect(() => {
         getUserRoles();
-        console.log(error)
+        error && console.error(error)
     }, [success, error]);
 
     async function getUserRoles() {

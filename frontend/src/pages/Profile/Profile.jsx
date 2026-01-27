@@ -85,7 +85,7 @@ function Profile() {
                     </div>
                     <div className={'info-group right'}>
                         <img className={'profile-picture info-box'}
-                             src={`${API}/images/test.png`}
+                             src={user.profilePicture}
                              alt={'Profile picture'}
                         />
                         <InfoBox
