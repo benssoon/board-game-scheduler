@@ -109,12 +109,6 @@ function UserForm({type, fields}) {
     async function handleSubmit(e) {
         e.preventDefault();
         if (emptyRequiredFields.length > 0) { // Update errors
-            /*setFormError(
-                emptyRequiredFields.reduce((acc, fieldName) => {
-                    acc[fieldName] = 'is required.';
-                    return acc;
-                }, {})
-            );*/
             toggleSubmittedWithError(true);
         } else if (passwordsMatch && passwordIsNew) {
             setSubmitError(null);

@@ -20,6 +20,7 @@ import CreateGame from './pages/CreateGame/CreateGame.jsx';
 import Register from './pages/Register/Register.jsx';
 import EditProfile from './pages/EditProfile/EditProfile.jsx';
 import ChangePassword from './pages/ChangePassword/ChangePassword.jsx';
+import ChangePicture from './pages/ChangePicture/ChangePicture.jsx';
 
 function App() {
     const {isAuth} = useContext(AuthContext);
@@ -35,6 +36,7 @@ function App() {
                     <Route path="/profile" element={isAuth ? <Profile/> : <Navigate to={"/login"}/>}/>
                     <Route path="/profile/edit" element={<EditProfile/>}/>
                     <Route path="/profile/change-password" element={<ChangePassword/>}/>
+                    <Route path="/profile/change-picture" element={<ChangePicture/>}/>
                     <Route path="/register" element={<Register/>}/>
                     <Route path="/events" element={<Events/>}/>
                     <Route path="/events/create" element={<CreateEvent/>}/>

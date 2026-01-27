@@ -1,0 +1,44 @@
+.upload-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    align-self: center;
+}
+
+.upload-block label {
+    flex-grow: 2;
+}
+
+.upload-block input {
+    flex-grow: 0;
+}
+
+.upload-block img {
+    max-width: 200px;
+    aspect-ratio: 1/1;
+    border: solid var(--color-tertiary) var(--input-border-weight);
+    border-radius: 100%;
+}
+
+.image-with-x {
+    position: relative;
+}
+
+.x-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 30px;
+    height: 30px;
+    aspect-ratio: 1/1;
+    padding: 0;
+    background: none;
+    color: var(--color-tertiary);
+    letter-spacing: 0;
+    line-height: 0;
+    border-radius: 50%;
+}
