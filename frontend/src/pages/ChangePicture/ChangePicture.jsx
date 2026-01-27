@@ -30,7 +30,7 @@ function ChangePicture() {
         if (!newImage) return;
         const token = localStorage.getItem('token');
         const formData = new FormData();
-        formData.append('file', newImage);
+        formData.append('file', newImage); // Creates a FormData object, which will give the header Content-Type: multipart/form-data
         try {
             const result = await axios.post(`${API}/images/upload`, formData, {
                 headers: {
@@ -39,8 +39,7 @@ function ChangePicture() {
             });
             console.log(result.data);
         } catch (err) {
-            console.log(newImage)
-            console.log(err);
+            console.error(err);
         }
     }
 
