@@ -7,6 +7,7 @@ import {AuthContext} from '../../context/AuthContext.jsx';
 
 function NavBar() {
     const {isAuth, user} = useContext(AuthContext);
+    console.log(user?.profilePicture)
     return (
         <nav className="navBar">
             <NavLink

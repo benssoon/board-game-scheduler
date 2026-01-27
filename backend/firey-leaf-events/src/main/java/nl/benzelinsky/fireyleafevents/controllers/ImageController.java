@@ -47,9 +47,16 @@ public class ImageController {
     }
 
     @GetMapping("/{filename}")
-    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+    public ResponseEntity<Resource> getImage(@PathVariable String filename, @RequestParam(required = false) String username) {
         try {
-            Path filePath = Path.of(uploadDirectory).resolve(filename);
+            Path userDirectory;
+            Path filePath;
+            if (username != null && !username.isEmpty()) { // Check if the parameter was given
+                userDirectory = Path.of(uploadDirectory + "/" + username);
+                filePath = userDirectory.resolve(filename);
+            } else {
+                filePath = Path.of(uploadDirectory).resolve(filename);
+            }
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 return ResponseEntity.ok()
