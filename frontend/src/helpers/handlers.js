@@ -1,4 +1,6 @@
 import userIcon from '../assets/icons/Symbol=User.svg';
+import gameIcon from '../assets/icons/Symbol=Game.svg';
+import eventIcon from '../assets/icons/Symbol=Calendar.svg';
 
 export function handleFormChange(e, formState, setFormState) {
     const { name, type, value, checked } = e.target;
@@ -31,4 +33,14 @@ export function handleFormChange(e, formState, setFormState) {
 export function handleUserImageError(e) {
     e.currentTarget.onError = null; // prevent infinite loop
     e.currentTarget.src = userIcon;
+}
+
+export function handleGameImageError(e) {
+    e.currentTarget.onError = null;
+    e.currentTarget.src = gameIcon;
+}
+
+export function handleEventImageError(e) {
+    e.currentTarget.onError = null;
+    e.currentTarget.src = eventIcon;
 }

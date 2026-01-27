@@ -14,22 +14,28 @@ function Game() {
         game ?
             <>
                 <h2>{game.title}</h2>
-                <InfoBox
-                    type="about"
-                    parentPage={`/games/${id}`}
-                    isEditable={isAdmin || isUser}
-                >
-                    <p>{game.description}</p>
-                </InfoBox>
-                <InfoBox
-                    type="details"
-                >
-                    <p>Minimum Players: {game.minPlayers}</p>
-                    <p>Maximum Players: {game.maxPlayers}</p>
-                    <p>Minimum Age: {game.minAge}</p>
-                    <p>Maximum Age: {game.maxAge}</p>
-                    <p>Complexity: {game.complexity}</p>
-                </InfoBox>
+                <div className={'info-box-container'}>
+                    <section className={'info-group left'}>
+                        <InfoBox
+                            type="about"
+                            parentPage={`/games/${id}`}
+                            isEditable={isAdmin || isUser}
+                        >
+                            <p>{game.description}</p>
+                        </InfoBox>
+                    </section>
+                    <section className={'info-group right'}>
+                        <InfoBox
+                            type="details"
+                        >
+                            <p>Minimum Players: {game.minPlayers}</p>
+                            <p>Maximum Players: {game.maxPlayers}</p>
+                            <p>Minimum Age: {game.minAge}</p>
+                            <p>Maximum Age: {game.maxAge}</p>
+                            <p>Complexity: {game.complexity}</p>
+                        </InfoBox>
+                    </section>
+                </div>
             </>
             :
             loading ?
