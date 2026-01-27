@@ -4,10 +4,12 @@
     left: 0;
     width: 100%;
     height: var(--navbar-height);
+
     display: flex;
     justify-content: space-between;
     background-color: var(--color-primary);
     align-items: center;
+    padding: calc((var(--navbar-height) * .25) / 2);
 }
 
 .navBar .links {
@@ -41,8 +43,29 @@
     text-decoration: none;
 }
 
-.home-icon img,
-.profile-icon img {
+.nav-icon {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: var(--navbar-height);
+}
+
+.home-icon {
+    justify-content: flex-start;
+}
+
+.profile-icon {
+    justify-content: flex-end;
+}
+
+.nav-icon img {
     display: block;
+    max-height: 100%;
+    aspect-ratio: 1/1;
+    border: solid var(--color-accent-mint-green) var(--button-border-weight);
+    border-radius: 50%;
+}
+
+.nav-icon img:hover {
     max-height: var(--navbar-height);
 }

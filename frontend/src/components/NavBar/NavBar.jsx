@@ -2,40 +2,48 @@ import logo from '../../assets/placeholder.webp';
 import profileIcon from '../../assets/icons/Symbol=User.svg';
 import './NavBar.css';
 import {NavLink} from 'react-router-dom';
+import {useContext} from 'react';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
 function NavBar() {
+    const {isAuth, user} = useContext(AuthContext);
     return (
         <nav className="navBar">
             <NavLink
-                className="home-icon"
+                className="nav-icon home-icon"
                 to="/">
                 <img src={logo} alt="Home"/>
             </NavLink>
             <ul className="links">
                 <li>
                     <NavLink
-                        className="home-icon"
                         to="/">
                         Home
                     </NavLink>
                 </li>
-                <li><NavLink
-                    to="/events">
-                    Events
-                </NavLink></li>
-                <li><NavLink
-                    to="/games">
-                    Games
-                </NavLink></li>
-                <li><NavLink
-                    to="/users">
-                    Users
-                </NavLink></li>
+                <li>
+                    <NavLink
+                        to="/events">
+                        Events
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        to="/games">
+                        Games
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        to="/users">
+                        Users
+                    </NavLink>
+                </li>
             </ul>
             <NavLink
-                className="profile-icon"
+                className="nav-icon profile-icon"
                 to="/profile">
-                <img src={profileIcon} alt="Profile"/>
+                <img src={isAuth ? user.profilePicture : profileIcon} alt="Profile"/>
             </NavLink>
         </nav>
     );

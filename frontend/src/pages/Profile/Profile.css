@@ -8,3 +8,13 @@
 .detail p {
     margin: 0;
 }
+
+.profile-picture {
+    width: 20rem;
+    height: 20rem;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    padding: 0;
+    align-self: center;
+    text-align: center;
+}

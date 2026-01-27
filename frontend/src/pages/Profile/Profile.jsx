@@ -1,5 +1,5 @@
 import './Profile.css';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import {Link, useNavigate} from 'react-router-dom';
@@ -84,6 +84,10 @@ function Profile() {
                         </InfoBox>
                     </div>
                     <div className={'info-group right'}>
+                        <img className={'profile-picture info-box'}
+                             src={user.profilePicture}
+                             alt={'Profile picture'}
+                        />
                         <InfoBox
                             type={'actions'}
                             parentPage={'/profile'}
