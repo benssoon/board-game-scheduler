@@ -69,7 +69,7 @@ function AuthContextProvider({children}) {
                     hostedEvents: u.hostedEvents,
                     joinedEvents: u.joinedEvents,
                     roles: u.roles,
-                    profilePicture: `${API}/images/${username}/profilePicture.png`
+                    profilePicture: `${API}/images/profilePicture.png?username=${username}`,
                 },
                 status: 'done',
             });

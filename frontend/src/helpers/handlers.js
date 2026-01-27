@@ -1,3 +1,5 @@
+import userIcon from '../assets/icons/Symbol=User.svg';
+
 export function handleFormChange(e, formState, setFormState) {
     const { name, type, value, checked } = e.target;
 
@@ -24,4 +26,9 @@ export function handleFormChange(e, formState, setFormState) {
         ...formState,
         [name]: newValue,
     });
+}
+
+export function handleUserImageError(e) {
+    e.currentTarget.onError = null; // prevent infinite loop
+    e.currentTarget.src = userIcon;
 }

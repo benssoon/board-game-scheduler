@@ -60,12 +60,12 @@
 
 .nav-icon img {
     display: block;
-    max-height: 100%;
+    height: var(--navbar-icon-max-width);
     aspect-ratio: 1/1;
     border: solid var(--color-accent-mint-green) var(--button-border-weight);
     border-radius: 50%;
 }
 
 .nav-icon img:hover {
-    max-height: var(--navbar-height);
+    height: var(--navbar-height);
 }

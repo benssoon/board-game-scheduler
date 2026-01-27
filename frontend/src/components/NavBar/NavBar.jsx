@@ -4,6 +4,8 @@ import './NavBar.css';
 import {NavLink} from 'react-router-dom';
 import {useContext} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import userIcon from '../../assets/icons/Symbol=User.svg';
+import {handleUserImageError} from '../../helpers/handlers.js';
 
 function NavBar() {
     const {isAuth, user} = useContext(AuthContext);
@@ -44,7 +46,11 @@ function NavBar() {
             <NavLink
                 className="nav-icon profile-icon"
                 to="/profile">
-                <img src={isAuth ? user.profilePicture : profileIcon} alt="Profile"/>
+                <img
+                    src={isAuth ? user.profilePicture : profileIcon}
+                    alt="Profile"
+                    onError={handleUserImageError}
+                />
             </NavLink>
         </nav>
     );
