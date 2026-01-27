@@ -14,11 +14,15 @@ public class ImageService {
     @Value("${file.upload-dir}")
     private String uploadDirectory;
 
-    public String saveImage(MultipartFile file) throws IOException {
+    public String saveImage(MultipartFile file, String username, String basename) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("Cannot save an empty file.");
         }
-        Path filePath = Path.of(uploadDirectory + file.getOriginalFilename());
+        Path userDirectory = Path.of(uploadDirectory + "/" + username);
+        if (!Files.exists(userDirectory)) {
+            Files.createDirectories(userDirectory);
+        }
+        Path filePath = Path.of(userDirectory + "/" + basename + ".png");
         try {
             Files.copy(file.getInputStream(), filePath);
         } catch (IOException e) {
