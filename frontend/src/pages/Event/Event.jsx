@@ -134,7 +134,7 @@ function Event() {
             <>
                 <h2>{event.name}</h2>
                 <div className={'info-box-container'}>
-                    <div className={'info-group left'}>
+                    <section className={'info-group left'}>
                         <InfoBox
                             type="about"
                             parentPage={`/events/${id}`}
@@ -142,8 +142,8 @@ function Event() {
                         >
                             <p>{event.description}</p>
                         </InfoBox>
-                    </div>
-                    <div className={'info-group right'}>
+                    </section>
+                    <section className={'info-group right'}>
                         <InfoBox
                             type="details"
                         >
@@ -200,7 +200,7 @@ function Event() {
                             </form>
                             {/*</editor-fold>*/}
                         </InfoBox>
-                    </div>
+                    </section>
                 </div>
             </>
             :

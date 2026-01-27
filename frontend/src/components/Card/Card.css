@@ -30,23 +30,23 @@
     list-style-type: circle;
 }
 
-.card .placeholder {
+.card .card-image {
     background-color: var(--color-primary);
     border-radius: var(--rounding-gentle-radius);
 }
 
 /* Placeholder specs */
-.event .placeholder {
+.event .card-image {
     height: 12rem;
     width: 10rem;
 }
 
-.game .placeholder {
+.game .card-image {
     height: 10rem;
     width: 20rem;
 }
 
-.user .placeholder {
+.user .card-image {
     aspect-ratio: 1 / 1;
     flex: 0 0 auto;
     width: var(--user-image-width);
@@ -60,7 +60,7 @@
     font-size: 0.85rem;
 }
 
-.card--small .placeholder {
+.card--small .card-image {
     width: calc(var(--user-image-width) * var(--small-card-scale-factor));
 }
 
