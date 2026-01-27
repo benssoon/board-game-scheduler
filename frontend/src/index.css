@@ -123,7 +123,7 @@ button:hover {
 }
 
 /* ------------------------------- 4. Form ----------------------------------- */
-.create-form, .login-form {
+.create-form, .login-form, .change-form {
     border: solid var(--box-border-weight) var(--color-tertiary);
     border-radius: var(--box-border-radius);
     display: flex;
@@ -141,6 +141,35 @@ input {
     border: solid var(--color-tertiary) var(--input-border-weight);
     padding: 4px;
     height: var(--input-height);
+}
+
+input[type="file"] {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    position: absolute;
+}
+
+.custom-file-upload {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter, sans-serif;
+    border: solid var(--color-accent-dark-red) var(--button-border-weight);
+    border-radius: 50px;
+    padding: 8px 32px;
+    background-color: var(--color-accent-dark-red);
+    color: var(--color-accent-mint-green);
+    font-weight: 800;
+    letter-spacing: .24em;
+    cursor: pointer;
+    height: var(--button-height);
+}
+
+.custom-file-upload:hover {
+    background-color: var(--color-accent-mint-green);
+    color: var(--color-accent-dark-red);
+    border: solid var(--color-accent-dark-red) var(--button-border-weight);
 }
 
 input:hover {

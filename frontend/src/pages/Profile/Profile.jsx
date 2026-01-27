@@ -48,8 +48,6 @@ function Profile() {
                             <Detail url={`${API}/users/${username}`} name={'address'} label={'Address'}
                                     value={userData.address}
                                     update={setUpdated}/>
-                            <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password
-                            </button>
                         </InfoBox>
                         <InfoBox
                             type={'address'}
@@ -90,6 +88,8 @@ function Profile() {
                             type={'actions'}
                             parentPage={'/profile'}
                         >
+                            <button type={'button'} onClick={() => navigate('/profile/change-picture')}>Change Photo</button>
+                            <button type={'button'} onClick={() => navigate(`/profile/change-password`)}>Change Password</button>
                             <button type="button" onClick={logout}>Logout</button>
                             <Roles username={username}/>
                         </InfoBox>

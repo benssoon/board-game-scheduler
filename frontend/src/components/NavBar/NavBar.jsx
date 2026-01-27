@@ -1,4 +1,5 @@
 import logo from '../../assets/placeholder.webp';
+import profileIcon from '../../assets/icons/Symbol=User.svg';
 import './NavBar.css';
 import {NavLink} from 'react-router-dom';
 
@@ -34,7 +35,7 @@ function NavBar() {
             <NavLink
                 className="profile-icon"
                 to="/profile">
-                <img src={logo} alt="Profile"/>
+                <img src={profileIcon} alt="Profile"/>
             </NavLink>
         </nav>
     );
