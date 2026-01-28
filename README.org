@@ -3,19 +3,49 @@
 * Inleiding
   De FiLoGames web-API is gebouwd met de Spring Framework en de frontend applicatie is gebouwd met React. FiLoGames is ontworpen om borspel fans andere lokale fans te vinden en daar evenementen mee te plannen. Zoek makkelijk op bestaande evenementen met een specifiek spel.
 * Benodigdheden (met minimale versienummers)
-- PostgreSQL
-  - Versie 14.2
-- Apache Maven
-  - Versie 3.6.3
-- JDK
-  - Versie 21.0.9
-- PGAdmin
-  - Versie 9.2
-- Postman (Niet verplicht)
-  - Versie 11.72.3
-- De frontend FiLoGames applicatie (kan ook gebruikt worden om de endpoints te triggeren)
++ Voor de backend
+  - PostgreSQL
+    - Minimale versie: 14.2
+  - Apache Maven
+    - Minimale versie: 3.6.3
+  - Java
+    - Minimale JDK versie: 21.0.9
+  - PGAdmin
+    - Minimale versie: 9.2
+  - Postman (Niet verplicht)
+    - Minimale versie: 11.72.3
+  - De frontend FiLoGames applicatie (kan ook gebruikt worden om de endpoints te triggeren)
++ Voor de frontend
+  - Node.js
+    - Minimale versie: 22.15.0
+  - nvm
+    - Minimale versie: 0.40.3
+  - npm
+    - Minimale versie: 10.9.2
 * Projectstructuur
   
 * Installatie
+1. Installeer indien nodig PostgreSQL.
+   - https://www.postgresql.org/download/
+   - Selecteer jouw OS en volg de aangegeven instructies.
+2. Maak een nieuwe database aan.
+   - Volg eventueel de instructies in de PostgreSQL documentatie om het te installeren en om een database aan te maken: https://www.postgresql.org/docs/18/tutorial-start.html
+   - *Let op: afhankelijk van de setup op jouw systeem kan het zijn dat je een nieuwe rol moet aanmaken voordat je een database kunt aanmaken. Zie https://www.postgresql.org/docs/18/database-roles.html voor meer informatie.*
+3. Installeer indien nodig Apache Maven.
+   - https://maven.apache.org/download.cgi
+   - Download de gewenste installatie package (minimaal versie 3.6.3).
+   - Volg eventueel de installatie instructies op https://maven.apache.org/install.html.
+4. Installeer indien nodig Java.
+   - https://www.oracle.com/nl/java/technologies/downloads/#java21
+   - Selecteer jouw OS en download de gewenste installatie package.
+   - Volg eventueel de installatie instructies op:
+     + https://docs.oracle.com/en/java/javase/21/install/overview-jdk-installation.html
+5. 
+6. Installeer Node.js
+   - https://nodejs.org/en/download
+   - Voor hier de gewenste versie (minimaal 22.15.0) en jouw OS in. Kies "using *nvm* with *npm*".
+   - Voer de aangeven commando's uit.
+   - Dit moet minimaal de nodige versies van nvm, npm en node.js installeeren.
+7. 
 
 * Tests
