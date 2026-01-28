@@ -10,7 +10,7 @@
     - Minimale versie: 3.6.3
   - Java
     - Minimale JDK versie: 21.0.9
-  - PGAdmin
+  - pgAdmin 4 (Indien wenselijk)
     - Minimale versie: 9.2
   - Postman (Niet verplicht)
     - Minimale versie: 11.72.3
@@ -25,27 +25,63 @@
 * Projectstructuur
   
 * Installatie
-1. Installeer indien nodig PostgreSQL.
+1. Clone deze repository naar jouw eigen systeem.
+2. Installeer indien nodig PostgreSQL.
    - https://www.postgresql.org/download/
    - Selecteer jouw OS en volg de aangegeven instructies.
-2. Maak een nieuwe database aan.
-   - Volg eventueel de instructies in de PostgreSQL documentatie om het te installeren en om een database aan te maken: https://www.postgresql.org/docs/18/tutorial-start.html
+3. Maak een nieuwe database aan.
+   - Volg eventueel de instructies in de PostgreSQL documentatie om het te installeren en om een database aan te maken:
+     + https://www.postgresql.org/docs/18/tutorial-start.html
    - *Let op: afhankelijk van de setup op jouw systeem kan het zijn dat je een nieuwe rol moet aanmaken voordat je een database kunt aanmaken. Zie https://www.postgresql.org/docs/18/database-roles.html voor meer informatie.*
-3. Installeer indien nodig Apache Maven.
+4. Installeer indien nodig Apache Maven.
    - https://maven.apache.org/download.cgi
    - Download de gewenste installatie package (minimaal versie 3.6.3).
-   - Volg eventueel de installatie instructies op https://maven.apache.org/install.html.
-4. Installeer indien nodig Java.
+   - Volg eventueel de installatie instructies op:
+     + https://maven.apache.org/install.html.
+5. Installeer indien nodig Java.
    - https://www.oracle.com/nl/java/technologies/downloads/#java21
    - Selecteer jouw OS en download de gewenste installatie package.
    - Volg eventueel de installatie instructies op:
      + https://docs.oracle.com/en/java/javase/21/install/overview-jdk-installation.html
-5. 
-6. Installeer Node.js
+6. Installeer indien wenselijk pgAdmin 4
+   - https://www.pgadmin.org/download/
+   - Selecteer de gewenste installatiemethode en volg de instructies.
+7. Installeer indien wenselijk Postman
+   - https://www.postman.com/downloads/
+   - Als alternatief voor het downloaden en installeren van Postman kan het ook in de browser gebruikt worden, door op de download pagina op "Try the Web Version" te klikken.
+8. Installeer Node.js
    - https://nodejs.org/en/download
-   - Voor hier de gewenste versie (minimaal 22.15.0) en jouw OS in. Kies "using *nvm* with *npm*".
+   - Voer hier de gewenste versie (minimaal 22.15.0) en jouw OS in. Kies "using *nvm* with *npm*".
    - Voer de aangeven commando's uit.
    - Dit moet minimaal de nodige versies van nvm, npm en node.js installeeren.
-7. 
+9. Pas de applicatie configuratie aan voor jouw database gegevens.
+   - Open [[file:backend/fi-lo-games/src/main/resources/application.properties][application.properties]].
+   - Zorg dat er een regel is met deze code:
+     + src_<java>{spring.datasource.url=jdbc:postgresql://localhost:5432/fi-lo-games}
+     + Zorg dat de naam van jouw database overeenkomt met de naam aan het eind van die regel.
+     + De standaard naam die de applicatie verwacht is "fi-lo-games". Mocht je jouw database een andere naam willen geven, pas die naam dan hier aan.
+   - Zorg dat jouw gebruikersnaam voor PostgreSQL overeenkomt met de in dit bestand aangegeven gebruikersnaam:
+     + src_java{spring.datasource.username=<jouw-postgres-gebruikersnaam>}
+     + Vervang <jouw-postgres-gebruikersnaam> met de gebruikersnaam die je hebt aangemaakt bij het instellen van PostgreSQL.
+   - Zorg dat jouw wachtwoord voor PostgreSQL overeenkomt met het in dit bestand aangegeven wachtwoord:
+     + Maak indien wenselijk een omgevingsvariabele aan met de naam POSTGRESQL_PASSWORD.
+       - src_java{spring.datasource.password=${POSTGRESQL_PASSWORD}}
+       - Stel de waarde van POSTGRESQL_PASSWORD in op het wachtwoord dat je hebt aangemaakt bij het instellen van PostgreSQL.
+       - Zorg dat de variabele permanent is aangemaakt (bijvoorbeeld om het in je src_bash{.bashrc} op te slaan, bij het gebruik van Linux).
+     + Mocht je geen omgevingsvariabele hebben aangemaakt:
+       - src_java{spring.datasource.password=<jouw-postgres-wachtwoord>}
+       - Vervang dan <jouw-postgres-wachtwoord> met het wachtwoord dat je hebt aangemaakt bij het instellen van PostgreSQL.
+10. Draai de backend applicatie.
+    - In een shell sessie, navigeer naar de backend root map (bijvoorbeeld met de commando src_bash{cd}:
+      + [[backend/fi-lo-games][<repository-root-map>/backend/fi-lo-games]]
+    - Voer de commando src_bash{mvn spring-boot:run} uit.
+    - Als er geen tekst meer gelogd wordt en de laatste regel eindigt met "Started FiLoGamesApplication in 5.924 seconds (process running for 6.216)" of iets vergelijkbaars, dan is de applicatie succesvol gestart.
+11. Draai de frontend applicatie.
+    - In een andere shell sessie, navigeer naar de frontend root map (bijvoorbeeld met de commando src_bash{cd}:
+      + [[frontend][<repository-root-map>/frontend]]
+    - Voer de commando src_bash{npm install} uit.
+    - Voer de commando src_bash{npm run dev} uit.
+    - Als de regel src_bash{➜  Local:   http://localhost:5173/} verschijnt, dan is de applicatie succesvol gestart. Dat adres is het adres waar de applicatie gedraaid wordt.
+    - Voer het adres in de browser in of klik er direct op op de applicatie in de browser te openen.
 
 * Tests
