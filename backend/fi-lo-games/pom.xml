@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>nl.benzelinsky</groupId>
-    <artifactId>firey-leaf-events</artifactId>
+    <artifactId>fi-lo-games</artifactId>
     <version>1.0</version>
-    <name>firey-leaf-events</name>
-    <description>firey-leaf-events</description>
+    <name>fi-lo-games</name>
+    <description>A web API to help board game fans schedule live game sessions together.</description>
     <url/>
     <licenses>
         <license/>
