@@ -81,7 +81,7 @@ Deze applicatie bestaat uit een frontend en een backend applicatie. De frontend 
 10. Draai de backend applicatie.
     - In een shell sessie, navigeer naar de backend root map.
       + bijvoorbeeld met de commando ~cd <repository-root-map>/backend/fi-lo-games~
-      + [[backend/fi-lo-games][<repository-root-map>/backend/fi-lo-games]]
+      + link naar de map: [[backend/fi-lo-games][<repository-root-map>/backend/fi-lo-games]]
     - Voer de commando ~mvn spring-boot:run~ uit.
     - Als er geen tekst meer gelogd wordt en de laatste regel eindigt met "Started FiLoGamesApplication in 5.924 seconds (process running for 6.216)" of iets vergelijkbaars, dan is de applicatie succesvol gestart.
 11. Draai de frontend applicatie.
