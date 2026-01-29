@@ -57,31 +57,31 @@
 9. Pas de applicatie configuratie aan voor jouw database gegevens.
    - Open [[file:backend/fi-lo-games/src/main/resources/application.properties][application.properties]].
    - Zorg dat er een regel is met deze code:
-     + src_<java>{spring.datasource.url=jdbc:postgresql://localhost:5432/fi-lo-games}
+     + <java>{spring.datasource.url=jdbc:postgresql://localhost:5432/fi-lo-games}
      + Zorg dat de naam van jouw database overeenkomt met de naam aan het eind van die regel.
      + De standaard naam die de applicatie verwacht is "fi-lo-games". Mocht je jouw database een andere naam willen geven, pas die naam dan hier aan.
    - Zorg dat jouw gebruikersnaam voor PostgreSQL overeenkomt met de in dit bestand aangegeven gebruikersnaam:
-     + src_java{spring.datasource.username=<jouw-postgres-gebruikersnaam>}
+     + ~spring.datasource.username=<jouw-postgres-gebruikersnaam>~
      + Vervang <jouw-postgres-gebruikersnaam> met de gebruikersnaam die je hebt aangemaakt bij het instellen van PostgreSQL.
    - Zorg dat jouw wachtwoord voor PostgreSQL overeenkomt met het in dit bestand aangegeven wachtwoord:
      + Maak indien wenselijk een omgevingsvariabele aan met de naam POSTGRESQL_PASSWORD.
-       - src_java{spring.datasource.password=${POSTGRESQL_PASSWORD}}
+       - ~spring.datasource.password=${POSTGRESQL_PASSWORD}~
        - Stel de waarde van POSTGRESQL_PASSWORD in op het wachtwoord dat je hebt aangemaakt bij het instellen van PostgreSQL.
-       - Zorg dat de variabele permanent is aangemaakt (bijvoorbeeld om het in je src_bash{.bashrc} op te slaan, bij het gebruik van Linux).
+       - Zorg dat de variabele permanent is aangemaakt (bijvoorbeeld om het in je ~.bashrc~ op te slaan, bij het gebruik van Linux).
      + Mocht je geen omgevingsvariabele hebben aangemaakt:
-       - src_java{spring.datasource.password=<jouw-postgres-wachtwoord>}
+       - ~spring.datasource.password=<jouw-postgres-wachtwoord>~
        - Vervang dan <jouw-postgres-wachtwoord> met het wachtwoord dat je hebt aangemaakt bij het instellen van PostgreSQL.
 10. Draai de backend applicatie.
-    - In een shell sessie, navigeer naar de backend root map (bijvoorbeeld met de commando src_bash{cd}:
+    - In een shell sessie, navigeer naar de backend root map (bijvoorbeeld met de commando ~cd~:
       + [[backend/fi-lo-games][<repository-root-map>/backend/fi-lo-games]]
-    - Voer de commando src_bash{mvn spring-boot:run} uit.
+    - Voer de commando ~mvn spring-boot:run~ uit.
     - Als er geen tekst meer gelogd wordt en de laatste regel eindigt met "Started FiLoGamesApplication in 5.924 seconds (process running for 6.216)" of iets vergelijkbaars, dan is de applicatie succesvol gestart.
 11. Draai de frontend applicatie.
-    - In een andere shell sessie, navigeer naar de frontend root map (bijvoorbeeld met de commando src_bash{cd}:
+    - In een andere shell sessie, navigeer naar de frontend root map (bijvoorbeeld met de commando ~cd~:
       + [[frontend][<repository-root-map>/frontend]]
-    - Voer de commando src_bash{npm install} uit.
-    - Voer de commando src_bash{npm run dev} uit.
-    - Als de regel src_bash{➜  Local:   http://localhost:5173/} verschijnt, dan is de applicatie succesvol gestart. Dat adres is het adres waar de applicatie gedraaid wordt.
+    - Voer de commando ~npm install~ uit.
+    - Voer de commando ~npm run dev~ uit.
+    - Als de regel ~➜  Local:   http://localhost:5173/~ verschijnt, dan is de applicatie succesvol gestart. Dat adres is het adres waar de applicatie gedraaid wordt.
     - Voer het adres in de browser in of klik er direct op op de applicatie in de browser te openen.
 
 * Tests
