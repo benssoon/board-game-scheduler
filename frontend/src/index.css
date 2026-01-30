@@ -41,6 +41,7 @@
     --button-border-weight: 3px;
     --button-height: 32px;
     --small-button-height: calc(var(--button-height) * .75);
+    --button-font-weight: 800;
 
     --card-spacing: 48px;
     --card-width: 100%;
@@ -108,7 +109,7 @@ button {
     padding: 8px 32px;
     background-color: var(--color-accent-dark-red);
     color: var(--color-accent-mint-green);
-    font-weight: 800;
+    font-weight: var(--button-font-weight);
     letter-spacing: .24em;
     cursor: pointer;
     height: var(--button-height);

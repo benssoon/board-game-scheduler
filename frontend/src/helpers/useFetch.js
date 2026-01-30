@@ -9,6 +9,7 @@ function useFetch(endpoint, config, updated) {
     const [error, setError] = useState(false);
 
     useEffect(() => {
+        console.log(endpoint)
         if (!endpoint) return; // Do not fetch data if there is no endpoint passed (i.e. for error/loading cards).
         const controller = new AbortController(); //TODO what should I do with this?
         const url = API + endpoint;
