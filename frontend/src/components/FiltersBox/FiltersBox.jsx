@@ -10,22 +10,22 @@ function FiltersBox({setParam, searchingFor}) {
 
     // Set the url parameter for filtering events by game.
     useEffect(() => {
+        console.log(filters)
         let urlParameter = '';
-        for (const filtersKey in filters) {
+        for (const filtersKey in filters) { // build the parameter
             if (urlParameter && filters[filtersKey].param) {
                 urlParameter = urlParameter + '&' // If there is more than one filter given, separate them by '&' in the parameter.
             }
             urlParameter = urlParameter + filters[filtersKey].param;
         }
-        if (urlParameter) {
-            setParam(urlParameter);
-        }
+        setParam(urlParameter);
     }, [filters]);
 
     return (
         <div className="filtersBox">
             <SearchBar
                 setFilters={setFilters}
+                filters={filters}
                 searchingFor={searchingFor}
             />
             <ul className="pills">

@@ -1,4 +1,4 @@
-package nl.benzelinsky.fireyleafevents.services;
+package nl.benzelinsky.filogames.services;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

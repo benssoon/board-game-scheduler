@@ -3,7 +3,7 @@ import {useMemo, useState} from 'react';
 import useFetch from '../../helpers/useFetch.js';
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 
-function SearchBar({setFilters, formMember, start, name, id, formState, handleChange: setFormState, searchingFor}) {
+function SearchBar({filters, setFilters, formMember, start, name, id, formState, handleChange: setFormState, searchingFor}) {
 
     const [searchText, setSearchText] = useState('');
     const [selectedGameId, setSelectedGameId] = useState(0);
@@ -24,6 +24,9 @@ function SearchBar({setFilters, formMember, start, name, id, formState, handleCh
     // Add a search parameter to the url used for DisplayGrid
     function handleSubmit(e) {
         e.preventDefault();
+        for (const key in filters) {
+            if (filters[key].id === selectedGameId) return;
+        }
         if (selectedGameId > 0) {
             setFilters(prev => [
                 ...prev,

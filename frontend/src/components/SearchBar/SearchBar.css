@@ -14,6 +14,7 @@
 
 .searchButton {
     border-radius: 0 var(--rounding-gentle-radius) var(--rounding-gentle-radius) 0;
+    height: var(--input-height);
     width: auto;
     padding: 6px 4px 6px 6px;
 

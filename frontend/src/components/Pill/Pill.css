@@ -1,15 +1,27 @@
+.pill * {
+    color: var(--color-accent-mint-green);
+}
 .pill {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: var(--small-button-height);
     background-color: var(--color-accent-dark-red);
-    color: var(--color-purple-white);
     border-radius: var(--rounding-pill);
-    padding: 7px;
+    padding: 0 0 0 8px;
+    font-weight: var(--button-font-weight);
 }
 
 .deletePill {
     background-color: transparent;
+    padding: 0;
+    aspect-ratio: 1/1;
     border: none;
-    color: var(--color-purple-white);
+}
+
+.deletePill:hover {
+    background-color: transparent;
+    color: var(--color-accent-mint-green);
+    border: none;
+    font-size: 24px;
 }
