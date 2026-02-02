@@ -12,13 +12,5 @@ export function tokenIsValid(token, currentUsername) {
         isExpired = true;
     }
 
-    /*if (token.sub === currentUsername) {
-        console.log(`${currentUsername} is still logged in.`);
-        isCurrentUser = true;
-    } else {
-        console.log(`${currentUsername} is not logged in.`)
-        isCurrentUser = false;
-    }*/
-
     return !(isExpired || !isCurrentUser);
 }

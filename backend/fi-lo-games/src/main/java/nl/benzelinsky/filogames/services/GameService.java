@@ -22,11 +22,11 @@ import java.util.Map;
 public class GameService {
 
     private final GameRepository gameRepository;
-    private final EventRepository eventRepository;
+    private final EventService eventService;
 
-    public GameService(GameRepository gameRepository, EventRepository eventRepository) {
+    public GameService(GameRepository gameRepository, EventService eventService) {
         this.gameRepository = gameRepository;
-        this.eventRepository = eventRepository;
+        this.eventService = eventService;
     }
 
     /****** CRUD operations ******/
@@ -108,7 +108,6 @@ public class GameService {
     }
 
     // Delete game by ID including associated events
-    // TODO Should only be used with special permission and after checking if sure.
     public String deleteGameAndEvents(Long id) {
         Game toDelete = this.gameRepository.findById(id)
                 .orElseThrow(() ->
@@ -121,7 +120,7 @@ public class GameService {
         // Iterate over a copy of toDelete.activeEvents to avoid a bug when deleting events from the same collection we're iterating over.
         new ArrayList<>(toDelete.getActiveEvents())
                 .forEach(event ->
-                        messages.add(removeEvent(event.getId(), toDelete.getId())));
+                        messages.add(this.eventService.deleteEventById(event.getId())));
         this.gameRepository.delete(toDelete);
         return "Deleting " + toDelete.getTitle() + " and its events:\n" +
                 "    " + eventNames.toString() + "\n" +
@@ -144,24 +143,5 @@ public class GameService {
                 .forEach(id ->
                         System.out.println("\n"+this.deleteGameById(id)+"\n"));
         return "All games except Game with id " + protectedId + " have been deleted.";
-    }
-
-    // Hard decoupling. Causes event to be deleted!
-    public String removeEvent(Long eventId, Long gameId) {
-        Game game = this.gameRepository.findById(gameId)
-                .orElseThrow(() ->
-                        new RecordNotFoundException("Game", gameId));
-        Event event = this.eventRepository.findById(eventId)
-                .orElseThrow(() ->
-                        new RecordNotFoundException("Event", eventId));
-        // TODO add check to see if they are in fact linked?
-        game.removeEvent(event);
-        new ArrayList<>(event.getPlayers())
-                .forEach(player -> {
-                        event.removePlayer(player);
-                        player.leaveEvent(event);
-                });
-        this.eventRepository.deleteById(eventId);
-        return "Event with id " + eventId + " has been deleted.";
     }
 }

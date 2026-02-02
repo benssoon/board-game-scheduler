@@ -1,25 +1,10 @@
-// CSS
 import './Events.css';
-
-// Components
 import FiltersBox from '../../components/FiltersBox/FiltersBox.jsx';
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
-
-// Libraries
-
-// Functions
-import {useContext, useEffect, useRef, useState} from 'react';
-import {handleFormChange} from '../../helpers/handlers.js';
+import {useContext, useState} from 'react';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
-import FormField from '../../components/FormField/FormField.jsx';
-import {cleanupData} from '../../helpers/processingAndFormatting.js';
-import DatePicker, {DateObject} from 'react-multi-date-picker';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
-import DatePanel from 'react-multi-date-picker/plugins/date_panel';
-import SearchBar from '../../components/SearchBar/SearchBar.jsx';
 import {useNavigate} from 'react-router-dom';
-import EventForm from '../../components/EventForm/EventForm.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 
@@ -76,6 +61,7 @@ function Events() {
             <section className="categoryBox">
                 <FiltersBox
                     setParam={setParam} // Set param inside FiltersBox and give param to DisplayGrid
+                    searchingFor={'events'}
                 />
                 <DisplayGrid
                     type="event"

@@ -5,13 +5,12 @@ import {Navigate, Route, Routes} from 'react-router-dom';
 import Profile from './pages/Profile/Profile.jsx';
 import Games from './pages/Games/Games.jsx';
 import Users from './pages/Users/Users.jsx';
-
 import Login from './pages/Login/Login.jsx';
 import Event from './pages/Event/Event.jsx';
 import Game from './pages/Game/Game.jsx';
 import EditEvent from './pages/EditEvent/EditEvent.jsx';
 import CreateEvent from './pages/CreateEvent/CreateEvent.jsx';
-import {useContext, useState} from 'react';
+import {useContext} from 'react';
 import {AuthContext} from './context/AuthContext.jsx';
 import NavBar from './components/NavBar/NavBar.jsx';
 import User from './pages/User/User.jsx';

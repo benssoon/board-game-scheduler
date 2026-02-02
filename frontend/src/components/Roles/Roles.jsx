@@ -5,9 +5,8 @@ import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import Notification from '../Notification/Notification.jsx';
 import checkmarkIcon from '/src/assets/icons/Symbol=Ready to Play.svg';
-import Detail from '../Detail/Detail.jsx';
-function Roles({username}) {
 
+function Roles({username}) {
     const [roles, setRoles] = useState(null);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);

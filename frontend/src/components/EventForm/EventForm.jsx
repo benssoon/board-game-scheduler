@@ -10,8 +10,6 @@ import {useNavigate, useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
 import {DateObject} from 'react-multi-date-picker';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import SearchBar from '../SearchBar/SearchBar.jsx';
-
 
 function EventForm({type}) { // type is either create or edit
     const {id} = useParams();
