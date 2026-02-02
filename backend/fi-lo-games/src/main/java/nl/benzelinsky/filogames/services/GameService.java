@@ -22,12 +22,10 @@ import java.util.Map;
 public class GameService {
 
     private final GameRepository gameRepository;
-    private final EventRepository eventRepository;
     private final EventService eventService;
 
-    public GameService(GameRepository gameRepository, EventRepository eventRepository, EventService eventService) {
+    public GameService(GameRepository gameRepository, EventService eventService) {
         this.gameRepository = gameRepository;
-        this.eventRepository = eventRepository;
         this.eventService = eventService;
     }
 

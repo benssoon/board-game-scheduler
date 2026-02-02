@@ -3,7 +3,6 @@ import {useState} from 'react';
 import FormField from '../FormField/FormField.jsx';
 import {handleFormChange} from '../../helpers/handlers.js';
 import axios from 'axios';
-import {API} from '../../globalConstants.js';
 
 function Detail({url, name, label, value, update, icon}) {
     // If no url is given, then the detail is not editable.

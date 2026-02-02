@@ -1,8 +1,6 @@
 import './FiltersBox.css';
-
 import SearchBar from '../SearchBar/SearchBar.jsx';
 import Pill from '../Pill/Pill.jsx';
-
 import {useEffect, useState} from 'react';
 
 function FiltersBox({setParam, searchingFor}) {
@@ -10,11 +8,11 @@ function FiltersBox({setParam, searchingFor}) {
 
     // Set the url parameter for filtering events by game.
     useEffect(() => {
-        console.log(filters)
+        console.log(filters);
         let urlParameter = '';
         for (const filtersKey in filters) { // build the parameter
             if (urlParameter && filters[filtersKey].param) {
-                urlParameter = urlParameter + '&' // If there is more than one filter given, separate them by '&' in the parameter.
+                urlParameter = urlParameter + '&'; // If there is more than one filter given, separate them by '&' in the parameter.
             }
             urlParameter = urlParameter + filters[filtersKey].param;
         }

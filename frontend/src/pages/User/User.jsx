@@ -1,7 +1,7 @@
 import './User.css';
 import {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import {Link, Navigate, redirect, useNavigate, useParams} from 'react-router-dom';
+import {Link, Navigate, useNavigate, useParams} from 'react-router-dom';
 import useFetch from '../../helpers/useFetch.js';
 import InfoBox from '../../components/InfoBox/InfoBox.jsx';
 import axios from 'axios';

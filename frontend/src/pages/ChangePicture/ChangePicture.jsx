@@ -1,9 +1,8 @@
 import './ChangePicture.css';
-import {useContext, useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {API} from '../../globalConstants.js';
 import {useNavigate} from 'react-router-dom';
-import {AuthContext} from '../../context/AuthContext.jsx';
 
 function ChangePicture() {
     const [newImage, setNewImage] = useState(null);

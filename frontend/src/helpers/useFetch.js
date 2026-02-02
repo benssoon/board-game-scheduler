@@ -1,7 +1,6 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {API} from '../globalConstants.js';
-import {AuthContext} from '../context/AuthContext.jsx';
 
 function useFetch(endpoint, config, updated) {
     const [data, setData] = useState(null);

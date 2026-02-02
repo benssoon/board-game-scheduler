@@ -1,11 +1,4 @@
-// CSS
 import './Home.css';
-
-// Components
-
-// Libraries
-
-// Functions
 import DisplayGrid from '../../components/DisplayGrid/DisplayGrid.jsx';
 
 function Home() {
