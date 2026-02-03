@@ -118,7 +118,7 @@ paths:
       summary: Alle Events
       tags:
         - Events
-      description: Haal alle Events uit de database op.
+      description: Haal alle Events uit de database op. Dit mag elke gebruiker uitvoeren.
       parameters:
         - in: query
           name: gameId
@@ -141,7 +141,7 @@ paths:
       summary: Eén Event
       tags:
         - Events
-      description: Haal één evenement op.
+      description: Haal één evenement op. Dit mag elke gebruiker uitvoeren.
       parameters:
         - in: path
           name: id
@@ -389,7 +389,7 @@ paths:
       summary: Alle Games
       tags:
         - Games
-      description: Haal alle spellen uit de database op.
+      description: Haal alle spellen uit de database op. Dit mag elke gebruiker uitvoeren.
       parameters:
         - in: query
           name: title
@@ -425,7 +425,7 @@ paths:
       summary: Een Game
       tags:
         - Games
-      description: Haal één spel uit de database op.
+      description: Haal één spel uit de database op. Dit mag elke gebruiker uitvoeren.
       parameters:
         - in: path
           name: id
@@ -512,7 +512,7 @@ paths:
       summary: Nieuwe User
       tags:
         - Users
-      description: Maak een nieuwe gebruiker aan.
+      description: Maak een nieuwe gebruiker aan. Gebruik deze endpoint om te registreren. Elke gebruiker mag deze actie uitvoeren.
       requestBody:
         required: true
         content:
@@ -683,6 +683,15 @@ paths:
       description: Om een afbeelding te uploaden als profile picture moet een gebruiker de ROLE_USER of ROLE_ADMIN authority hebben.
       security:
         - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profilePicture:
+                  type: string
+                  format: binary
       responses:
         "200":
           description: De afbeelding is succesvol geupload. Stuurt de naam van het bestand terug.
@@ -699,7 +708,11 @@ paths:
       responses:
         "200":
           description: De afbeelding.
-          content: image/png
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
         "500":
           description: Er is iets misgegaan in het ophalen van de afbeelding.
         "404":
