@@ -1,5 +1,7 @@
 #+TITLE: Fi-Lo-Games
 
+https://github.com/benssoon/fi-lo-games-board-game-scheduler
+
 * Inleiding
 De FiLoGames web-API is gebouwd met de Spring Framework en de frontend applicatie is gebouwd met React. FiLoGames is ontworpen om borspel fans andere lokale fans te vinden en daar evenementen mee te plannen. Zoek makkelijk op bestaande evenementen met een specifiek spel.
 * Benodigdheden (met minimale versienummers)
