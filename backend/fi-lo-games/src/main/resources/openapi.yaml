@@ -3,7 +3,15 @@ info:
   title: Fi-Lo-Games API
   version: '1.0.0'
   description: |
-    API Description here
+    De FiLoGames API is bedoeld om gegevens van gebruikers (Users), bordspellen (Games) en evenementen (Events) op te slaan zodat gebruikers evenementen met elkaar kunnen inplannen. Op die manier wordt het makkelijker voor gebruikers om met mensen in hun regio te verbinden en daardoor makkelijker fysiek bordspellen kunnen spelen.
+
+    **Beveiliging**
+    ----------------
+    Sommige endpoints zijn beveiligd en eisen dat een gebruiker ingelogd is en/of een bepaalde rol heeft. De huidige rollen heten als volgt:
+    - ROLE_USER – voornamelijk voor gebruikers die zich willen inschrijven voor evenementen en evenementen willen aanmaken.
+    - ROLE_ADMIN – voornamelijk voor gebruikers die noodzakelijke acties moeten uitvoeren om de veiligheid en kwaliteit van de inhoud in de database te waarborgen.
+
+    Een gebruiker die een beveiligde endpoint succesvol wil activeren moet geautoriseerd worden door in de header van een request een JSON Web Token (JWT) als Bearer token mee te sturen.
 
 servers:
   - url: http://localhost:8080/
