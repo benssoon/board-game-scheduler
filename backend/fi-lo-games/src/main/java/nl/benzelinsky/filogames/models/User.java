@@ -26,9 +26,6 @@ public class User {
     private String password;
 
     @Column
-    private String apiKey;
-
-    @Column
     @NonNull
     private String name;
 
