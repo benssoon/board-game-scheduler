@@ -117,4 +117,9 @@ public class EventController {
         String username = userDetails.getUsername();
         return ResponseEntity.ok(this.service.removePlayer(username, eventId));
     }
+
+    @PostMapping("/{id}/close")
+    public ResponseEntity<String> closeEvent(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(this.service.closeEvent(id));
+    }
 }

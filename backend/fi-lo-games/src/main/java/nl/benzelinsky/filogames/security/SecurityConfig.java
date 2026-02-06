@@ -60,6 +60,7 @@ public class SecurityConfig {
                                 // Events
                                 .requestMatchers(HttpMethod.POST, "/events").hasRole("USER") // Create event must be a user
                                 .requestMatchers(HttpMethod.POST, "/events/*/join").hasRole("USER") // Join/leave event, must be  user
+                                .requestMatchers(HttpMethod.POST, "/events/*/close").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/events/*/leave").hasRole("USER")
                                 .requestMatchers(HttpMethod.POST, "/events/*/add-player/*").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/events/*/remove-player/*").hasAnyRole("USER", "ADMIN")

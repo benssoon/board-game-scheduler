@@ -4,13 +4,15 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import nl.benzelinsky.filogames.dtos.GameInputDto;
 import nl.benzelinsky.filogames.dtos.GameOutputDto;
+import nl.benzelinsky.filogames.dtos.GameStatsDto;
 import nl.benzelinsky.filogames.exceptions.HasActiveEventsException;
 import nl.benzelinsky.filogames.exceptions.RecordNotFoundException;
 import nl.benzelinsky.filogames.mappers.GameMapper;
-import nl.benzelinsky.filogames.models.Event;
+import nl.benzelinsky.filogames.mappers.GameStatsMapper;
 import nl.benzelinsky.filogames.models.Game;
-import nl.benzelinsky.filogames.repositories.EventRepository;
+import nl.benzelinsky.filogames.models.GameStats;
 import nl.benzelinsky.filogames.repositories.GameRepository;
+import nl.benzelinsky.filogames.repositories.GameStatsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,10 +25,12 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final EventService eventService;
+    private final GameStatsRepository statsRepository;
 
-    public GameService(GameRepository gameRepository, EventService eventService) {
+    public GameService(GameRepository gameRepository, EventService eventService, GameStatsRepository statsRepository) {
         this.gameRepository = gameRepository;
         this.eventService = eventService;
+        this.statsRepository = statsRepository;
     }
 
     /****** CRUD operations ******/
@@ -34,7 +38,11 @@ public class GameService {
     // Create a game
     public GameOutputDto createGame(GameInputDto dtoIn) {
         Game game = GameMapper.toEntity(dtoIn);
+        GameStats stats = new GameStats(game);
+        game.setStats(stats);
+        stats.setGame(game);
         this.gameRepository.save(game);
+        this.statsRepository.save(stats);
         return GameMapper.toOutputDto(game);
     }
 
@@ -143,5 +151,13 @@ public class GameService {
                 .forEach(id ->
                         System.out.println("\n"+this.deleteGameById(id)+"\n"));
         return "All games except Game with id " + protectedId + " have been deleted.";
+    }
+
+    // Get stats
+    public GameStatsDto getStats(Long gameId) {
+        Game game = this.gameRepository.findById(gameId)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("Game", gameId));
+        return GameStatsMapper.toDto(game.getStats());
     }
 }

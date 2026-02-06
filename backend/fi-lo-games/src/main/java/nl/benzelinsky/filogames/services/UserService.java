@@ -34,7 +34,7 @@ public class UserService {
         if (this.userRepository.existsUserByTelephoneNumber(userInputDto.telephoneNumber)) {
             throw new UserAlreadyExistsException("telephone number", userInputDto.telephoneNumber);
         }
-        userInputDto.apiKey = RandomStringGenerator.generateAlphaNumeric(20); // TODO unnecessary?
+        //userInputDto.apiKey = RandomStringGenerator.generateAlphaNumeric(20); // TODO unnecessary?
         userInputDto.password = passwordEncoder.encode(userInputDto.password);
         User newUser = UserMapper.toEntity(userInputDto);
         this.userRepository.save(newUser);

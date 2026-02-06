@@ -51,6 +51,8 @@ public class EventService {
             event.addPlayer(host);
         }
 
+        this.gameRepository.save(game);
+        this.userRepository.save(host);
         this.eventRepository.save(event);
         return EventMapper.toOutputDto(event);
     }
@@ -158,6 +160,7 @@ public class EventService {
         event.setGame(game);
         game.addEvent(event);
         this.eventRepository.save(event);
+        this.gameRepository.save(game);
         return EventMapper.toOutputDto(event);
     }
 
@@ -177,6 +180,7 @@ public class EventService {
         event.setHost(host);
         host.hostEvent(event);
         this.eventRepository.save(event);
+        this.userRepository.save(host);
         return EventMapper.toOutputDto(event);
     }
 
@@ -223,6 +227,17 @@ public class EventService {
             // player is not in event
             throw new NotAPlayerException(username, eventId);
         }
+        this.userRepository.save(player);
+        this.eventRepository.save(event);
         return EventMapper.toOutputDto(event);
+    }
+
+    public String closeEvent(Long id) {
+        Event event = this.eventRepository.findById(id)
+                .orElseThrow(() ->
+                        new RecordNotFoundException("Event", id));
+        event.getGame().getStats().incrementPlays(event.getPlayers().size());
+        event.setClosed(true);
+        return "Event with id " + id + " has been closed.";
     }
 }

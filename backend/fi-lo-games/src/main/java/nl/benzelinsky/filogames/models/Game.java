@@ -45,6 +45,10 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<Event> activeEvents = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "stats_id")
+    private GameStats stats;
+
     // Constructor
     public Game(String title, int minPlayers, int maxPlayers) {
         this.title = title;
