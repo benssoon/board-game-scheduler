@@ -18,7 +18,6 @@ public class UserInputDto {
     @NotBlank
     @NonNull
     public String password;
-    public String apiKey;
     @NotBlank
     @NonNull
     public String name;

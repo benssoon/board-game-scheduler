@@ -43,7 +43,6 @@ class UserServiceTest {
     private String hasActiveEventsMessage;
     private String username;
     private String password;
-    private String apiKey;
     private String name;
     private String email;
     private String phone;
@@ -68,7 +67,6 @@ class UserServiceTest {
     void setUp() {
         username = "ben";
         password = "1234";
-        apiKey = "test-string";
         name = "Ben";
         email = "ben@made.up";
         phone = "123456789";
@@ -76,7 +74,7 @@ class UserServiceTest {
         user1 = new User(username, password, name, email);
         user2 = new User("bob", "12345", "Bob", "bob@bob.bob");
         user3 = new User("saskia", "4321", "Saskia", "sas@sas.kia");
-        dtoIn = new UserInputDto(username, password, apiKey, name, email, phone, age, area, address, rolesArray);
+        dtoIn = new UserInputDto(username, password, name, email, phone, age, area, address, rolesArray);
         shortUpdateDto = new UserInputDto(username, "abcd", "Moishe", "moishe@oy.vey");
         patchDtoFull = new PatchUserInputDto("abcd", "Moishe", "moishe@oy.vey", "123456789", "Stetl", "some address");
         patchDtoEmpty = new PatchUserInputDto();
@@ -220,7 +218,6 @@ class UserServiceTest {
         //assert
         assertEquals(user1.getUsername(), dto.username);
         assertEquals(user1.getPassword(), dto.password);
-        assertEquals(user1.getApiKey(), dto.apiKey);
         assertEquals(user1.getName(), dto.name);
         assertEquals(user1.getEmailAddress(), dto.emailAddress);
         assertEquals(user1.getTelephoneNumber(), dto.telephoneNumber);

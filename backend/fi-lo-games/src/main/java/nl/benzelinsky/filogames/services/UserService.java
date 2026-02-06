@@ -5,7 +5,6 @@ import nl.benzelinsky.filogames.exceptions.*;
 import nl.benzelinsky.filogames.mappers.UserMapper;
 import nl.benzelinsky.filogames.models.Role;
 import nl.benzelinsky.filogames.models.User;
-import nl.benzelinsky.filogames.repositories.EventRepository;
 import nl.benzelinsky.filogames.repositories.UserRepository;
 import nl.benzelinsky.filogames.utils.RandomStringGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +18,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, EventRepository eventRepository) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.userRepository = repository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -170,13 +169,9 @@ public class UserService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
         if (!toDelete.getHostedEvents().isEmpty()) {
-            List<String> events = new ArrayList<>();
             Map<Long, String> eventIds = new HashMap<>();
             toDelete.getHostedEvents()
-                    .forEach(event -> {
-                        events.add(event.getName());
-                        eventIds.put(event.getId(), event.getName());
-                    });
+                    .forEach(event -> eventIds.put(event.getId(), event.getName()));
             throw new HasActiveEventsException(username, eventIds);
         }
         else {
