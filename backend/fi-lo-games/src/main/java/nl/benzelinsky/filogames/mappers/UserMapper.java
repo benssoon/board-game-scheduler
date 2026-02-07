@@ -73,14 +73,6 @@ public class UserMapper {
 
         outputDto.password = user.getPassword();
 
-        List<TinyEventOutputDto> hostedEvents = new ArrayList<>();
-        user.getHostedEvents().forEach((event) -> hostedEvents.add(EventMapper.toTinyDto(event)));
-        outputDto.hostedEvents = hostedEvents;
-        List<TinyEventOutputDto> joinedEvents = new ArrayList<>();
-        user.getJoinedEvents().forEach((event) -> joinedEvents.add(EventMapper.toTinyDto(event)));
-        outputDto.joinedEvents = joinedEvents;
-
-
         return outputDto;
     }
 }
