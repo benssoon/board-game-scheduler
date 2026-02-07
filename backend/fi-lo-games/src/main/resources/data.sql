@@ -1,30 +1,44 @@
+INSERT INTO game_stats (play_count,
+                       plays_with_max_players)
+VALUES (52,
+        42);
+
+INSERT INTO game_stats (play_count,
+                       plays_with_max_players)
+VALUES (6,
+        0);
+
 INSERT INTO games (title,
                    description,
                    min_players,
                    max_players,
                    complexity,
                    min_age,
-                   max_age)
+                   max_age,
+                   stats_id)
 VALUES ('Root',
         'A game of woodland might and right',
         2,
         4,
         'very high',
         10,
-        99);
+        99,
+        1);
 
 INSERT INTO games (title,
                    min_players,
                    max_players,
                    complexity,
                    min_age,
-                   max_age)
+                   max_age,
+                   stats_id)
 VALUES ('Arcs',
         2,
         4,
         'very high',
         10,
-        99);
+        99,
+        2);
 
 INSERT INTO users (username, password, name, email_address, telephone_number, age, area, address)
 VALUES ('ben','$2a$12$5CZNfchW.KoDGIf0/8SMpeHfRU.Qlki28RUCYddJhWqzBJ7mLCcIe', 'Ben', 'ben@test.none', '0123456789', 34, 'Rotterdam', 'Erewhon'),
@@ -48,6 +62,7 @@ INSERT INTO events (name,
                     is_full,
                     is_ready_to_start,
                     is_host_playing,
+                    is_closed,
                     location,
                     game_id,
                     host_username)
@@ -57,6 +72,7 @@ VALUES ('Game night',
         FALSE,
         TRUE,
         TRUE,
+        FALSE,
         'Ben''s house',
         1,
         'ben');

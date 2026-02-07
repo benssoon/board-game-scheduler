@@ -8,6 +8,7 @@ import nl.benzelinsky.filogames.exceptions.*;
 import nl.benzelinsky.filogames.mappers.EventMapper;
 import nl.benzelinsky.filogames.models.Event;
 import nl.benzelinsky.filogames.models.Game;
+import nl.benzelinsky.filogames.models.GameStats;
 import nl.benzelinsky.filogames.models.User;
 import nl.benzelinsky.filogames.repositories.EventRepository;
 import nl.benzelinsky.filogames.repositories.GameRepository;
@@ -737,6 +738,37 @@ class EventServiceTest {
 
         //act
         RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.removePlayer(usernamePlayer1, eventId));
+
+        //assert
+        assertEquals(eventNotFoundMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should close event and update game stats.")
+    public void testCloseEvent() {
+        //arrange
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event1));
+        event1.setGame(game1);
+        game1.setStats(new GameStats(game1));
+
+        //act
+        String closeMessage = this.eventService.closeEvent(eventId);
+
+        //assert
+        assertEquals(closeMessage, "Event with id " + eventId + " has been closed.");
+        assertTrue(event1.isClosed());
+        assertEquals(1, event1.getGame().getStats().getPlayCount());
+
+    }
+
+    @Test
+    @DisplayName("Should throw RecordNotFoundException")
+    public void testCloseEventThrowsRecordNotFoundException() {
+        //arrange
+        Mockito.when(eventRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        //act
+        RecordNotFoundException exception = assertThrowsExactly(RecordNotFoundException.class, () -> eventService.closeEvent(eventId));
 
         //assert
         assertEquals(eventNotFoundMessage, exception.getMessage());

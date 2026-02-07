@@ -3,6 +3,7 @@ package nl.benzelinsky.filogames.controllers;
 import jakarta.validation.Valid;
 import nl.benzelinsky.filogames.dtos.GameInputDto;
 import nl.benzelinsky.filogames.dtos.GameOutputDto;
+import nl.benzelinsky.filogames.dtos.GameStatsDto;
 import nl.benzelinsky.filogames.services.GameService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,5 +68,11 @@ public class GameController {
     @DeleteMapping
     public ResponseEntity<String> deleteAllGames() {
         return ResponseEntity.ok(this.service.deleteAllGames());
+    }
+
+    // Get stats
+    @GetMapping("/{id}/stats")
+    public ResponseEntity<GameStatsDto> getStats(@PathVariable Long id) {
+        return ResponseEntity.ok(this.service.getStats(id));
     }
 }

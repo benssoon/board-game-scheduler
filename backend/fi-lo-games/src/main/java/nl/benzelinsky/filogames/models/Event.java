@@ -37,6 +37,9 @@ public class Event {
     private boolean isHostPlaying;
 
     @Column
+    private boolean isClosed;
+
+    @Column
     private LocalDateTime definitiveTime;
 
     @Column
