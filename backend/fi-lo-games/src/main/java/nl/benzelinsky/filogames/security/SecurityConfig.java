@@ -76,6 +76,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/games").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.PATCH, "/games/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/games/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/games/*/stats").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/games").hasRole("ADMIN") // Delete all games
                                 .requestMatchers(HttpMethod.DELETE, "/games/**").hasRole("ADMIN") // Delete game by id
                                 // Images

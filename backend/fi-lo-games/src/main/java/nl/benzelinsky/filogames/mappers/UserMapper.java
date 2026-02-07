@@ -63,7 +63,6 @@ public class UserMapper {
         UserOutputDto outputDto = new UserOutputDto();
 
         outputDto.username = user.getUsername();
-        outputDto.password = user.getPassword();
         outputDto.name = user.getName();
         outputDto.emailAddress = user.getEmailAddress();
         outputDto.telephoneNumber = user.getTelephoneNumber();
@@ -71,6 +70,16 @@ public class UserMapper {
         outputDto.area = user.getArea();
         outputDto.address = user.getAddress();
         outputDto.roles = user.getRoles();
+
+        outputDto.password = user.getPassword();
+
+        List<TinyEventOutputDto> hostedEvents = new ArrayList<>();
+        user.getHostedEvents().forEach((event) -> hostedEvents.add(EventMapper.toTinyDto(event)));
+        outputDto.hostedEvents = hostedEvents;
+        List<TinyEventOutputDto> joinedEvents = new ArrayList<>();
+        user.getJoinedEvents().forEach((event) -> joinedEvents.add(EventMapper.toTinyDto(event)));
+        outputDto.joinedEvents = joinedEvents;
+
 
         return outputDto;
     }

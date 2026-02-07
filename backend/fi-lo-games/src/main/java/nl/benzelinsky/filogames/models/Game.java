@@ -45,7 +45,7 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<Event> activeEvents = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "stats_id")
     private GameStats stats;
 

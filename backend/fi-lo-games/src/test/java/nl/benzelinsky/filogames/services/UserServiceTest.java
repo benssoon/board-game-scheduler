@@ -2,6 +2,7 @@ package nl.benzelinsky.filogames.services;
 
 import nl.benzelinsky.filogames.dtos.*;
 import nl.benzelinsky.filogames.exceptions.*;
+import nl.benzelinsky.filogames.mappers.EventMapper;
 import nl.benzelinsky.filogames.models.Event;
 import nl.benzelinsky.filogames.models.Game;
 import nl.benzelinsky.filogames.models.Role;
@@ -58,13 +59,14 @@ class UserServiceTest {
     private User user1;
     private User user2;
     private User user3;
+    private Event event1;
     private UserInputDto dtoIn;
     private UserInputDto shortUpdateDto;
     private PatchUserInputDto patchDtoFull;
     private PatchUserInputDto patchDtoEmpty;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         username = "ben";
         password = "1234";
         name = "Ben";
@@ -74,6 +76,8 @@ class UserServiceTest {
         user1 = new User(username, password, name, email);
         user2 = new User("bob", "12345", "Bob", "bob@bob.bob");
         user3 = new User("saskia", "4321", "Saskia", "sas@sas.kia");
+        event1 = new Event("Root night");
+        event1.setId(1L);
         dtoIn = new UserInputDto(username, password, name, email, phone, age, area, address, rolesArray);
         shortUpdateDto = new UserInputDto(username, "abcd", "Moishe", "moishe@oy.vey");
         patchDtoFull = new PatchUserInputDto("abcd", "Moishe", "moishe@oy.vey", "123456789", "Stetl", "some address");
@@ -168,8 +172,10 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Should return the correct user (self)")
-    void testGetUserSelf() {
+    public void testGetUserSelf() {
         //arrange
+        user1.hostEvent(event1);
+        user1.joinEvent(event1);
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
 
         //act
@@ -184,14 +190,45 @@ class UserServiceTest {
         assertEquals(user1.getArea(), dto.area);
         assertEquals(user1.getAddress(), dto.address);
         user1.getHostedEvents().forEach(e -> {
-            assertTrue(dto.hostedEvents.contains(e.getName()));
+            TinyEventOutputDto tinyE = EventMapper.toTinyDto(e);
+            assertTrue(
+                    dto.hostedEvents.stream().anyMatch(h ->
+                            h.id.equals(tinyE.id)));
         });
         user1.getJoinedEvents().forEach(e -> {
-            assertTrue(dto.joinedEvents.contains(e.getName()));
+            TinyEventOutputDto tinyE = EventMapper.toTinyDto(e);
+            assertTrue(dto.joinedEvents.stream().anyMatch(j ->
+                    j.id.equals(tinyE.id)));
         });
     }
 
-    //TODO test for non-self user as well.
+    @Test
+    @DisplayName("Should return the correct user")
+    public void testGetUser() {
+        //arrange
+        user1.hostEvent(event1);
+        user1.joinEvent(event1);
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        TinyUserOutputDto dto = (TinyUserOutputDto) userService.getUser(username, false);
+
+        //assert
+        assertEquals(user1.getUsername(), dto.username);
+        assertEquals(user1.getName(), dto.name);
+        assertEquals(user1.getArea(), dto.area);
+        user1.getHostedEvents().forEach(e -> {
+            TinyEventOutputDto tinyE = EventMapper.toTinyDto(e);
+            assertTrue(
+                    dto.hostedEvents.stream().anyMatch(h ->
+                            h.id.equals(tinyE.id)));
+        });
+        user1.getJoinedEvents().forEach(e -> {
+            TinyEventOutputDto tinyE = EventMapper.toTinyDto(e);
+            assertTrue(dto.joinedEvents.stream().anyMatch(j ->
+                    j.id.equals(tinyE.id)));
+        });
+    }
 
     @Test
     @DisplayName("Should throw UsernameNotFoundException")
@@ -208,8 +245,10 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Should return full dto of correct user")
-    void getUserWithPassword() {
+    public void getUserWithPassword() {
         //arrange
+        user1.hostEvent(event1);
+        user1.joinEvent(event1);
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
 
         //act
@@ -225,10 +264,15 @@ class UserServiceTest {
         assertEquals(user1.getArea(), dto.area);
         assertEquals(user1.getAddress(), dto.address);
         user1.getHostedEvents().forEach(e -> {
-            assertTrue(dto.hostedEvents.contains(e.getName()));
+            TinyEventOutputDto tinyE = EventMapper.toTinyDto(e);
+            assertTrue(
+                    dto.hostedEvents.stream().anyMatch(h ->
+                            h.id.equals(tinyE.id)));
         });
         user1.getJoinedEvents().forEach(e -> {
-            assertTrue(dto.joinedEvents.contains(e.getName()));
+            TinyEventOutputDto tinyE = EventMapper.toTinyDto(e);
+            assertTrue(dto.joinedEvents.stream().anyMatch(j ->
+                    j.id.equals(tinyE.id)));
         });
         user1.getRoles().forEach(r -> {
             assertTrue(dto.roles.contains(r));
@@ -250,7 +294,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Should return user with updated values")
-    void updateWholeUser() {
+    public void updateWholeUser() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
         Mockito.when(passwordEncoder.encode(anyString())).thenReturn("$2a$12$O2eOMLCxxkhZMmKCZk6G8OEq6fh2Q0Ti4P04dZUECsTY3k6rE0.y6");
@@ -282,8 +326,22 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw MayNotChangeUsernameException")
+    public void testUpdateWholeUserThrowsMayNotChangeUsernameException() {
+        //arrange
+        shortUpdateDto.username = username + "astring";
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+
+        //act
+        MayNotChangeUsernameException exception = assertThrowsExactly(MayNotChangeUsernameException.class, () -> userService.updateWholeUser(username, shortUpdateDto));
+
+        //assert
+        assertEquals("You are not allowed to change your username.", exception.getMessage());
+    }
+
+    @Test
     @DisplayName("Should return fully updated user")
-    void testUpdateUserAllAttributes() {
+    public void testUpdateUserAllAttributes() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
 
@@ -302,7 +360,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Should return unupdated user")
-    void testUpdateUserNoAttributes() {
+    public void testUpdateUserNoAttributes() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
 
@@ -367,7 +425,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Should add role to user")
-    void addRole() {
+    public void addRole() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
 
@@ -407,7 +465,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Should remove role from user")
-    void testRemoveRole() {
+    public void testRemoveRole() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
         user1.addRole(new Role(username, "ROLE_" + rolesArray[0]) );
@@ -446,8 +504,38 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw AdminCannotRemoveOwnAdminRoleException")
+    public void testRemoveRoleThrowsAdminCannotRemoveOwnAdminRoleException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+        user1.addRole(new Role(username, "ROLE_ADMIN") );
+
+        //act
+        AdminCannotRemoveOwnAdminRoleException exception = assertThrowsExactly(AdminCannotRemoveOwnAdminRoleException.class, () -> userService.removeRole(username, "ADMIN", username));
+
+        //assert
+        assertEquals("Only another user with role ADMIN can remove your ADMIN role.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw CannotRemoveUserRoleFromActiveUserException")
+    public void testRemoveRoleThrowsCannotRemoveUserRoleFromActiveUserException() {
+        //arrange
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
+        user1.addRole(new Role(username, "ROLE_USER") );
+        user1.hostEvent(event1);
+        user1.joinEvent(event1);
+
+        //act
+        CannotRemoveUserRoleFromActiveUserException exception = assertThrowsExactly(CannotRemoveUserRoleFromActiveUserException.class, () -> userService.removeRole(username, "USER", "none"));
+
+        //assert
+        assertEquals("You may not remove the USER role from a user that is still participating in or hosting events. Please remove them from those events first.", exception.getMessage());
+    }
+
+    @Test
     @DisplayName("Should delete user")
-    void testDeleteUser() {
+    public void testDeleteUser() {
         //arrange
         Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user1));
 

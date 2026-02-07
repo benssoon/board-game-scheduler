@@ -42,7 +42,6 @@ public class GameService {
         game.setStats(stats);
         stats.setGame(game);
         this.gameRepository.save(game);
-        this.statsRepository.save(stats);
         return GameMapper.toOutputDto(game);
     }
 
@@ -90,7 +89,6 @@ public class GameService {
         toUpdate.setMinAge(dtoIn.minAge);
         toUpdate.setMaxAge(dtoIn.maxAge);
 
-        this.gameRepository.save(toUpdate);
         return GameMapper.toOutputDto(toUpdate);
     }
 

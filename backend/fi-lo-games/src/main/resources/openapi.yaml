@@ -349,6 +349,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/event'
+  /events/{id}/close:
+    post:
+      summary: Rond een evenement af.
+      tags:
+        - Events
+      description: Gebruik deze endpoint om een evenement af te ronden. Daarmee krijgt hij een gesloten status (event.isClosed = true) en worden de statistieken van het spel geüpdatet. De gebruiker moet de ROLE_USER of ROLE_ADMIN authority hebben.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          description: Numeriek ID van het evenement.
+      responses:
+        "200":
+          description: Een string met de tekst "Event with id {id} has been closed."
+          content:
+            text/plain:
+              type: string
 
   /events/deleteAll:
     delete:
@@ -491,6 +513,30 @@ paths:
           content:
             text/plain:
               type: string
+
+  /games/{id}/stats:
+    get:
+      summary: Game statistieken
+      tags:
+        - Games
+      description: Haalt de statistieken van het gezochte spel op. De gebruiker moet de ROLE_ADMIN authority hebben.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeriek ID van het gezochte spel.
+      responses:
+        "200":
+          description: En object met alle statistieken van het gezochte spel.
+          content:
+            application/json:
+              type: object
+              schema:
+                $ref: '#/components/schemas/gameStats'
 
   /games/{id}/forceDelete:
     delete:
@@ -825,6 +871,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/eventShort'
+    gameStats:
+      type: object
+      properties:
+        id:
+          type: long
+        playCount:
+          type: int
+        playsWithMaxPlayers:
+          type: int
     gameNew:
       type: object
       properties:

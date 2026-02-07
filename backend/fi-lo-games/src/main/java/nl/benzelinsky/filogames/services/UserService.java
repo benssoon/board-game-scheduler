@@ -37,10 +37,10 @@ public class UserService {
         //userInputDto.apiKey = RandomStringGenerator.generateAlphaNumeric(20); // TODO unnecessary?
         userInputDto.password = passwordEncoder.encode(userInputDto.password);
         User newUser = UserMapper.toEntity(userInputDto);
-        this.userRepository.save(newUser);
         for (String role : userInputDto.roles) {
             addRole(newUser.getUsername(), role);
         }
+        this.userRepository.save(newUser);
         return UserMapper.toShortDto(newUser);
     }
 
@@ -78,7 +78,7 @@ public class UserService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
 
-        if (!dtoIn.username.equals(username)) {
+        if (!dtoIn.username.equals(username)) { // Check that the username is not different being updated in the dto.
             throw new MayNotChangeUsernameException();
         }
 
@@ -91,7 +91,6 @@ public class UserService {
         toUpdate.setArea(dtoIn.area);
         toUpdate.setAddress(dtoIn.address);
 
-        this.userRepository.save(toUpdate);
         return UserMapper.toShortDto(toUpdate);
     }
 
@@ -120,7 +119,6 @@ public class UserService {
             toUpdate.setAddress(dtoIn.address);
         }
 
-        this.userRepository.save(toUpdate);
         return UserMapper.toShortDto(toUpdate);
     }
 

@@ -51,9 +51,9 @@ public class EventService {
             event.addPlayer(host);
         }
 
+        this.eventRepository.save(event);
         this.gameRepository.save(game);
         this.userRepository.save(host);
-        this.eventRepository.save(event);
         return EventMapper.toOutputDto(event);
     }
 
@@ -109,7 +109,6 @@ public class EventService {
             toUpdate.setPossibleTimes(dtoIn.possibleTimes);
         }
 
-        this.eventRepository.save(toUpdate);
         return EventMapper.toOutputDto(toUpdate);
     }
 
@@ -159,8 +158,7 @@ public class EventService {
         event.getGame().removeEvent(event);
         event.setGame(game);
         game.addEvent(event);
-        this.eventRepository.save(event);
-        this.gameRepository.save(game);
+
         return EventMapper.toOutputDto(event);
     }
 
@@ -179,8 +177,7 @@ public class EventService {
         event.getHost().stopHostingEvent(event);
         event.setHost(host);
         host.hostEvent(event);
-        this.eventRepository.save(event);
-        this.userRepository.save(host);
+
         return EventMapper.toOutputDto(event);
     }
 
@@ -203,8 +200,7 @@ public class EventService {
         }
         event.addPlayer(player);
         player.joinEvent(event);
-        this.userRepository.save(player);
-        this.eventRepository.save(event);
+
         return EventMapper.toOutputDto(event);
     }
 
@@ -221,14 +217,12 @@ public class EventService {
             }
             event.removePlayer(player);
             player.leaveEvent(event);
-            this.eventRepository.save(event);
         }
         else {
             // player is not in event
             throw new NotAPlayerException(username, eventId);
         }
-        this.userRepository.save(player);
-        this.eventRepository.save(event);
+
         return EventMapper.toOutputDto(event);
     }
 
